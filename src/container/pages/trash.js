@@ -1,0 +1,42 @@
+export const Trash = [
+  {
+    id: 1,
+    name: "생수병",
+    big: "페트병",
+    small: "무색단일",
+    rules: "어쩌구",
+    image: "/images/search/pett_bottle.jpg",
+  },
+  {
+    id: 2,
+    name: "맥주병",
+    big: "유리병",
+    small: "갈색",
+    rules: "저쩌구",
+    image: "/images/search/barley_bottle.jpg",
+  },
+  {
+    id: 3,
+    name: "소주병",
+    big: "유리병",
+    small: "녹색",
+    rules: "이러쿵",
+    image: "/images/search/soju_bottle.jpg",
+  },
+  {
+    id: 4,
+    name: "폐의약품",
+    big: "기타",
+    small: "기타",
+    rules: "가까운 보건소나 약국, 아파트 관리사무소 등에 버려주세요",
+    image: "/images/search/old_medicine.jpg",
+  },
+  {
+    id: 5,
+    name: "폐건전지",
+    big: "건전지",
+    small: "건전지",
+    rules: "저러쿵",
+    image: "/images/search/old_battery.jpg",
+  },
+];
