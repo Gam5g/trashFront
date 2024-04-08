@@ -57,8 +57,9 @@ const LoginForm = () => {
         throw new Error("Network response was not ok");
       }
       const accessToken = response.headers.authorization;
+      const accountName = formData.id;
       localStorage.setItem("accessToken", accessToken);
-      console.log(accessToken);
+      localStorage.setItem("accountName", accountName);
       setCookie("accessToken", accessToken, { path: "/" });
 
       setIsLoggedIn(true);

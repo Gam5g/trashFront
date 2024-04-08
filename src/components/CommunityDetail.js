@@ -7,7 +7,7 @@ const CommunityDetail = ({ posts, postsType }) => {
   const id = parseInt(location.pathname.split("/").pop());
   const navigate = useNavigate();
   const [post, setPost] = useState(null);
-
+  const getAccountName = localStorage.getItem("accountName");
   useEffect(() => {
     const fetchPost = async () => {
       try {
@@ -28,7 +28,9 @@ const CommunityDetail = ({ posts, postsType }) => {
       alert("삭제되었습니다.");
     }
   };
-
+  const editPost = () => {
+    // 게시글 수정 로직 구현
+  };
   return (
     <div className="container">
       {post && (
@@ -36,8 +38,8 @@ const CommunityDetail = ({ posts, postsType }) => {
           <h2>{post.title}</h2>
           <div className="post-info">
             <p>
-              작성자: {post.author} | 조회수: {post.views} | 작성일: {post.date}{" "}
-              | 좋아요: {post.likes}
+              작성자: {post.nickname} | 조회수: {post.views} | 작성일:{" "}
+              {post.date} | 좋아요: {post.likes} | 아이디 : {post.accountName}
               {postsType === "nanum" && (
                 <span>| 나눔 완료 상태: {post.nanum}</span>
               )}
@@ -46,17 +48,29 @@ const CommunityDetail = ({ posts, postsType }) => {
           <p className="post-content">{post.content}</p>
         </div>
       )}
-      <div className="buttons">
-        <button className="deleteButton" onClick={deletePost}>
-          삭제
-        </button>
+      {getAccountName === post?.accountName ? (
+        <div className="buttons">
+          <button className="deleteButton" onClick={deletePost}>
+            삭제
+          </button>
+          <button className="editButton" onClick={editPost}>
+            수정
+          </button>
+          <button
+            className="listButton"
+            onClick={() => navigate(`/community-${postsType}`)}
+          >
+            목록
+          </button>
+        </div>
+      ) : (
         <button
           className="listButton"
           onClick={() => navigate(`/community-${postsType}`)}
         >
           목록
         </button>
-      </div>
+      )}
     </div>
   );
 };

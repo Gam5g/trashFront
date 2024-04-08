@@ -44,8 +44,8 @@ const CommunityList = ({ posts, postType }) => {
     const filtered = posts.filter((post) => {
       if (searchBy === "title") {
         return post.title.includes(query);
-      } else if (searchBy === "author") {
-        return post.author.includes(query);
+      } else if (searchBy === "nickname") {
+        return post.nickname.includes(query);
       }
       return false;
     });
@@ -95,8 +95,8 @@ const CommunityList = ({ posts, postType }) => {
                 </p>
                 <div>
                   <p className="info">
-                    {post.author} | 조회수 {post.views} | 추천수 {post.likes} |{" "}
-                    {post.date}
+                    {post.nickname} | 조회수 {post.views} | 추천수 {post.likes}{" "}
+                    | {post.date}
                     {postType === "nanum" &&
                       (post.nanum === "O" ? " | 나눔 완료" : " | 나눔 진행 중")}
                   </p>
@@ -126,7 +126,7 @@ const CommunityList = ({ posts, postType }) => {
                       ? post.title.slice(0, 30) + "..."
                       : post.title}
                   </td>
-                  <td>{post.author}</td>
+                  <td>{post.nickname}</td>
                   <td>{post.views}</td>
                   <td>{post.likes}</td>
                   <td>{post.date}</td>
@@ -157,7 +157,7 @@ const CommunityList = ({ posts, postType }) => {
               onChange={handleSearchChange}
             >
               <option value="title">제목</option>
-              <option value="author">글쓴이</option>
+              <option value="nickname">글쓴이</option>
             </select>
             <input
               type="text"

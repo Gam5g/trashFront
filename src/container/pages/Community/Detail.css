@@ -34,7 +34,7 @@
     margin-top: 20px;
   }
   
-  .deleteButton, .listButton {
+  .deleteButton, .editButton, .listButton {
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
@@ -47,6 +47,12 @@
     background-color: #ff5555;
     color: #fff;
   }
+
+  .editButton {
+    background-color: #038b85;
+    color: #fff;
+    margin-left: 10px;
+  }
   
   .listButton {
     background-color: #007bff;
@@ -54,8 +60,12 @@
     margin-left: 10px;
   }
   
-  .deleteButton:hover, .listButton:hover {
+  .deleteButton:hover {
     background-color: #ff3333;
+  }
+
+  .editButton:hover {
+    background-color: #016e69;
   }
   
   .listButton:hover {
@@ -73,6 +83,6 @@
     src: url("../../../fonts/Pretendard-Bold.woff2") format('truetype');
   }
   
-.deleteButton, .listButton{
+.deleteButton, .listButton, .editButton{
     font-family: 'Pretendard-Bold';
 }
