@@ -10,6 +10,9 @@ import axios from "axios";
 import "../../App.css";
 
 const RegisterForm = () => {
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
+
   const {
     register,
     watch,
@@ -23,12 +26,34 @@ const RegisterForm = () => {
   });
 
   const onSubmit = () => {
+    if (agreed) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          console.log(latitude);
+          console.log(longitude);
+          submitForm(latitude, longitude);
+        },
+        (error) => {
+          console.error("Error fetching geolocation:", error);
+          submitForm();
+        },
+        { enableHighAccuracy: true }
+      );
+    } else {
+      submitForm();
+    }
+  };
+
+  const submitForm = (latitude = null, longitude = null) => {
     const formData = {
       id: watch("id"),
       password: watch("password"),
       email: watch("email"),
       nickname: watch("nickname"),
       region: watch("region"),
+      latitude,
+      longitude,
     };
     axios
       .post(
@@ -39,6 +64,8 @@ const RegisterForm = () => {
           email: formData.email,
           nickname: formData.nickname,
           region: formData.region,
+          latitude: formData.latitude,
+          longitude: formData.longitude,
         },
         {
           headers: {
@@ -92,6 +119,7 @@ const RegisterForm = () => {
   const [passwordVisible, setPasswordVisible] = useState("");
   const [passwordConfirmVisible, setPasswordConfirmVisible] = useState("");
   const [agreed, setAgreed] = useState(false);
+  const [position, setPosition] = useState(null);
 
   const navigate = useNavigate();
   const NavigateToLogin = () => {

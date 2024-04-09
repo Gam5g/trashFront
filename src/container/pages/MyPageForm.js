@@ -45,10 +45,11 @@ function MyPageForm() {
       {account ? (
         <div className="accountInfo">
           <ul>
-            <li>ID: {account.id}</li>
             <li>아이디: {account.accountName}</li>
             <li>이메일: {account.email}</li>
             <li>닉네임: {account.nickname}</li>
+            <li>경도: {account.latitude}</li>
+            <li>위도: {account.longitude}</li>
           </ul>
           {/* <button onClick={}>정보 수정</button> */}
         </div>

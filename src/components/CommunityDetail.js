@@ -39,7 +39,7 @@ const CommunityDetail = ({ posts, postsType }) => {
           <div className="post-info">
             <p>
               작성자: {post.nickname} | 조회수: {post.views} | 작성일:{" "}
-              {post.date} | 좋아요: {post.likes} | 아이디 : {post.accountName}
+              {post.date} | 좋아요: {post.likes}
               {postsType === "nanum" && (
                 <span>| 나눔 완료 상태: {post.nanum}</span>
               )}
