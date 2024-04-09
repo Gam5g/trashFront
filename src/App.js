@@ -21,6 +21,7 @@ import NotFound from "./container/pages/NotFound";
 import Header from "./header";
 import { RecoilRoot } from "recoil";
 import { isLoggedInState } from "./state/authState";
+import Loading from "./container/pages/LoadingForm";
 
 function App() {
   const initializeState = ({ set }) => {
@@ -44,6 +45,7 @@ function App() {
             <Route path="/community-nanum" element={<CommunityNanumList />} />
             <Route path="/community-bunri" element={<CommunityBunriList />} />
             <Route path="/my-page" element={<MyPageForm />} />
+            <Route path="/loading" element={<Loading />} />
             <Route
               path="/community-nanum/:id"
               element={<CommunityNanumDetail />}

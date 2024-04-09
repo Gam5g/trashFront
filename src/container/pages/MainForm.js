@@ -28,8 +28,10 @@ function MainForm() {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      setImage(URL.createObjectURL(file));
       console.log("Uploaded file:", file);
       readImage(file);
+      navigate("/loading");
     } else {
       console.log("File upload cancelled");
       setActive(false);
@@ -58,7 +60,7 @@ function MainForm() {
     }
   };
   const handleButtonClick = () => {
-    cameraInputRef.current.click();
+    inputRef.current.click();
   };
 
   const onSubmit = () => {
@@ -140,9 +142,6 @@ function MainForm() {
         ref={cameraInputRef}
         onChange={handleCameraChange}
       />
-      <button onClick={handleButtonClick} className="loginbutton">
-        사진 찍기
-      </button>
       <div>
         <input
           type="file"
@@ -150,21 +149,22 @@ function MainForm() {
           style={{ display: "none" }}
           onChange={handleFileChange}
         />
-        <img
-          src={
-            image
-              ? image
-              : isActive
-              ? "/images/file_upload2.png"
-              : "/images/file_upload.png"
-          }
-          onDragEnter={handleDragStart}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragEnd}
-          onDrop={handleDrop}
-          onClick={handleImageClick}
-          className="upload-img"
-        />
+        {image ? (
+          <>
+            <img src={image} className="uploaded-image" alt="Uploaded" />
+          </>
+        ) : (
+          <button
+            className={`upload-button ${isActive ? "active" : ""}`}
+            onClick={handleButtonClick}
+            onDragEnter={handleDragStart}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragEnd}
+            onDrop={handleDrop}
+          >
+            사진 업로드
+          </button>
+        )}
         <button onClick={ScrollToTop} className="MoveTopBtn" />
       </div>
     </div>

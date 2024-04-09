@@ -291,6 +291,25 @@ header {
   background-color: lightblue;
 }
 
+.upload-button {
+  background-color: white;
+  background-size: cover;
+  border: none;
+  cursor: pointer;
+  width: 380px;
+  height: 240px;
+  transition: background-color 0.3s ease;
+}
+
+.upload-button:hover, .upload-button.active {
+  background-color: gray;
+}
+
+.uploaded-image {
+  width: 100%;
+  height: auto;
+}
+
 
 footer {
   position: fixed;
@@ -309,6 +328,6 @@ footer {
   src: url("fonts/Pretendard-Bold.woff2") format('truetype');
 }
 
-.search-button, .clear-search-button, .search-input {
+.search-button, .clear-search-button, .search-input, .upload-button {
   font-family: 'Pretendard-Bold';
 }
