@@ -16,7 +16,7 @@
     text-decoration: none;
     color: #333;
     border: 1px solid #ccc;
-    border-radius: 3px;
+    border-radius: 25px;
   }
   
   .pagination li.active a {

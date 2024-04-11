@@ -13,8 +13,3 @@ export const Background = styled.div`
     align-items: center;
     justify-content: center;
 `;
-
-export const LoadingText = styled.div`
-    font-family: "Pretendard-Bold";
-    text-align: center;
-`;

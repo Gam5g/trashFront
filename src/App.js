@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; // Br
 import RegisterForm from "./container/pages/RegisterForm";
 import MainForm from "./container/pages/MainForm";
 import LoginForm from "./container/pages/LoginForm";
+import WithdrawalForm from "./container/pages/WithdrawalForm";
 import FindID from "./container/pages/FindID";
 import FindPassword from "./container/pages/FindPassword";
 import Station from "./container/pages/Station";
@@ -38,6 +39,10 @@ function App() {
             <Route exact path="/" element={<MainForm />} />
             <Route path="/api/auth/sign-up" element={<RegisterForm />} />
             <Route path="/api/auth/sign-in" element={<LoginForm />} />
+            <Route
+              path="/api/account/withdrawal"
+              element={<WithdrawalForm />}
+            />
             <Route path="/find-id" element={<FindID />} />
             <Route path="/find-password" element={<FindPassword />} />
             <Route path="/station" element={<Station />} />

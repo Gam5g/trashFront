@@ -9,43 +9,29 @@ import { Trash } from "./trash";
 
 function MainForm() {
   const [isActive, setActive] = useState(false);
-  const [inputValue, setInputValue] = useState([]);
   const [query, setQuery] = useState("");
   const [image, setImage] = useState(null);
   const [isFocused, setIsFocused] = useState(false);
   const { register, handleSubmit } = useForm();
 
-  const prevInputValueRef = useRef("");
   const inputRef = useRef(null);
   const cameraInputRef = useRef(null);
-  const handleDragStart = () => setActive(true);
-  const handleDragEnd = () => setActive(false);
   const navigate = useNavigate();
 
-  const readImage = (file) => {
-    setImage(URL.createObjectURL(file));
-  };
   const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
+    e.preventDefault();
+    const files = e.dataTransfer ? e.dataTransfer.files : e.target.files;
+
+    if (files && files.length > 0) {
+      const file = files[0];
       setImage(URL.createObjectURL(file));
       console.log("Uploaded file:", file);
-      readImage(file);
       navigate("/loading");
     } else {
       console.log("File upload cancelled");
+      alert("파일 업로드가 취소되었습니다.");
       setActive(false);
     }
-  };
-  const handleDragOver = (e) => {
-    e.preventDefault();
-  };
-  const handleDrop = (e) => {
-    e.preventDefault();
-    const file = e.dataTransfer.files[0];
-    console.log("Uploaded file:", file);
-    readImage(file);
-    setActive(false);
   };
   const handleImageClick = () => {
     inputRef.current.click();
@@ -53,23 +39,17 @@ function MainForm() {
   };
   const handleCameraChange = (e) => {
     const file = e.target.files[0];
-    const imageUrl = URL.createObjectURL(file);
-    const picElement = document.getElementById("pic");
-    if (picElement) {
-      picElement.src = imageUrl;
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setImage(imageUrl);
+      console.log(imageUrl);
     }
-  };
-  const handleButtonClick = () => {
-    inputRef.current.click();
   };
 
-  const onSubmit = () => {
-    if (prevInputValueRef.current !== inputValue) {
-      prevInputValueRef.current = inputValue;
-      setQuery(inputValue);
-    }
-    if (query.trim() !== "") {
-      navigate(`/search?query=${encodeURIComponent(query)}`); // 쿼리스트링이 비어 있지 않은 경우에만 추가
+  const onSubmit = (data) => {
+    const searchTerm = data.searchTerm.trim();
+    if (searchTerm !== "") {
+      navigate(`/search?query=${encodeURIComponent(searchTerm)}`);
     }
   };
   const ScrollToTop = () => {
@@ -94,7 +74,7 @@ function MainForm() {
             <input
               {...register("searchTerm")}
               type="text"
-              placeholder="검색"
+              placeholder="이름 또는 태그로 검색하기"
               className="search-input"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
@@ -127,12 +107,12 @@ function MainForm() {
             </div>
           </div>
         </form>
-        <button type="submit" className="search-button">
+        <button type="submit" className="search-button" aria-label="검색">
           <FaSearch className="search-icon" />
         </button>
       </div>
       <h2>찾고자 하는 쓰레기를 업로드해보세요!</h2>
-      <input
+      <button
         type="file"
         id="camera"
         name="camera"
@@ -141,28 +121,27 @@ function MainForm() {
         style={{ display: "none" }}
         ref={cameraInputRef}
         onChange={handleCameraChange}
+        aria-label="카메라로 촬영"
       />
       <div>
-        <input
+        <button
           type="file"
           ref={inputRef}
           style={{ display: "none" }}
           onChange={handleFileChange}
+          aria-label="파일 업로드"
         />
         {image ? (
-          <>
-            <img src={image} className="uploaded-image" alt="Uploaded" />
-          </>
+          <img src={image} className="uploaded-image" alt="Uploaded" />
         ) : (
           <button
             className={`upload-button ${isActive ? "active" : ""}`}
-            onClick={handleButtonClick}
-            onDragEnter={handleDragStart}
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragEnd}
-            onDrop={handleDrop}
+            onClick={handleImageClick}
+            onDragOver={(e) => e.preventDefault()}
+            onDrop={handleFileChange}
+            aria-label="사진 업로드"
           >
-            사진 업로드
+            클릭이나 드래그로 사진 업로드
           </button>
         )}
         <button onClick={ScrollToTop} className="MoveTopBtn" />

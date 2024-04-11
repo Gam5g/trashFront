@@ -8,8 +8,12 @@ import "./MyPageForm.css";
 function MyPageForm() {
   const isLoggedIn = useRecoilValue(isLoggedInState);
   const navigate = useNavigate();
-  const [account, setAccount] = useState([]);
+  const [account, setAccount] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const navigateToOut = () => {
+    navigate("/api/account/withdrawal");
+  };
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -19,13 +23,9 @@ function MyPageForm() {
       (async () => {
         try {
           const response = await AuthToken.get(
-            "http://3.39.190.90/api/account/list"
+            "http://3.39.190.90/api/account/me"
           );
-          const accountName = localStorage.getItem("accountName");
-          const matchingAccount = response.data.find(
-            (account) => account.accountName === accountName
-          );
-          if (matchingAccount) setAccount(matchingAccount);
+          setAccount(response.data);
         } catch (error) {
           console.error("계정 정보를 가져오는 데 실패했습니다.", error);
         } finally {
@@ -46,11 +46,11 @@ function MyPageForm() {
         <div className="accountInfo">
           <ul>
             <li>아이디: {account.accountName}</li>
-            <li>이메일: {account.email}</li>
             <li>닉네임: {account.nickname}</li>
             <li>경도: {account.latitude}</li>
             <li>위도: {account.longitude}</li>
           </ul>
+          {<button onClick={navigateToOut}>회원 탈퇴</button>}
           {/* <button onClick={}>정보 수정</button> */}
         </div>
       ) : (

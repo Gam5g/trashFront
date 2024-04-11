@@ -30,7 +30,7 @@ AuthToken.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const refreshToken = localStorage.getItem("refresh");
+        const refreshToken = localStorage.getItem("refreshToken");
         console.log(refreshToken);
         const response = await axios.post(
           "http://3.39.190.90/api/auth/token",
