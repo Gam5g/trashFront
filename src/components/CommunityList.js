@@ -85,7 +85,7 @@ const CommunityList = ({ posts, postType }) => {
     <>
       <div className="NotDrag">
         {isMobile ? (
-          <table style={{ width: "100%" }}>
+          <table className="mobile-table-container">
             {paginatedPosts.map((post) => (
               <tr key={post.id} onClick={() => handlePostClick(post)}>
                 <p className="title">
@@ -136,7 +136,11 @@ const CommunityList = ({ posts, postType }) => {
             </tbody>
           </table>
         )}
-        <div className="search-controls" style={{ paddingTop: "20px" }}>
+
+        <div
+          className={isMobile ? "mobile-search-controls" : "search-controls"}
+          style={{ paddingTop: "20px" }}
+        >
           <select
             className="sort-container"
             value={sortBy}
@@ -170,13 +174,14 @@ const CommunityList = ({ posts, postType }) => {
             <button className="searchbutton" onClick={handleSearch}>
               검색
             </button>
-            {isLoggedIn ? (
-              <button className="writebutton" onClick={NavigateToWrite}>
-                글쓰기
-              </button>
-            ) : (
-              <button className="disabled-write-button">글쓰기</button>
-            )}
+            {!isMobile &&
+              (isLoggedIn ? (
+                <button className="greenbutton" onClick={NavigateToWrite}>
+                  글쓰기
+                </button>
+              ) : (
+                <button className="disabled-write-button">글쓰기</button>
+              ))}
           </div>
         </div>
 
@@ -187,6 +192,23 @@ const CommunityList = ({ posts, postType }) => {
             }
             onPageChange={handlePageChange}
           />
+          {isMobile &&
+            (isLoggedIn ? (
+              <button
+                className="greenbutton"
+                style={{ marginLeft: "450px" }}
+                onClick={NavigateToWrite}
+              >
+                글쓰기
+              </button>
+            ) : (
+              <button
+                className="disabled-write-button"
+                style={{ marginLeft: "450px" }}
+              >
+                글쓰기
+              </button>
+            ))}
         </div>
       </div>
     </>

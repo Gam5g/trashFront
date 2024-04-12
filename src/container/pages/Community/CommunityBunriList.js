@@ -1,5 +1,4 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 import CommunityList from "../../../components/CommunityList";
 import { BunriPosts } from "./BunriPosts";
@@ -7,28 +6,26 @@ import "../../../Button.css";
 
 const CommunityBunriList = () => {
   const isMobile = useMediaQuery({ query: "(max-width: 1000px)" });
-  const navigate = useNavigate();
-  const navigateToNanum = () => {
-    navigate(`/community-nanum/`);
-  };
   return (
     <div>
-      <h1>분리수거 게시글 목록</h1>
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <button
-          style={{ width: isMobile ? "50%" : "100%" }}
-          onClick={navigateToNanum}
-          className="unactiveBtn"
-        >
-          나눔
-        </button>
-        <button
-          style={{ width: isMobile ? "50%" : "100%" }}
-          className="activeBtn"
-        >
-          분리수거
-        </button>
-      </div>
+      <h1
+        style={
+          isMobile ? { textAlign: "center", marginTop: "100px" } : undefined
+        }
+      >
+        분리수거 커뮤니티
+      </h1>
+      {isMobile ? (
+        <h4 style={{ textAlign: "center" }}>
+          헷갈리거나 모르는 쓰레기의 분리수거 방법을 질문해요. 정보성 글도
+          괜찮아요!
+        </h4>
+      ) : (
+        <h3>
+          헷갈리거나 모르는 쓰레기의 분리수거 방법을 질문해요. 정보성 글도
+          괜찮아요!
+        </h3>
+      )}
       <CommunityList posts={BunriPosts} postType="bunri" />
     </div>
   );

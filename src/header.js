@@ -113,9 +113,9 @@ const Header = () => {
                 </a>
               )}
             </li>
-            <span className="separator">|</span>
+            <span className="separator">ㅣ</span>
             <li>
-              <a style={{ color: "darkgray" }}>커뮤니티</a>
+              <a>커뮤니티</a>
             </li>
             <li>
               <a href="/community-nanum">나눔</a>
@@ -123,7 +123,7 @@ const Header = () => {
             <li>
               <a href="/community-bunri">분리수거</a>
             </li>
-            <span className="separator">|</span>
+            <span className="separator">ㅣ</span>
             <li>
               <a href="/medicine-location">폐의약품 위치</a>
             </li>

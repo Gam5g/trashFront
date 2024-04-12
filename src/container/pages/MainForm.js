@@ -3,14 +3,16 @@ import { useForm } from "react-hook-form";
 import { FaSearch } from "react-icons/fa";
 import { HiXCircle } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
+import { Trash } from "./trash";
+import axios from "axios";
 import "../../Button.css";
 import "../../style.css";
-import { Trash } from "./trash";
 
 function MainForm() {
   const [isActive, setActive] = useState(false);
   const [query, setQuery] = useState("");
   const [image, setImage] = useState(null);
+  const [lastFile, setLastFile] = useState(null);
   const [isFocused, setIsFocused] = useState(false);
   const { register, handleSubmit } = useForm();
 
@@ -20,46 +22,60 @@ function MainForm() {
 
   const handleFileChange = (e) => {
     e.preventDefault();
-    const files = e.dataTransfer ? e.dataTransfer.files : e.target.files;
-
-    if (files && files.length > 0) {
+    const files = e.target.files || e.dataTransfer.files;
+    if (files.length > 0) {
       const file = files[0];
-      setImage(URL.createObjectURL(file));
-      console.log("Uploaded file:", file);
-      navigate("/loading");
-    } else {
-      console.log("File upload cancelled");
-      alert("파일 업로드가 취소되었습니다.");
-      setActive(false);
+      const imageUrl = URL.createObjectURL(file);
+      setImage(imageUrl);
+      setLastFile(file);
+      console.log("Local file uploaded:", imageUrl);
+      e.target.value = null;
+      setActive(true);
     }
   };
   const handleImageClick = () => {
     inputRef.current.click();
     setActive(!isActive);
   };
-  const handleCameraChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setImage(imageUrl);
-      console.log(imageUrl);
+  const handleImageRemove = () => {
+    alert("파일 업로드가 취소되었습니다.");
+    setImage(null);
+    setActive(false);
+    setLastFile(null);
+    inputRef.current.value = null;
+    cameraInputRef.current.value = null;
+  };
+  const handleUploadComplete = async () => {
+    if (lastFile) {
+      console.log("GET 요청 파일명 :", lastFile.name);
+      axios({
+        method: "get",
+        url: "http://3.39.190.90/api/separation",
+      })
+        .then((result) => {
+          const data = result.data;
+          console.log("데이터:", data);
+          navigate("/loading");
+        })
+        .catch((error) => {
+          console.error("에러 :", error);
+        });
     }
   };
-
   const onSubmit = (data) => {
     const searchTerm = data.searchTerm.trim();
     if (searchTerm !== "") {
       navigate(`/search?query=${encodeURIComponent(searchTerm)}`);
     }
   };
+  const navigateToSearch = (selectedQuery) => {
+    navigate(`/search?query=${encodeURIComponent(selectedQuery)}`);
+  };
   const ScrollToTop = () => {
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
-  };
-  const navigateToSearch = (selectedQuery) => {
-    navigate(`/search?query=${encodeURIComponent(selectedQuery)}`);
   };
   return (
     <div className="NotDrag" style={{ paddingTop: "50px" }}>
@@ -112,34 +128,36 @@ function MainForm() {
         </button>
       </div>
       <h2>찾고자 하는 쓰레기를 업로드해보세요!</h2>
-      <button
-        type="file"
-        id="camera"
-        name="camera"
-        capture="camera"
-        accept="image/*"
-        style={{ display: "none" }}
-        ref={cameraInputRef}
-        onChange={handleCameraChange}
-        aria-label="카메라로 촬영"
-      />
       <div>
-        <button
+        <input
           type="file"
           ref={inputRef}
           style={{ display: "none" }}
           onChange={handleFileChange}
-          aria-label="파일 업로드"
+        />
+        <input
+          type="file"
+          id="camera"
+          name="camera"
+          capture="camera"
+          accept="image/*"
+          ref={cameraInputRef}
+          style={{ display: "none" }}
+          onChange={handleFileChange}
         />
         {image ? (
-          <img src={image} className="uploaded-image" alt="Uploaded" />
+          <div>
+            <button onClick={() => inputRef.current.click()}>사진 촬영</button>
+            <button onClick={handleUploadComplete}>업로드 완료</button>
+            <img src={image} className="uploaded-image" alt="Uploaded" />
+            <button onClick={handleImageRemove}>사진 지우기</button>
+          </div>
         ) : (
           <button
             className={`upload-button ${isActive ? "active" : ""}`}
             onClick={handleImageClick}
             onDragOver={(e) => e.preventDefault()}
             onDrop={handleFileChange}
-            aria-label="사진 업로드"
           >
             클릭이나 드래그로 사진 업로드
           </button>

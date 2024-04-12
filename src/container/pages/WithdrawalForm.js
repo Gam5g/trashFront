@@ -24,16 +24,12 @@ const WithdrawalForm = () => {
     }
 
     try {
-      const Atoken = localStorage.getItem("accessToken");
-      const accountId = localStorage.getItem("accountName");
-      const timeToLive = new Date().toISOString();
-      const Rtoken = localStorage.getItem("refreshToken");
+      const accesstoken = localStorage.getItem("accessToken");
+      const refreshtoken = localStorage.getItem("RefreshToken");
       await AuthToken.delete("http://3.39.190.90/api/account/withdrawal", {
         data: {
-          Atoken,
-          accountId,
-          timeToLive,
-          Rtoken,
+          accesstoken,
+          refreshtoken,
         },
         withCredentials: true,
       });

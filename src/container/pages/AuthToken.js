@@ -30,19 +30,11 @@ AuthToken.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const refreshToken = localStorage.getItem("refreshToken");
-        console.log(refreshToken);
-        const response = await axios.post(
-          "http://3.39.190.90/api/auth/token",
-          {
-            refreshToken: refreshToken,
+        const response = await axios.post("http://3.39.190.90/api/auth/token", {
+          headers: {
+            "Content-Type": "application/json",
           },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        });
 
         if (response.status === 200) {
           const newAccessToken = response.headers.authorization;

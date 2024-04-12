@@ -71,6 +71,7 @@ const LoginForm = () => {
     } catch (error) {
       console.error("에러:", error);
       if (error.response && error.response.status === 403) {
+        alert("회원정보가 일치하지 않습니다.");
         console.error("회원정보가 일치하지 않습니다.");
       } else {
         console.error("네트워크 응답이 올바르지 않습니다.");
