@@ -13,7 +13,7 @@ const CommunityBunriList = () => {
           isMobile ? { textAlign: "center", marginTop: "100px" } : undefined
         }
       >
-        분리수거 커뮤니티
+        분리수거 커뮤니티 ＞
       </h1>
       {isMobile ? (
         <h4 style={{ textAlign: "center" }}>

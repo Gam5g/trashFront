@@ -13,7 +13,7 @@ const CommunityNanumList = () => {
           isMobile ? { textAlign: "center", marginTop: "100px" } : undefined
         }
       >
-        나눔 커뮤니티
+        나눔 커뮤니티 ＞
       </h1>
       {isMobile ? (
         <h4 style={{ textAlign: "center" }}>

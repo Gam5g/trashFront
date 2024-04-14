@@ -10,12 +10,14 @@ import "../../style.css";
 
 function MainForm() {
   const [isActive, setActive] = useState(false);
+  const [inputValue, setInputValue] = useState([]);
   const [query, setQuery] = useState("");
   const [image, setImage] = useState(null);
   const [lastFile, setLastFile] = useState(null);
-  const [isFocused, setIsFocused] = useState(false);
+  const [isSearchFocused, setSearchFocused] = useState(false);
   const { register, handleSubmit } = useForm();
 
+  const prevInputValueRef = useRef("");
   const inputRef = useRef(null);
   const cameraInputRef = useRef(null);
   const navigate = useNavigate();
@@ -62,13 +64,17 @@ function MainForm() {
         });
     }
   };
-  const onSubmit = (data) => {
-    const searchTerm = data.searchTerm.trim();
-    if (searchTerm !== "") {
-      navigate(`/search?query=${encodeURIComponent(searchTerm)}`);
+  const onSubmit = () => {
+    if (prevInputValueRef.current !== inputValue) {
+      prevInputValueRef.current = inputValue;
+      setQuery(inputValue);
+    }
+    if (query.trim() !== "") {
+      navigate(`/search?query=${encodeURIComponent(query)}`);
     }
   };
   const navigateToSearch = (selectedQuery) => {
+    console.log(selectedQuery);
     navigate(`/search?query=${encodeURIComponent(selectedQuery)}`);
   };
   const ScrollToTop = () => {
@@ -78,37 +84,47 @@ function MainForm() {
     });
   };
   return (
-    <div className="NotDrag" style={{ paddingTop: "50px" }}>
+    <div>
       <h2>찾고자 하는 쓰레기를 검색해보세요!</h2>
-      <div className="trash-search-container">
+      <div
+        className={query ? "search-active-container" : "trash-search-container"}
+      >
         <form
           autoComplete="off"
           onSubmit={handleSubmit(onSubmit)}
           className="search-form"
         >
           <div className="search-input-container">
-            <input
-              {...register("searchTerm")}
-              type="text"
-              placeholder="이름 또는 태그로 검색하기"
-              className="search-input"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              onFocus={() => setIsFocused(true)}
-              onBlur={() => setIsFocused(false)}
-            />
-            {isFocused && query && query.length > 0 && (
-              <HiXCircle
-                className="clear-search-button"
-                onClick={() => setQuery("")}
-                style={{ color: "gray" }}
-              />
-            )}
             <div>
+              <input
+                {...register("searchTerm")}
+                type="text"
+                placeholder="이름 또는 태그로 검색하기"
+                className="search-input"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                onFocus={() => {
+                  setSearchFocused(true);
+                }}
+                onBlur={() => {
+                  setSearchFocused(false);
+                }}
+              />
+              {query && query.length > 0 && (
+                <HiXCircle
+                  className="clear-search-button"
+                  onClick={() => setQuery("")}
+                  style={{ color: "gray" }}
+                />
+              )}
+              <button type="submit" className="search-button" aria-label="검색">
+                <FaSearch className="search-icon" />
+              </button>
               {query && query.length > 0 && (
                 <div className="list">
-                  {Trash.filter((target) => target.name.includes(query)).map(
-                    (target) => (
+                  {Trash.filter((target) => target.name.includes(query))
+                    .slice(0, 5)
+                    .map((target) => (
                       <ul
                         key={target.id}
                         className="list-item"
@@ -116,53 +132,77 @@ function MainForm() {
                       >
                         {target.name}
                       </ul>
-                    )
-                  )}
+                    ))}
                 </div>
               )}
             </div>
           </div>
         </form>
-        <button type="submit" className="search-button" aria-label="검색">
-          <FaSearch className="search-icon" />
-        </button>
       </div>
-      <h2>찾고자 하는 쓰레기를 업로드해보세요!</h2>
       <div>
-        <input
-          type="file"
-          ref={inputRef}
-          style={{ display: "none" }}
-          onChange={handleFileChange}
-        />
-        <input
-          type="file"
-          id="camera"
-          name="camera"
-          capture="camera"
-          accept="image/*"
-          ref={cameraInputRef}
-          style={{ display: "none" }}
-          onChange={handleFileChange}
-        />
-        {image ? (
-          <div>
-            <button onClick={() => inputRef.current.click()}>사진 촬영</button>
-            <button onClick={handleUploadComplete}>업로드 완료</button>
-            <img src={image} className="uploaded-image" alt="Uploaded" />
-            <button onClick={handleImageRemove}>사진 지우기</button>
-          </div>
-        ) : (
-          <button
-            className={`upload-button ${isActive ? "active" : ""}`}
-            onClick={handleImageClick}
-            onDragOver={(e) => e.preventDefault()}
-            onDrop={handleFileChange}
-          >
-            클릭이나 드래그로 사진 업로드
-          </button>
-        )}
-        <button onClick={ScrollToTop} className="MoveTopBtn" />
+        <h2>찾고자 하는 쓰레기를 업로드해보세요!</h2>
+        <div>
+          <input
+            type="file"
+            ref={inputRef}
+            style={{ display: "none" }}
+            onChange={handleFileChange}
+          />
+          <input
+            type="file"
+            id="camera"
+            name="camera"
+            capture="camera"
+            accept="image/*"
+            ref={cameraInputRef}
+            style={{ display: "none" }}
+            onChange={handleFileChange}
+          />
+          {image ? (
+            <div
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+                position: "flex",
+              }}
+            >
+              <button
+                className="white-button"
+                onClick={() => inputRef.current.click()}
+              >
+                사진 촬영
+              </button>
+              <button className="white-button" onClick={handleUploadComplete}>
+                업로드 완료
+              </button>
+              <div />
+              <img
+                src={image}
+                className="uploaded-image"
+                alt="Uploaded"
+                style={{
+                  width: "50%",
+                  height: "50%",
+                  objectFit: "cover",
+                }}
+              />
+              <div />
+              <button className="white-button" onClick={handleImageRemove}>
+                사진 지우기
+              </button>
+            </div>
+          ) : (
+            <button
+              className={`upload-button ${isActive ? "active" : ""}`}
+              onClick={handleImageClick}
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={handleFileChange}
+            >
+              클릭이나 드래그로 사진 업로드
+            </button>
+          )}
+          <button onClick={ScrollToTop} className="MoveTopBtn" />
+        </div>
       </div>
     </div>
   );

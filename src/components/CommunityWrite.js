@@ -155,13 +155,14 @@ const CommunityWrite = ({ posttype }) => {
             나눔 완료
           </label>
         )}
-        <div></div>
-        <button className="loginbutton" type="submit">
-          등록
-        </button>
-        <button className="cancelbutton" onClick={NavigateToList}>
-          취소
-        </button>
+        <div className="button-container">
+          <button className="greenbutton" type="submit">
+            등록
+          </button>
+          <button className="cancelbutton" onClick={NavigateToList}>
+            취소
+          </button>
+        </div>
       </form>
     </div>
   );

@@ -174,23 +174,34 @@
     height: 35px;
     border: 1px solid #ccc; 
     border-radius: 4px;
-    background-color: #f9f9f9;
+    background-color: #d9d9d9;
     color: #333;
     font-size: 14px; 
     cursor: pointer;
 }
 
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .greenbutton {
+    margin-top: 60px;
+    margin-left : 8px;
     padding: 8px 20px;
     background-color: #3B855D;
-    width : 84px;
-    height : 35px;
+    width : 144px;
+    height : 45px;
     color: white;
-    font-size: 14px;
+    font-size: 16px;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.3s;
+}
+
+.greenbutton:hover {
+    background-color: #2D6446;
 }
 
 .writebutton:hover {
@@ -210,16 +221,19 @@
 }
 
 
-.search-container select:focus,
 .community-search-input:focus,
-.search-container select:hover,
 .community-search-input:hover,
-.searchbutton:hover,
-.searchBy-container:hover,
 .sort-container:hover {
     border-color: #00A54C
 }
 
+.searchBy-container:hover {
+    background-color: #c6c6c6;
+}
+
+.searchbutton:hover {
+    background-color: #EEEEEE;
+}
 .search-container select:focus,
 .community-search-input:focus,
 .searchbutton:focus,
@@ -240,6 +254,6 @@
     src: url("../../../fonts/Pretendard-Bold.woff2") format('truetype');
   }
   
-.writebutton, .disabled-write-button, .searchBy-container, .community-search-input, .sort-container {
+.writebutton, .disabled-write-button, .searchBy-container, .community-search-input, .sort-container, .greenbutton {
     font-family: 'Pretendard-Bold';
 }

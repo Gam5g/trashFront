@@ -39,4 +39,12 @@ export const Trash = [
     rules: "저러쿵",
     image: "/images/search/old_battery.jpg",
   },
+  {
+    id: 6,
+    name: "유리병",
+    big: "유리병",
+    small: "유리병",
+    rules: "불라불라",
+    image: "/images/search/glass_bottle.png",
+  },
 ];

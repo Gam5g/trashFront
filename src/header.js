@@ -115,7 +115,7 @@ const Header = () => {
             </li>
             <span className="separator">ㅣ</span>
             <li>
-              <a>커뮤니티</a>
+              <a style={{ color: "green" }}>커뮤니티</a>
             </li>
             <li>
               <a href="/community-nanum">나눔</a>
