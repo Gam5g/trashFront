@@ -309,7 +309,7 @@ header {
 
 .position-item {
   text-align: center;
-  border: solid #c8c8c8;
+  border: 0.2px solid #c8c8c8;
   cursor: pointer;
   color: black;
 }

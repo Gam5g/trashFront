@@ -130,14 +130,17 @@ body {
 }
 
 .region-button {
+    margin-top : 5px;
     padding: 8px 20px;
-    background-color: #4CAF50;
+    background-color: #3B855D;
     color: white;
     font-size: 16px;
     border: #124614;
-    border-radius: 5px;
+    height:38px;
+    border-radius: 12px 12px 0 0;
     cursor: pointer;
     transition: background-color 0.3s;
+    box-shadow: 0px -4px 5px rgba(0, 0, 0, 0.4);
   }
   
   .region-button:hover {
@@ -149,8 +152,8 @@ body {
   }
 
   .region-button.active {
-    color:black;
-    background-color: #FFA500;
+    color:#3B855D;
+    background-color: white;
   }
 
 @font-face {

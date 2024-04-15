@@ -208,7 +208,6 @@ const MedicineMap = () => {
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(2, 1fr)",
-          gridGap: "10px",
         }}
       >
         {positions.map((position) => (
@@ -220,7 +219,7 @@ const MedicineMap = () => {
                 : ""
             }`}
             style={{
-              border: "solid #c8c8c8",
+              border: "0.1px solid #c8c8c8",
               cursor: "pointer",
             }}
             onClick={() => handlePositionClick(position)}

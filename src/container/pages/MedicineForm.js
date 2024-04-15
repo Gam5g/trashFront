@@ -37,7 +37,7 @@ const MedicineForm = () => {
     </div>
   ) : (
     <div>
-      <h2>대구시의 폐의약품 수거함 위치</h2>
+      <h2>대구광역시 폐의약품 수거함 위치 ＞</h2>
       <MedicineMap />
     </div>
   );
