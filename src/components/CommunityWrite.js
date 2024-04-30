@@ -9,39 +9,23 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
 const CommunityWrite = ({ posttype }) => {
+  const navigate = useNavigate();
   const isLoggedIn = useRecoilValue(isLoggedInState);
   const [userInfo, setUserInfo] = useState({
     title: "",
     content: "",
+    nanum: false,
+    images: [],
   });
-  const [TitleError, setTitleError] = useState("");
-  const [ContentError, setContentError] = useState("");
+  const [errors, setErrors] = useState({ title: "", content: "" });
 
-  const onChangeTitle = (e) => {
-    setTitleError("");
-    setUserInfo({
-      ...userInfo,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const onChangeContent = (content) => {
-    setContentError("");
-    setUserInfo({
-      ...userInfo,
-      content: content,
-    });
-  };
-
-  const onChangeNanum = (nanum) => {
-    setUserInfo({
-      ...userInfo,
-      nanum: nanum,
-    });
-  };
-
-  const NavigateToList = () => {
-    navigate(`/community-${posttype}`);
+  const onChange = (e) => {
+    const { name, value } = e.target;
+    setErrors((prev) => ({ ...prev, [name]: "" }));
+    setUserInfo((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const modules = useMemo(() => {
@@ -74,40 +58,49 @@ const CommunityWrite = ({ posttype }) => {
     "background",
     "color",
     "link",
+    "image",
   ];
 
   const quillRef = useRef(null);
-  const navigate = useNavigate();
 
   const onSubmit = async (e) => {
+    e.preventDefault();
+    /* if (!isLoggedIn) {
+      alert("로그인 한 후에 글을 작성할 수 있습니다.");
+      return;
+    } */
+    const { title, content, images } = userInfo;
+    if (!title.trim()) {
+      setErrors((prev) => ({ ...prev, title: "제목은 필수 항목입니다." }));
+    }
+
+    if (content.trim().length < 10) {
+      setErrors((prev) => ({
+        ...prev,
+        content: "내용은 최소 10자 이상이어야 합니다.",
+      }));
+    }
+
     try {
-      e.preventDefault();
-      if (!isLoggedIn) {
-        alert("로그인 한 후에 글을 작성할 수 있습니다.");
-        return;
-      }
-      if (userInfo.title.trim() === "") {
-        setTitleError("제목은 필수 항목입니다.");
-      }
-
-      if (userInfo.content.trim().length < 10) {
-        setContentError("내용은 최소 10자 이상이어야 합니다.");
-      }
-
-      if (
-        userInfo.title.trim() !== "" &&
-        userInfo.content.trim().length >= 10
-      ) {
-        const res = await axios.post(`url`, {
-          title: userInfo.title,
-          content: userInfo.content,
-        });
+      {
+        const res = await axios.post(
+          "http://3.39.190.90/api/questionBoard/create",
+          {
+            title: title,
+            content: content,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
         if (res.data.success === true) {
           navigate("/post");
         }
       }
     } catch (error) {
-      throw error;
+      alert("글 등록에 실패했습니다. 다시 시도해주세요.");
     }
   };
 
@@ -124,9 +117,9 @@ const CommunityWrite = ({ posttype }) => {
             name="title"
             placeholder="제목"
             value={userInfo.title}
-            onChange={onChangeTitle}
+            onChange={onChange}
           />
-          {TitleError && <p className="error-message">{TitleError}</p>}
+          {errors.title && <p className="error-message">{errors.title}</p>}
         </div>
         <div style={{ userSelect: "none" }}>
           <ReactQuill
@@ -135,12 +128,13 @@ const CommunityWrite = ({ posttype }) => {
             modules={modules}
             formats={formats}
             theme="snow"
+            name="content"
             style={{ width: "800px", height: "250px", marginBottom: "40px" }}
             placeholder="내용을 입력해주세요."
             value={userInfo.content}
-            onChange={onChangeContent}
+            onChange={(content) => setUserInfo({ ...userInfo, content })}
           ></ReactQuill>
-          {ContentError && <p className="error-message">{ContentError}</p>}
+          {errors.content && <p className="error-message">{errors.content}</p>}
         </div>
         {posttype === "nanum" && (
           <label for="nanum">
@@ -149,7 +143,9 @@ const CommunityWrite = ({ posttype }) => {
               id="nanum"
               name="nanum"
               value="나눔 완료"
-              onChange={onChangeNanum}
+              onChange={(e) =>
+                setUserInfo({ ...userInfo, nanum: e.target.checked })
+              }
               style={{ marginTop: "20px" }}
             />
             나눔 완료
@@ -159,7 +155,10 @@ const CommunityWrite = ({ posttype }) => {
           <button className="greenbutton" type="submit">
             등록
           </button>
-          <button className="cancelbutton" onClick={NavigateToList}>
+          <button
+            className="cancelbutton"
+            onClick={() => navigate(`/community-${posttype}`)}
+          >
             취소
           </button>
         </div>
