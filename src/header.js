@@ -30,6 +30,7 @@ const Header = () => {
 
   const handleLogout = (e) => {
     e.preventDefault();
+    alert("로그아웃되었습니다.");
     setIsLoggedIn(false);
     removeCookie("accessToken", { path: "/" });
     localStorage.removeItem("accessToken");

@@ -15,7 +15,7 @@ function MainForm() {
   const [image, setImage] = useState(null);
   const [lastFile, setLastFile] = useState(null);
   const [isSearchFocused, setSearchFocused] = useState(false);
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, reset } = useForm();
 
   const prevInputValueRef = useRef("");
   const inputRef = useRef(null);
@@ -64,14 +64,29 @@ function MainForm() {
         });
     }
   };
-  const onSubmit = () => {
-    if (prevInputValueRef.current !== inputValue) {
+  const onSubmit = (data) => {
+    const searchTerm = data.searchTerm.trim();
+    if (searchTerm) {
+      axios
+        .get(
+          `http://3.39.190.90/api/separation/${encodeURIComponent(searchTerm)}`
+        ) // 배출방법 현재 없다고 나옴
+        .then((response) => {
+          console.log("Search Results :", response.data);
+          navigate(`/search/${searchTerm}`);
+        })
+        .catch((error) => {
+          console.error("Search error : ", error);
+        });
+    }
+    reset();
+    /*if (prevInputValueRef.current !== inputValue) {
       prevInputValueRef.current = inputValue;
       setQuery(inputValue);
     }
     if (query.trim() !== "") {
       navigate(`/search?query=${encodeURIComponent(query)}`);
-    }
+    } */
   };
   const navigateToSearch = (selectedQuery) => {
     console.log(selectedQuery);

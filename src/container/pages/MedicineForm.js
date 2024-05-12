@@ -1,45 +1,56 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios"; // Ensure axios is imported
 import MedicineMap from "./MedicineMap";
 import MedicineAgreedMap from "./MedicineAgreedMap";
-import AuthToken from "./AuthToken";
 import { useRecoilValue } from "recoil";
 import { isLoggedInState } from "../../state/authState";
 
 const MedicineForm = () => {
   const isLoggedIn = useRecoilValue(isLoggedInState);
-  const [account, setAccount] = useState([]);
+  const [locationData, setLocationData] = useState(null);
 
   useEffect(() => {
-    const fetchAccount = async () => {
+    const fetchLocationData = async () => {
       try {
-        const response = await AuthToken.get(
-          "http://3.39.190.90/api/account/list"
+        // Assume you fetch user's state and city from local storage or context
+        const userState = localStorage.getItem("userState");
+        const userCity = localStorage.getItem("userCity");
+        const response = await axios.get(
+          `http://3.39.190.90/api/location/medicine`,
+          {
+            params: {
+              state: userState,
+              city: userCity,
+            },
+          }
         );
-        const accountName = localStorage.getItem("accountName");
-        const matchingAccount = response.data.find(
-          (account) => account.accountName === accountName
-        );
-        if (matchingAccount) setAccount(matchingAccount);
+        setLocationData(response.data);
+        console.log("Location data fetched:", response.data);
       } catch (error) {
-        console.error("Failed to fetch account information", error);
+        console.error("Failed to fetch location data", error);
       }
     };
 
-    fetchAccount();
-  }, []);
-  const latitude = account.latitude;
-  const longitude = account.longitude;
-  console.log(latitude);
-  return isLoggedIn && latitude && longitude ? (
+    if (isLoggedIn) {
+      fetchLocationData();
+    }
+  }, [isLoggedIn]);
+
+  return (
     <div>
-      <h2>현재 위치에 따른 폐의약품 수거함 위치</h2>
-      <MedicineAgreedMap />
-    </div>
-  ) : (
-    <div>
-      <h2>대구광역시 폐의약품 수거함 위치 ＞</h2>
-      <MedicineMap />
+      {isLoggedIn && locationData ? (
+        <div>
+          <h2>현재 위치에 따른 폐의약품 수거함 위치</h2>
+          <MedicineAgreedMap locationData={locationData} />
+        </div>
+      ) : (
+        <div>
+          <h2>대구광역시 폐의약품 수거함 위치 ＞</h2>
+          <MedicineMap />
+        </div>
+      )}
     </div>
   );
 };
+
 export default MedicineForm;
