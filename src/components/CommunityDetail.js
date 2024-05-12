@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { isLoggedInState } from "../state/authState";
 import "../container/pages/Community/Detail.css";
 
 const CommunityDetail = ({ posts, postsType }) => {
   const location = useLocation();
+  const isLoggedIn = useRecoilValue(isLoggedInState);
   const id = parseInt(location.pathname.split("/").pop());
   const navigate = useNavigate();
   const [post, setPost] = useState(null);
@@ -71,6 +74,15 @@ const CommunityDetail = ({ posts, postsType }) => {
           목록
         </button>
       )}
+      <h2>개의 댓글</h2>
+      <div>
+        {isLoggedIn ? (
+          <input type="text" placeholder="댓글을 입력하세요"></input>
+        ) : (
+          <input placeholder="로그인하세요" disabled></input>
+        )}
+        <button>등록</button>
+      </div>
     </div>
   );
 };

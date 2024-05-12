@@ -1,5 +1,5 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Trash } from "./trash";
 import Medicine from "./MedicineMap";
 import "../../style.css";
@@ -9,16 +9,23 @@ function SearchDetailForm() {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const query = queryParams.get("query");
-
+  const navigate = useNavigate();
   const searchResult = Trash.find((item) => item.name === query);
 
+  const handleEdit = () => {
+    navigate(`/search/edit?query=${encodeURIComponent(query)}`);
+  };
   return (
     <div className="NotDrag">
       {searchResult ? (
         <div>
           <div>
             <h1 style={{ textAlign: "center" }}>{searchResult.name}</h1>
-            <img src={searchResult.image} alt={searchResult.name} />
+            <img
+              src={searchResult.image}
+              style={{ width: "300px", height: "500px" }}
+              alt={searchResult.name}
+            />
             <p>큰 분류: {searchResult.big}</p>
             <p>작은 분류: {searchResult.small}</p>
             <p
@@ -27,6 +34,7 @@ function SearchDetailForm() {
               배출 요령
             </p>
             <p>{searchResult.rules}</p>
+            <button onClick={handleEdit}>편집</button>
             {searchResult.name === "폐의약품" && (
               <div>
                 <div>

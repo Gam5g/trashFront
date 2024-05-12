@@ -47,7 +47,6 @@ const LoginForm = () => {
         },
         {
           headers: {
-            "Content-Type": "application/json",
             Authorization: cookies.accessToken,
           },
         }

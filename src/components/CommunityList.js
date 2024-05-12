@@ -176,7 +176,10 @@ const CommunityList = ({ posts, postType }) => {
             </button>
             {!isMobile &&
               (isLoggedIn ? (
-                <button className="greenbutton" onClick={NavigateToWrite}>
+                <button
+                  className="write-green-button"
+                  onClick={NavigateToWrite}
+                >
                   글쓰기
                 </button>
               ) : (
@@ -195,7 +198,7 @@ const CommunityList = ({ posts, postType }) => {
           {isMobile &&
             (isLoggedIn ? (
               <button
-                className="greenbutton"
+                className="write-green-button"
                 style={{ marginLeft: "450px" }}
                 onClick={NavigateToWrite}
               >

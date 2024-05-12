@@ -1,41 +1,49 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import AuthToken from "./AuthToken";
+import axios from "axios";
+import { useRecoilState } from "recoil";
+import { isLoggedInState } from "../../state/authState";
 
 const WithdrawalForm = () => {
   const {
     register,
     formState: { errors },
     handleSubmit,
-    getValues,
   } = useForm({
     mode: "onChange",
   });
 
   const [backendError, setBackendError] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInState);
   const navigate = useNavigate();
 
   const onSubmit = async () => {
-    const { confirmation } = getValues();
-    if (confirmation !== "탈퇴합니다") {
-      setBackendError("정확한 문구를 입력해야 탈퇴가 가능합니다.");
-      return;
-    }
-
     try {
-      const accesstoken = localStorage.getItem("accessToken");
-      const refreshtoken = localStorage.getItem("RefreshToken");
-      await AuthToken.delete("http://3.39.190.90/api/account/withdrawal", {
-        data: {
-          accesstoken,
-          refreshtoken,
-        },
-        withCredentials: true,
-      });
+      const accessToken = localStorage.getItem("accessToken");
+      const accessTokenObject = {
+        accountId: 0,
+        timeToLive: new Date().toISOString(),
+      };
+
+      const response = await axios.delete(
+        "http://3.39.190.90/api/account/withdrawal",
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+          data: accessTokenObject,
+          withCredentials: true,
+        }
+      );
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("RefreshToken");
+      setIsLoggedIn(false);
       navigate("/");
     } catch (error) {
       setBackendError("탈퇴 처리 중 오류가 발생했습니다. 다시 시도해주세요.");
+      console.error("Error during withdrawal:", error);
     }
   };
 

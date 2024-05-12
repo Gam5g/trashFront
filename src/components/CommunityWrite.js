@@ -1,12 +1,15 @@
-import React, { useRef, useMemo, useState } from "react";
+import React, { useRef, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { isLoggedInState } from "../state/authState";
 import axios from "axios";
 import "../container/pages/Community/Community.css";
 import "../Button.css";
-import ReactQuill from "react-quill";
+import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import ImageResize from "quill-image-resize";
+
+Quill.register("modules/imageResize", ImageResize);
 
 const CommunityWrite = ({ posttype }) => {
   const navigate = useNavigate();
@@ -15,7 +18,8 @@ const CommunityWrite = ({ posttype }) => {
     title: "",
     content: "",
     nanum: false,
-    images: [],
+    imageUrl: "",
+    category: posttype === "bunri" ? "분리수거" : "나눔",
   });
   const [errors, setErrors] = useState({ title: "", content: "" });
 
@@ -39,6 +43,10 @@ const CommunityWrite = ({ posttype }) => {
           [{ color: [] }, { background: [] }],
           [{ align: [] }, "link", "image"],
         ],
+      },
+      imageResize: {
+        parchment: Quill.import("parchment"),
+        modules: ["Resize", "DisplaySize"],
       },
     };
   }, []);
@@ -69,7 +77,7 @@ const CommunityWrite = ({ posttype }) => {
       alert("로그인 한 후에 글을 작성할 수 있습니다.");
       return;
     } */
-    const { title, content, images } = userInfo;
+    const { title, content, imageUrl, category } = userInfo;
     if (!title.trim()) {
       setErrors((prev) => ({ ...prev, title: "제목은 필수 항목입니다." }));
     }
@@ -79,15 +87,17 @@ const CommunityWrite = ({ posttype }) => {
         ...prev,
         content: "내용은 최소 10자 이상이어야 합니다.",
       }));
+      return;
     }
-
     try {
       {
         const res = await axios.post(
           "http://3.39.190.90/api/questionBoard/create",
           {
-            title: title,
-            content: content,
+            title,
+            content,
+            category,
+            imageUrl,
           },
           {
             headers: {

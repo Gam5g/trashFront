@@ -203,6 +203,23 @@
 .greenbutton:hover {
     background-color: #2D6446;
 }
+.write-green-button {
+    margin-left : 8px;
+    padding: 8px 20px;
+    background-color: #3B855D;
+    width : 104px;
+    height : 35px;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.write-green-button:hover {
+    background-color: #2D6446;
+}
 
 .writebutton:hover {
     background-color: #0073e6;
@@ -254,6 +271,6 @@
     src: url("../../../fonts/Pretendard-Bold.woff2") format('truetype');
   }
   
-.writebutton, .disabled-write-button, .searchBy-container, .community-search-input, .sort-container, .greenbutton {
+.writebutton, .disabled-write-button, .searchBy-container, .write-green-button, .community-search-input, .sort-container, .greenbutton {
     font-family: 'Pretendard-Bold';
 }

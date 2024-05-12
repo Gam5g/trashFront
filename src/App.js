@@ -17,6 +17,7 @@ import CommunityBunriDetail from "./container/pages/Community/CommunityBunriDeta
 import MyPageForm from "./container/pages/MyPageForm";
 import MedicineForm from "./container/pages/MedicineForm";
 import SearchDetailForm from "./container/pages/SearchDetailForm";
+import SearchEditForm from "./container/pages/SearchEditForm";
 import SwaggerDocs from "./SwaggerDocs";
 import NotFound from "./container/pages/NotFound";
 import Header from "./header";
@@ -47,6 +48,7 @@ function App() {
             <Route path="/find-password" element={<FindPassword />} />
             <Route path="/station" element={<Station />} />
             <Route path="/search" element={<SearchDetailForm />} />
+            <Route path="/search/edit" element={<SearchEditForm />} />
             <Route path="/community-nanum" element={<CommunityNanumList />} />
             <Route path="/community-bunri" element={<CommunityBunriList />} />
             <Route path="/my-page" element={<MyPageForm />} />

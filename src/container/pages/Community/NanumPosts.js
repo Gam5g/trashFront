@@ -113,7 +113,8 @@ export const NanumPosts = [
   },
   {
     id: 12,
-    title: "열두 번째 글열두 번째 글열두 번째 글열두 번째 글열두 번째 글",
+    title:
+      "열두 번째 글열두 번째 글열두 번째 글열두 번째 글열두 번째 글열두 번째 글열두 번째 글열두 번째 글",
     content: "고구마깡",
     nickname: "작성자12",
     views: 5,
