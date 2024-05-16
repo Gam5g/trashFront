@@ -12,6 +12,9 @@ function SearchDetailForm() {
   const navigate = useNavigate();
   const searchResult = Trash.find((item) => item.name === query);
 
+  const navigateToHome = () => {
+    navigate("/");
+  };
   const handleEdit = () => {
     navigate(`/search/edit?query=${encodeURIComponent(query)}`);
   };
@@ -21,20 +24,60 @@ function SearchDetailForm() {
         <div>
           <div>
             <h1 style={{ textAlign: "center" }}>{searchResult.name}</h1>
-            <img
-              src={searchResult.image}
-              style={{ width: "300px", height: "500px" }}
-              alt={searchResult.name}
-            />
-            <p>큰 분류: {searchResult.big}</p>
-            <p>작은 분류: {searchResult.small}</p>
-            <p
-              style={{ textAlign: "center", color: "green", fontSize: "30px" }}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
             >
-              배출 요령
-            </p>
-            <p>{searchResult.rules}</p>
-            <button onClick={handleEdit}>편집</button>
+              <img
+                src={searchResult.image}
+                style={{
+                  width: "60%",
+                  height: "60%",
+                }}
+                alt={searchResult.name}
+              />
+            </div>
+            <div style={{ textAlign: "center" }}>
+              <p
+                style={{
+                  textAlign: "center",
+                  color: "green",
+                  fontSize: "25px",
+                }}
+              >
+                재질
+              </p>
+              {searchResult.quality}
+              <p
+                style={{
+                  textAlign: "center",
+                  color: "green",
+                  fontSize: "25px",
+                }}
+              >
+                키워드
+              </p>
+              {searchResult.keywords}
+              <p
+                style={{
+                  textAlign: "center",
+                  color: "green",
+                  fontSize: "25px",
+                }}
+              >
+                배출 요령
+              </p>
+              <p>{searchResult.rules}</p>
+            </div>
+            <div style={{ marginLeft: "350px" }}>
+              <button onClick={handleEdit}>수정하기</button>
+              <button onClick={navigateToHome} style={{ marginLeft: "10px" }}>
+                돌아가기
+              </button>
+            </div>
             {searchResult.name === "폐의약품" && (
               <div>
                 <div>

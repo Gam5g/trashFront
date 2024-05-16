@@ -21,7 +21,7 @@ const SearchEditForm = () => {
   useEffect(() => {
     if (!isLoggedIn) {
       alert("로그인 한 후에 글을 작성할 수 있습니다.");
-      navigate("/login");
+      navigate("/api/auth/sign-in");
     }
   }, [isLoggedIn, navigate]);
 
@@ -39,7 +39,25 @@ const SearchEditForm = () => {
   };
   return (
     <div>
-      <h1>{query}의 배출요령을 편집하세요</h1>
+      <h1>{query}</h1>
+      <h3
+        style={{
+          textAlign: "center",
+          color: "green",
+          fontSize: "25px",
+        }}
+      >
+        재질
+      </h3>
+      <h3
+        style={{
+          textAlign: "center",
+          color: "green",
+          fontSize: "25px",
+        }}
+      >
+        배출요령
+      </h3>
       <ReactQuill
         value={editedRules}
         onChange={handleRulesChange}
