@@ -10,10 +10,18 @@ function MyPageForm() {
   const navigate = useNavigate();
   const [account, setAccount] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [userId, setUserId] = useState(null);
 
   const navigateToOut = () => {
     navigate("/api/account/withdrawal");
   };
+
+  useEffect(() => {
+    const storedUserId = localStorage.getItem("currentUserId");
+    if (storedUserId) {
+      setUserId(parseInt(storedUserId, 10));
+    }
+  }, []);
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -23,7 +31,7 @@ function MyPageForm() {
       (async () => {
         try {
           const response = await AuthToken.get(
-            "http://3.39.190.90/api/account/me"
+            `http://3.39.190.90/api/account/me?id=${userId}`
           );
           setAccount(response.data);
         } catch (error) {
@@ -33,7 +41,17 @@ function MyPageForm() {
         }
       })();
     }
-  }, [isLoggedIn, navigate]);
+  }, [isLoggedIn, navigate, userId]);
+
+  const onUpdate = async () => {
+    try {
+      const update_response = await AuthToken.put(
+        `http://3.39.190.90/api/account/me?id=${userId}`
+      );
+    } catch (error) {
+      console.error("error : ", error);
+    }
+  }; // 아직 미구현
 
   if (loading) {
     return <div className="loading">Loading...</div>;
@@ -51,7 +69,7 @@ function MyPageForm() {
             <li>위도: {account.longitude}</li>
           </ul>
           {<button onClick={navigateToOut}>회원 탈퇴</button>}
-          {/* <button onClick={}>정보 수정</button> */}
+          {<button onClick={onUpdate}>정보 수정</button>}
         </div>
       ) : (
         <div>계정 정보를 찾을 수 없습니다.</div>

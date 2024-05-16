@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { VscCopilot } from "react-icons/vsc";
@@ -12,7 +12,7 @@ import "../../App.css";
 const RegisterForm = () => {
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
-
+  const [currentUserId, setCurrentUserID] = useState(0);
   const {
     register,
     watch,
@@ -24,6 +24,15 @@ const RegisterForm = () => {
       userId: 0,
     },
   });
+
+  useEffect(() => {
+    const storedUserId = localStorage.getItem("currentUserId");
+    if (storedUserId) {
+      setCurrentUserID(parseInt(storedUserId, 10));
+    } else {
+      localStorage.setItem("currentUserId", "0");
+    }
+  }, []);
 
   const onSubmit = () => {
     if (agreed) {
@@ -46,6 +55,7 @@ const RegisterForm = () => {
   };
 
   const submitForm = (latitude = null, longitude = null) => {
+    const userId = currentUserId;
     const formData = {
       id: watch("id"),
       password: watch("password"),
@@ -81,6 +91,9 @@ const RegisterForm = () => {
       })
       .then((result) => {
         console.log("결과:", result);
+        const newUserId = userId + 1;
+        setCurrentUserID(newUserId);
+        localStorage.setItem("currentUserId", newUserId.toString());
         navigate("../api/auth/sign-in");
       })
       .catch((error) => {

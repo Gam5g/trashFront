@@ -1,11 +1,12 @@
 .container {
-    max-width: 600px;
+    max-width: 1000px;
     margin: 0 auto;
     padding: 20px;
   }
   
   .post {
     background-color: #f9f9f9;
+    width : 700px;
     border-radius: 8px;
     padding: 20px;
     margin-bottom: 20px;
@@ -34,6 +35,48 @@
     margin-top: 20px;
   }
   
+  .commentbox {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height : 120px;
+    border : 0.3px solid #d9d9d9;
+    border-radius : 10px;
+    margin-top: 10px;
+    padding : 10px;
+  }
+
+  .commentbox h5 {
+    margin : 0;
+    margin-right : 10px;
+    font-weight: normal;
+  }
+  .commentinput {
+    border : none;
+    height : 40px;
+    margin-right:10px;
+    outline: none;
+  }
+
+  .commentinput::placeholder {
+    color: #d9d9d9;
+  }
+
+  .commentinput:hover, .commentinput:focus {
+    border : none;
+    outline : none;
+  }
+
+  .submitButton {
+    align-self: flex-end;
+    font-size : 16px;
+    font-weight: bold;
+    border : none;
+    color : #3B855D;
+    background-color: white;
+    cursor : pointer;
+  }
+
   .deleteButton, .editButton, .listButton {
     padding: 10px 20px;
     border: none;
@@ -43,13 +86,23 @@
     transition: background-color 0.3s ease;
   }
   
+  .likesButton {
+    font-size : bold 15px;
+    background-color: white;
+    width : 50px;
+    height:50px;
+    color : #3B855D;
+    border : 1px solid #3B855D;
+    border-radius: 50px 50px 50px 50px;
+    
+  }
   .deleteButton {
     background-color: #ff5555;
     color: #fff;
   }
 
   .editButton {
-    background-color: #038b85;
+    background-color: #3B855D;
     color: #fff;
     margin-left: 10px;
   }
@@ -72,6 +125,10 @@
     background-color: #0056b3;
   }
   
+  .likesButton:hover {
+    color : white;
+    background-color: #038b85;
+  }
   .post-content {
     font-size: 16px; 
     line-height: 1.6;
@@ -83,6 +140,6 @@
     src: url("../../../fonts/Pretendard-Bold.woff2") format('truetype');
   }
   
-.deleteButton, .listButton, .editButton{
+.deleteButton, .listButton, .editButton, .commentinput, .submitButton{
     font-family: 'Pretendard-Bold';
 }

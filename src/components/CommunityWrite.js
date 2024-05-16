@@ -22,6 +22,7 @@ const CommunityWrite = ({ posttype }) => {
     category: posttype === "bunri" ? "분리수거" : "나눔",
   });
   const [errors, setErrors] = useState({ title: "", content: "" });
+  const [currentQuestionId, setCurrentQuestionId] = useState(0);
 
   const onChange = (e) => {
     const { name, value } = e.target;
@@ -31,6 +32,15 @@ const CommunityWrite = ({ posttype }) => {
       [name]: value,
     }));
   };
+
+  useEffect(() => {
+    const storedQuestionId = localStorage.getItem("currentQuestionId");
+    if (storedQuestionId) {
+      setCurrentQuestionId(parseInt(storedQuestionId, 10));
+    } else {
+      localStorage.setItem("currentQuestionId", "0");
+    }
+  }, []);
 
   const modules = useMemo(() => {
     return {
@@ -73,13 +83,15 @@ const CommunityWrite = ({ posttype }) => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    /* if (!isLoggedIn) {
+    if (!isLoggedIn) {
       alert("로그인 한 후에 글을 작성할 수 있습니다.");
       return;
-    } */
+    }
+    const questionId = currentQuestionId;
     const { title, content, imageUrl, category } = userInfo;
     if (!title.trim()) {
       setErrors((prev) => ({ ...prev, title: "제목은 필수 항목입니다." }));
+      return;
     }
 
     if (content.trim().length < 10) {
@@ -89,25 +101,27 @@ const CommunityWrite = ({ posttype }) => {
       }));
       return;
     }
+
     try {
-      {
-        const res = await axios.post(
-          "http://3.39.190.90/api/questionBoard/create",
-          {
-            title,
-            content,
-            category,
-            imageUrl,
+      const res = await axios.post(
+        `http://3.39.190.90/api/questionBoard/create?id=${questionId}`,
+        {
+          title,
+          content,
+          category,
+          imageUrl,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
           },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        if (res.data.success === true) {
-          navigate("/post");
         }
+      );
+      if (res.data.success === true) {
+        navigate("/post");
+        const newQuestionId = questionId + 1;
+        setCurrentQuestionId(newQuestionId);
+        localStorage.setItem("currentQuestionId", newQuestionId.toString());
       }
     } catch (error) {
       alert("글 등록에 실패했습니다. 다시 시도해주세요.");
@@ -147,12 +161,12 @@ const CommunityWrite = ({ posttype }) => {
           {errors.content && <p className="error-message">{errors.content}</p>}
         </div>
         {posttype === "nanum" && (
-          <label for="nanum">
+          <label htmlFor="nanum">
             <input
               type="checkbox"
               id="nanum"
               name="nanum"
-              value="나눔 완료"
+              checked={userInfo.nanum}
               onChange={(e) =>
                 setUserInfo({ ...userInfo, nanum: e.target.checked })
               }

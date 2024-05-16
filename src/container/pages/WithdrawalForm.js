@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -16,7 +16,15 @@ const WithdrawalForm = () => {
 
   const [backendError, setBackendError] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInState);
+  const [userId, setUserId] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const storedUserId = localStorage.getItem("currentUserId");
+    if (storedUserId) {
+      setUserId(parseInt(storedUserId, 10));
+    }
+  }, []);
 
   const onSubmit = async () => {
     try {
@@ -27,7 +35,7 @@ const WithdrawalForm = () => {
       };
 
       const response = await axios.delete(
-        "http://3.39.190.90/api/account/withdrawal",
+        `http://3.39.190.90/api/account/withdrawal?id=${userId}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
