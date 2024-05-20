@@ -4,6 +4,7 @@ import { useRecoilValue } from "recoil";
 import { isLoggedInState } from "../../state/authState";
 import AuthToken from "./AuthToken";
 import "./MyPageForm.css";
+import { useCookies } from "react-cookie";
 
 function MyPageForm() {
   const isLoggedIn = useRecoilValue(isLoggedInState);
@@ -11,6 +12,7 @@ function MyPageForm() {
   const [account, setAccount] = useState(null);
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState(null);
+  const [cookies, setCookie] = useCookies(["accessToken"]);
 
   const navigateToOut = () => {
     navigate("/api/account/withdrawal");
@@ -24,6 +26,7 @@ function MyPageForm() {
   }, []);
 
   useEffect(() => {
+    const accessToken = localStorage.getItem("accessToken");
     if (!isLoggedIn) {
       alert("로그인한 회원만 볼 수 있습니다.");
       navigate("/");
@@ -31,7 +34,12 @@ function MyPageForm() {
       (async () => {
         try {
           const response = await AuthToken.get(
-            `http://3.39.190.90/api/account/me?id=${userId}`
+            `http://3.39.190.90/api/account/me?id=${userId}`,
+            {
+              headers: {
+                Authorization: cookies.accessToken,
+              },
+            }
           );
           setAccount(response.data);
         } catch (error) {
@@ -44,14 +52,8 @@ function MyPageForm() {
   }, [isLoggedIn, navigate, userId]);
 
   const onUpdate = async () => {
-    try {
-      const update_response = await AuthToken.put(
-        `http://3.39.190.90/api/account/me?id=${userId}`
-      );
-    } catch (error) {
-      console.error("error : ", error);
-    }
-  }; // 아직 미구현
+    navigate("/my-page/update");
+  };
 
   if (loading) {
     return <div className="loading">Loading...</div>;
@@ -68,8 +70,20 @@ function MyPageForm() {
             <li>경도: {account.latitude}</li>
             <li>위도: {account.longitude}</li>
           </ul>
-          {<button onClick={navigateToOut}>회원 탈퇴</button>}
-          {<button onClick={onUpdate}>정보 수정</button>}
+          {
+            <button
+              className="withdrawal-button"
+              onClick={navigateToOut}
+              style={{ marginBottom: "15px" }}
+            >
+              회원 탈퇴
+            </button>
+          }
+          {
+            <button className="info-update-button" onClick={onUpdate}>
+              정보 수정
+            </button>
+          }
         </div>
       ) : (
         <div>계정 정보를 찾을 수 없습니다.</div>
