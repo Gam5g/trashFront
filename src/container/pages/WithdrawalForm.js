@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { useRecoilState } from "recoil";
 import { isLoggedInState } from "../../state/authState";
+import AuthToken from "./AuthToken";
 
 const WithdrawalForm = () => {
   const {
@@ -29,12 +29,13 @@ const WithdrawalForm = () => {
   const onSubmit = async () => {
     try {
       const accessToken = localStorage.getItem("accessToken");
+      console.log(accessToken);
       const accessTokenObject = {
         accountId: 0,
         timeToLive: new Date().toISOString(),
       };
 
-      const response = await axios.delete(
+      const response = await AuthToken.delete(
         `http://3.39.190.90/api/account/withdrawal?id=${userId}`,
         {
           headers: {
@@ -46,7 +47,6 @@ const WithdrawalForm = () => {
         }
       );
       localStorage.removeItem("accessToken");
-      localStorage.removeItem("RefreshToken");
       setIsLoggedIn(false);
       navigate("/");
     } catch (error) {

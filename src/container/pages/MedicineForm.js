@@ -12,7 +12,6 @@ const MedicineForm = () => {
   useEffect(() => {
     const fetchLocationData = async () => {
       try {
-        // Assume you fetch user's state and city from local storage or context
         const userState = localStorage.getItem("userState");
         const userCity = localStorage.getItem("userCity");
         const response = await axios.get(

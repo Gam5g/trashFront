@@ -50,10 +50,8 @@ function MainForm() {
   const handleUploadComplete = async () => {
     if (lastFile) {
       console.log("GET 요청 파일명 :", lastFile.name);
-      axios({
-        method: "get",
-        url: "http://3.39.190.90/api/separation",
-      })
+      axios
+        .get("http://3.39.190.90/api/separation")
         .then((result) => {
           const data = result.data;
           console.log("데이터:", data);
