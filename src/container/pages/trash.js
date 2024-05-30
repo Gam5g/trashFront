@@ -44,7 +44,8 @@ export const Trash = [
     name: "유리병",
     quality: "유리병",
     keywords: "#유리 #유리병",
-    rules: "불라불라",
+    rules:
+      "유리병 안에 남아 있는 내용물을 깨끗이 비웁니다.\n물로 헹구어 내부를 깨끗하게 만듭니다.\n라벨이나 스티커가 붙어있다면 가능한 한 제거합니다.",
     image: "/images/search/glass_bottle.png",
   },
 ];
