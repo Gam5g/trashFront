@@ -27,6 +27,7 @@ import Header from "./header";
 import { RecoilRoot } from "recoil";
 import { isLoggedInState } from "./state/authState";
 import Loading from "./container/pages/LoadingForm";
+import AdminForm from "./container/pages/AdminForm";
 
 function App() {
   const initializeState = ({ set }) => {
@@ -41,6 +42,7 @@ function App() {
           <Header />
           <Routes>
             <Route exact path="/" element={<MainForm />} />
+            <Route path="/admin" element={<AdminForm />} />
             <Route path="/api/auth/sign-up" element={<RegisterForm />} />
             <Route path="/api/auth/sign-in" element={<LoginForm />} />
             <Route
