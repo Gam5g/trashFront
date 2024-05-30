@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { useMediaQuery } from "react-responsive";
@@ -12,7 +11,6 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [width, setWidth] = useState(0);
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInState);
-  const [, , removeCookie] = useCookies(["accessToken"]);
   const navigate = useNavigate();
 
   const handleLogoClick = () => {
@@ -30,9 +28,18 @@ const Header = () => {
 
   const handleLogout = (e) => {
     e.preventDefault();
+    try {
+      /*const response = await AuthToken.post("http://3.39.190.90/api/account/sign-out?accessToken={$accessToken}&RefreshToken={$RefreshToken}", {
+        {
+          headers: {
+            Authorization: localStorage.getItem("accessToken"),
+            "Content-Type": "application/json",
+          },
+        }
+      }) */
+    } catch {}
     alert("로그아웃되었습니다.");
     setIsLoggedIn(false);
-    removeCookie("accessToken", { path: "/" });
     localStorage.removeItem("accessToken");
     navigate("/");
   };
@@ -79,14 +86,16 @@ const Header = () => {
                 <li>
                   <a style={{ color: "darkgray" }}>커뮤니티</a>
                 </li>
+                /*
                 <li>
                   <a href="/community-nanum">나눔</a>
                 </li>
+                */
                 <li>
                   <a href="/community-bunri">분리수거</a>
                 </li>
                 <li>
-                  <a href="/medicine-location">폐의약품 위치</a>
+                  <a href="/medicine">폐의약품 위치</a>
                 </li>
               </ul>
             </div>
@@ -126,7 +135,7 @@ const Header = () => {
             </li>
             <span className="separator">ㅣ</span>
             <li>
-              <a href="/medicine-location">폐의약품 위치</a>
+              <a href="/medicine">수거함 위치</a>
             </li>
           </ul>
         </nav>

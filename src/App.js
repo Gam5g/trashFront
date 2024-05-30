@@ -16,6 +16,8 @@ import CommunityNanumDetail from "./container/pages/Community/CommunityNanumDeta
 import CommunityBunriDetail from "./container/pages/Community/CommunityBunriDetail";
 import MyPageForm from "./container/pages/MyPageForm";
 import MyPageUpdateForm from "./container/pages/MyPageUpdateForm";
+import MyCommunityList from "./container/pages/MyCommunityList";
+import BatteryForm from "./container/pages/BatteryForm";
 import MedicineForm from "./container/pages/MedicineForm";
 import SearchDetailForm from "./container/pages/SearchDetailForm";
 import SearchEditForm from "./container/pages/SearchEditForm";
@@ -54,6 +56,7 @@ function App() {
             <Route path="/community-bunri" element={<CommunityBunriList />} />
             <Route path="/my-page" element={<MyPageForm />} />
             <Route path="/my-page/update" element={<MyPageUpdateForm />} />
+            <Route path="/my-page/list" element={<MyCommunityList />} />
             <Route path="/loading" element={<Loading />} />
             <Route
               path="/community-nanum/:id"
@@ -71,7 +74,8 @@ function App() {
               path="/community-bunri/write"
               element={<CommunityBunriWrite />}
             />
-            <Route path="/medicine-location" element={<MedicineForm />} />
+            <Route path="/battery" element={<BatteryForm />} />
+            <Route path="/medicine" element={<MedicineForm />} />
             <Route path="/*" element={<NotFound />} />
           </Routes>
         </Router>

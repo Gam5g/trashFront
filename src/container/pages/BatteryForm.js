@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import MedicineMap from "./MedicineMap";
-import MedicineAgreedMap from "./MedicineAgreedMap";
+import axios from "axios"; // Ensure axios is imported
 import { useRecoilValue } from "recoil";
 import { isLoggedInState } from "../../state/authState";
+import BatteryMap from "./BatteryMap";
 import "../../Button.css";
 
-const MedicineForm = () => {
+const BatteryForm = () => {
   const isLoggedIn = useRecoilValue(isLoggedInState);
   const [locationData, setLocationData] = useState(null);
   const navigate = useNavigate();
 
-  const navigateToBattery = () => {
-    navigate("/battery");
+  const navigateToMedicine = () => {
+    navigate("/medicine");
   };
   useEffect(() => {
     const fetchLocationData = async () => {
@@ -47,23 +46,19 @@ const MedicineForm = () => {
         className="button-container"
         style={{ marginTop: "40px", marginBottom: "20px" }}
       >
-        <button
-          className="write-green-button"
-          style={{ width: "220px", marginLeft: "0px" }}
-        >
+        <button className="gray-button" onClick={navigateToMedicine}>
           폐의약품 수거함
         </button>
         <button
-          className="gray-button"
-          onClick={navigateToBattery}
-          style={{ marginLeft: "10px" }}
+          className="write-green-button"
+          style={{ marginLeft: "10px", width: "220px" }}
         >
           폐건전지/폐형광등 수거함
         </button>
       </div>
-      <MedicineMap />
+      <BatteryMap />
     </div>
   );
 };
 
-export default MedicineForm;
+export default BatteryForm;
