@@ -5,7 +5,7 @@ import { RiLockPasswordLine } from "react-icons/ri";
 import { LuUserSquare2 } from "react-icons/lu";
 import { useForm } from "react-hook-form";
 import { useSetRecoilState } from "recoil";
-import { useCookies } from "react-cookie";
+import { useCookies, Cookies } from "react-cookie";
 import "../../App.css";
 import "../../Button.css";
 import AuthToken from "./AuthToken";
@@ -23,7 +23,7 @@ const LoginForm = () => {
 
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [cookies, setCookie] = useCookies(["accessToken"]);
+  const [cookies, setCookie] = useCookies(["accessToken, RefreshToken"]);
   const { state } = useLocation();
   const setIsLoggedIn = useSetRecoilState(isLoggedInState);
   const navigate = useNavigate();
@@ -47,19 +47,27 @@ const LoginForm = () => {
         },
         {
           headers: {
-            Authorization: cookies.accessToken,
+            "Content-Type": "application/json",
+            withCredentials: true,
+            //credentials: "include",
           },
+          credentials: "include",
         }
       );
 
       if (response.status !== 200) {
         throw new Error("Network response was not ok");
       }
-      const accessToken = response.headers.authorization;
-      const accountName = formData.id;
+
+      const accessToken = response.headers["authorization"];
+      const refreshToken = cookies.RefreshToken;
+
       localStorage.setItem("accessToken", accessToken);
-      localStorage.setItem("accountName", accountName);
-      setCookie("accessToken", accessToken, { path: "/" });
+      localStorage.setItem("accountName", formData.id);
+      //setCookie("accessToken", accessToken, { path: "/" });
+
+      console.log("Access Token:", accessToken);
+      console.log("Refresh Token:", refreshToken);
 
       setIsLoggedIn(true);
       if (state) {
@@ -68,7 +76,7 @@ const LoginForm = () => {
         navigate("/");
       }
     } catch (error) {
-      console.error("에러:", error);
+      console.error("Error:", error);
       if (error.response && error.response.status === 403) {
         alert("회원정보가 일치하지 않습니다.");
         console.error("회원정보가 일치하지 않습니다.");
