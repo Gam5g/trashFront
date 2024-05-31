@@ -43,7 +43,7 @@ const MedicineForm = () => {
   }, [isLoggedIn]);
 
   return (
-    <div>
+    <div style={{ marginTop: "250px" }}>
       <h1>대구광역시 수거함 위치 ＞</h1>
       <div
         className="location-button-container"

@@ -80,7 +80,11 @@ const FindID = () => {
           />
         </div>
 
-        <button className="loginbutton" onClick={handleSubmit}>
+        <button
+          className="write-green-button"
+          style={{ width: "160px", marginTop: "10px" }}
+          onClick={handleSubmit}
+        >
           아이디 찾기
         </button>
         <div></div>

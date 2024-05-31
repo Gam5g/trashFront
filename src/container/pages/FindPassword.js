@@ -41,13 +41,23 @@ const FindPassword = () => {
           })}
         />
       </div>
-      <button className="loginbutton" onClick={navigateToLogin}>
-        인증번호 전송
-      </button>
-      <div></div>
-      <button className="loginbutton" onClick={navigateToLogin}>
-        비밀번호 찾기
-      </button>
+      <div className="button-container">
+        <button
+          className="write-green-button"
+          style={{ width: "160px", marginTop: "10px" }}
+          onClick={navigateToLogin}
+        >
+          인증번호 전송
+        </button>
+        <div></div>
+        <button
+          className="write-green-button"
+          style={{ width: "160px", marginTop: "10px" }}
+          onClick={navigateToLogin}
+        >
+          비밀번호 찾기
+        </button>
+      </div>
       <div></div>
       <Link
         to="/find-id"

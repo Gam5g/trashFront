@@ -18,8 +18,22 @@ function SearchDetailForm() {
   const handleEdit = () => {
     navigate(`/search/edit?query=${encodeURIComponent(query)}`);
   };
+
+  const navigateToCommunity = () => {
+    navigate(`/community-bunri`);
+  };
+
+  const formatRules = (rules) => {
+    return rules.split("\n").map((line, index) => (
+      <span key={index}>
+        {line}
+        <br />
+      </span>
+    ));
+  };
+
   return (
-    <div className="NotDrag">
+    <div className="NotDrag" style={{ marginTop: "40px" }}>
       {searchResult ? (
         <div>
           <div>
@@ -34,8 +48,8 @@ function SearchDetailForm() {
               <img
                 src={searchResult.image}
                 style={{
-                  width: "60%",
-                  height: "60%",
+                  width: "30%",
+                  height: "30%",
                 }}
                 alt={searchResult.name}
               />
@@ -70,33 +84,52 @@ function SearchDetailForm() {
               >
                 배출 요령
               </p>
-              <p>{searchResult.rules}</p>
+              <p>{formatRules(searchResult.rules)}</p>
             </div>
-            <div style={{ marginLeft: "350px" }}>
-              <button onClick={handleEdit}>수정하기</button>
-              <button onClick={navigateToHome} style={{ marginLeft: "10px" }}>
+            <div className="button-container">
+              <button
+                className="white-button"
+                style={{ marginLeft: "30px" }}
+                onClick={handleEdit}
+              >
+                수정하기
+              </button>
+              <button
+                className="white-button"
+                onClick={navigateToHome}
+                style={{ marginLeft: "5px" }}
+              >
                 돌아가기
               </button>
             </div>
-            {searchResult.name === "폐의약품" && (
-              <div>
+            {searchResult.name === "폐의약품" ||
+              (searchResult.name === "폐의약품" && (
                 <div>
-                  <h1>근처에 폐의약품 수거함을 찾아보세요</h1>
+                  <div>
+                    <h1>근처에 폐의약품이나 폐건전지 수거함을 찾아보세요</h1>
+                  </div>
+                  <div>
+                    <Medicine />
+                  </div>
                 </div>
-                <div>
-                  <Medicine />
-                </div>
-              </div>
-            )}
+              ))}
           </div>
         </div>
       ) : (
         <div>
           <img src={"images/sad.jpg"} style={{ width: "500px" }} alt="없음" />
-          <h2 style={{ textAlign: "center" }}>검색 결과가 없습니다.</h2>
+          <h2 style={{ textAlign: "center" }}>
+            죄송합니다. 해당 사진에 대한 결과가 없습니다.
+          </h2>
+          <button
+            className="white-button"
+            onClick={navigateToCommunity}
+            style={{ width: "600px" }}
+          >
+            분리수거 게시판에 글 쓰러 가기
+          </button>
         </div>
       )}
-      <MainForm />
     </div>
   );
 }

@@ -7,7 +7,7 @@ import { isLoggedInState } from "./state/authState";
 import "./style.css";
 
 const Header = () => {
-  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
+  const isMobile = useMediaQuery({ query: "(max-width: 1024px)" });
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [width, setWidth] = useState(0);
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInState);
@@ -101,7 +101,10 @@ const Header = () => {
                   <a href="/community-bunri">분리수거</a>
                 </li>
                 <li>
-                  <a href="/medicine">폐의약품 위치</a>
+                  <a href="/medicine">수거함 위치</a>
+                </li>
+                <li>
+                  <a href="/daegu-bunri-policy">대구의 분리수거 정책</a>
                 </li>
               </ul>
             </div>
@@ -142,6 +145,9 @@ const Header = () => {
             <span className="separator">ㅣ</span>
             <li>
               <a href="/medicine">수거함 위치</a>
+            </li>
+            <li>
+              <a href="/daegu-bunri-policy">대구의 분리수거 정책</a>
             </li>
           </ul>
         </nav>
