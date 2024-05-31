@@ -3,16 +3,18 @@ import AuthToken from "./AuthToken";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import "./MyPageForm.css";
+
 const MyPageUpdateForm = () => {
   const [cookies, setCookie] = useCookies(["accessToken"]);
   const userId = localStorage.getItem("currentUserId");
   const [account, setAccount] = useState({
-    email: "",
-    nickname: "",
-    longitude: "",
+    email: localStorage.getItem("email") || "",
+    nickname: localStorage.getItem("nickname") || "",
     latitude: "",
+    longitude: "",
   });
   const [loading, setLoading] = useState(true);
+  const isAdmin = localStorage.getItem("accountName") === "admin";
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -49,7 +51,6 @@ const MyPageUpdateForm = () => {
     try {
       await AuthToken.put(
         `http://3.39.190.90/api/account/me?id=${userId}`,
-
         {
           email: account.email,
           nickname: account.nickname,
@@ -58,19 +59,23 @@ const MyPageUpdateForm = () => {
         },
         {
           headers: {
-            Authorization: cookies.accessToken,
+            Authorization: localStorage.getItem("accessToken"),
           },
         }
       );
       alert("정보가 성공적으로 수정되었습니다.");
+      localStorage.setItem("email", account.email);
+      localStorage.setItem("nickname", account.nickname);
       navigate("/my-page");
     } catch (error) {
       console.error("error : ", error);
     }
   };
+
   if (loading) {
     return <div className="loading">Loading...</div>;
   }
+
   return (
     <div className="myPage">
       <h1>정보 수정 페이지</h1>
@@ -84,7 +89,7 @@ const MyPageUpdateForm = () => {
             value={account.email}
             onChange={handleChange}
           />
-          <div>현재 이메일 : {account.email}</div>
+          <div>현재 이메일 : {localStorage.getItem("email")}</div>
         </div>
         <div className="form-group">
           <label>닉네임</label>
@@ -93,9 +98,10 @@ const MyPageUpdateForm = () => {
             type="text"
             name="nickname"
             value={account.nickname}
+            disabled={isAdmin}
             onChange={handleChange}
           />
-          <div>현재 닉네임 : {account.nickname}</div>
+          <div>현재 닉네임 : {localStorage.getItem("nickname")}</div>
         </div>
         <div className="form-group">
           <div>현재 위도 : {account.latitude}</div>
