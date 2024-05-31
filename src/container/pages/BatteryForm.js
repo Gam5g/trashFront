@@ -19,7 +19,7 @@ const BatteryForm = () => {
       try {
         const userCity = localStorage.getItem("userCity");
         const response = await axios.get(
-          `http://3.39.190.90/api/location/medicine`,
+          `http://3.39.190.90/api/location/lampAndBattery`,
           {
             params: {
               state: "대구",
@@ -43,16 +43,13 @@ const BatteryForm = () => {
     <div>
       <h1>대구광역시 수거함 위치 ＞</h1>
       <div
-        className="button-container"
+        className="location-button-container"
         style={{ marginTop: "40px", marginBottom: "20px" }}
       >
         <button className="gray-button" onClick={navigateToMedicine}>
           폐의약품 수거함
         </button>
-        <button
-          className="write-green-button"
-          style={{ marginLeft: "10px", width: "220px" }}
-        >
+        <button className="location-green-button">
           폐건전지/폐형광등 수거함
         </button>
       </div>

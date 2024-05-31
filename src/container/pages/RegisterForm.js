@@ -165,10 +165,19 @@ const RegisterForm = () => {
                   value: 12,
                   message: "아이디는 최대 12글자입니다",
                 },
+                validate: {
+                  notAdmin: (value) =>
+                    value !== "admin" || "불가능한 아이디입니다.",
+                },
               })}
             />
           </div>
-          <button className="loginbutton">아이디 중복확인</button>
+          <button
+            className="write-green-button"
+            style={{ marginTop: "5px", width: "360px" }}
+          >
+            아이디 중복확인
+          </button>
           <p style={{ color: "red" }}>{errors.id?.message}</p>
           <div className="inputWrap">
             <RiLockPasswordLine style={{ height: "30px" }} />
@@ -241,7 +250,11 @@ const RegisterForm = () => {
               })}
             />
           </div>
-          <button className="loginbutton" onClick={NavigateToLogin}>
+          <button
+            className="write-green-button"
+            style={{ marginTop: "5px", width: "360px" }}
+            onClick={NavigateToLogin}
+          >
             이메일 인증
           </button>
           <p style={{ color: "red" }}>{errors.email?.message}</p>
@@ -269,7 +282,11 @@ const RegisterForm = () => {
               })}
             />
           </div>
-          <button className="loginbutton" onClick={NavigateToLogin}>
+          <button
+            className="write-green-button"
+            style={{ marginTop: "5px", width: "360px" }}
+            onClick={NavigateToLogin}
+          >
             닉네임 중복확인
           </button>
           <p style={{ color: "red" }}>{errors.nickname?.message}</p>
@@ -324,16 +341,18 @@ const RegisterForm = () => {
             </div>
           )}
         </div>
-        <button
-          className="registerbutton"
-          onClick={onSubmit}
-          disabled={isSubmitting}
-        >
-          등록하기
-        </button>
-        <button className="cancelbutton" onClick={NavigateToMain}>
-          돌아가기
-        </button>
+        <div className="button-container">
+          <button
+            className="submitbutton"
+            onClick={onSubmit}
+            disabled={isSubmitting}
+          >
+            완료
+          </button>
+          <button className="cancelbutton" onClick={NavigateToMain}>
+            돌아가기
+          </button>
+        </div>
       </form>
     </div>
   );

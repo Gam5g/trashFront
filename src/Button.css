@@ -41,6 +41,45 @@
 
 .registerbutton:hover {
     background-color: #FF8C00;
+  
+}
+
+.gray-button {
+    width : 220px;
+    height : 35px;
+    background-color: #a5a5a5;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin : auto;
+    display: block;
+    transition: background-color 0.3s;
+}
+
+.location-green-button {
+    background-color: #3B855D;
+    width : 220px;
+    height : 35px;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    margin : auto;
+    display: block;
+    transition: background-color 0.3s;
+}
+
+@media screen and (max-width: 480px) {
+    .gray-button {
+        width : 150px;
+        font-size : 13px;
+    }
+    .location-green-button {
+        width : 150px;
+        font-size : 13px;
+    }
 }
 .write-green-button {
     margin-left : 8px;
@@ -53,6 +92,8 @@
     border: none;
     border-radius: 8px;
     cursor: pointer;
+    margin : auto;
+    display: block;
     transition: background-color 0.3s;
 }
 
@@ -95,6 +136,21 @@ body {
     display:flex;
     justify-content: center;
     align-items:center;
+}
+
+.submitbutton {
+    margin-top: 60px;
+    margin-left : 8px;
+    padding: 8px 20px;
+    background-color: #3B855D;
+    width : 144px;
+    height : 45px;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 .cancelbutton {
@@ -153,24 +209,13 @@ body {
     cursor:pointer;
 }
 
-.gray-button {
-    padding: 8px 20px;
-    width : 220px;
-    height : 35px;
-    background-color: #a5a5a5;
-    color: white;
-    font-size: 14px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
 
 .disabled-write-button {
     padding: 8px 20px;
     width : 84px;
     height : 35px;
-    margin-left: 60px;
+    margin : auto;
+    display: block;
     background-color: #6d6d6d;
     color: white;
     font-size: 14px;
@@ -210,6 +255,6 @@ body {
     src: url("fonts/Pretendard-Bold.woff2") format('truetype');
   }
   
-.unactiveBtn, .activeBtn, .white-button, .disabled-write-button, .cancelbutton, .registerbutton, .loginbutton,.region-button, .gray-button, .write-green-button {
+.unactiveBtn, .activeBtn, .white-button, .location-green-button, .disabled-write-button, .submitbutton, .cancelbutton, .registerbutton, .loginbutton,.region-button, .gray-button, .write-green-button {
     font-family: 'Pretendard-Bold';
 }

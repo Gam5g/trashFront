@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "../../style.css";
 import "../../Button.css";
-
+import { useMediaQuery } from "react-responsive";
 const { kakao } = window;
 
 const BatteryMap = () => {
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const initialPositions = [
     {
       title: "내당1동행정복지센터",
@@ -149,7 +150,14 @@ const BatteryMap = () => {
 
   return (
     <div className="NotDrag">
-      <div id="map" style={{ width: "660px", height: "500px" }}></div>
+      <div
+        id="map"
+        style={
+          isMobile
+            ? { width: "360px", height: "250px" }
+            : { width: "660px", height: "500px" }
+        }
+      ></div>
       <button
         className={`region-button ${activeRegion === "서구" ? "active" : ""}`}
         onClick={() => toggleMarker("서구")}

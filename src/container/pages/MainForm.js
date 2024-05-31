@@ -7,8 +7,11 @@ import { Trash } from "./trash";
 import axios from "axios";
 import "../../Button.css";
 import "../../style.css";
+import AuthToken from "./AuthToken";
+import { useMediaQuery } from "react-responsive";
 
 function MainForm() {
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const [isActive, setActive] = useState(false);
   const [inputValue, setInputValue] = useState([]);
   const [query, setQuery] = useState("");
@@ -47,19 +50,30 @@ function MainForm() {
     inputRef.current.value = null;
     cameraInputRef.current.value = null;
   };
+  const isAdmin = localStorage.getItem("accountName") === "admin";
   const handleUploadComplete = async () => {
     if (lastFile) {
       console.log("GET 요청 파일명 :", lastFile.name);
-      axios
-        .get("http://3.39.190.90/api/separation")
-        .then((result) => {
-          const data = result.data;
-          console.log("데이터:", data);
-          navigate("/loading");
-        })
-        .catch((error) => {
-          console.error("에러 :", error);
-        });
+      try {
+        const imageURL = encodeURIComponent(lastFile.name); // URL 인코딩
+        const response = await AuthToken.get(
+          `http://3.39.190.90/api/separation?url=${imageURL}`,
+
+          {
+            url: imageURL,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const data = response.data;
+        console.log("데이터:", data);
+        navigate("/loading");
+      } catch (error) {
+        console.error("에러 :", error);
+      }
     }
   };
   const onSubmit = (data) => {
@@ -89,6 +103,14 @@ function MainForm() {
   const navigateToSearch = (selectedQuery) => {
     console.log(selectedQuery);
     navigate(`/search?query=${encodeURIComponent(selectedQuery)}`);
+  };
+  const handleSearchButtonClick = () => {
+    if (query && query.trim() !== "") {
+      const targetItem = Trash.find((item) => item.name.includes(query));
+      if (targetItem) {
+        navigateToSearch(targetItem.name);
+      }
+    }
   };
   const ScrollToTop = () => {
     window.scrollTo({
@@ -130,7 +152,12 @@ function MainForm() {
                   style={{ color: "gray" }}
                 />
               )}
-              <button type="submit" className="search-button" aria-label="검색">
+              <button
+                type="submit"
+                className="search-button"
+                aria-label="검색"
+                onClick={handleSearchButtonClick}
+              >
                 <FaSearch className="search-icon" />
               </button>
               {query && query.length > 0 && (
@@ -210,11 +237,19 @@ function MainForm() {
               onClick={handleImageClick}
               onDragOver={(e) => e.preventDefault()}
               onDrop={handleFileChange}
+              style={{ width: "90%", height: "80%" }}
             >
               클릭이나 드래그로 사진 업로드
             </button>
           )}
           <button onClick={ScrollToTop} className="MoveTopBtn" />
+        </div>
+        <div>
+          {isAdmin && (
+            <button className="white-button" onClick={() => navigate("/admin")}>
+              수정 요청 관리
+            </button>
+          )}
         </div>
       </div>
     </div>

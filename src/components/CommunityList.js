@@ -8,7 +8,7 @@ import "../Button.css";
 import "../container/pages/Community/Community.css";
 
 const CommunityList = ({ posts, postType }) => {
-  const isMobile = useMediaQuery({ query: "(max-width: 1000px)" });
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const [selectedPost, setSelectedPost] = useState(null);
   const [searchResults, setSearchResults] = useState([]);
   const [isFocused, setIsFocused] = useState(false);
@@ -138,7 +138,7 @@ const CommunityList = ({ posts, postType }) => {
         )}
 
         <div
-          className={isMobile ? "mobile-search-controls" : "search-controls"}
+          className={isMobile ? "" : "search-controls"}
           style={{ paddingTop: "20px" }}
         >
           <select
@@ -154,6 +154,7 @@ const CommunityList = ({ posts, postType }) => {
               <option value="nanum">나눔완료순 정렬</option>
             )}
           </select>
+          {isMobile ? <div style={{ marginBottom: "15px" }} /> : <></>}
           <div className="search-container">
             <select
               className="searchBy-container"
@@ -197,20 +198,11 @@ const CommunityList = ({ posts, postType }) => {
           />
           {isMobile &&
             (isLoggedIn ? (
-              <button
-                className="write-green-button"
-                style={{ marginLeft: "450px" }}
-                onClick={NavigateToWrite}
-              >
+              <button className="write-green-button" onClick={NavigateToWrite}>
                 글쓰기
               </button>
             ) : (
-              <button
-                className="disabled-write-button"
-                style={{ marginLeft: "450px" }}
-              >
-                글쓰기
-              </button>
+              <button className="disabled-write-button">글쓰기</button>
             ))}
         </div>
       </div>

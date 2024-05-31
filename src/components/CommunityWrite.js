@@ -2,12 +2,13 @@ import React, { useRef, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { isLoggedInState } from "../state/authState";
-import axios from "axios";
 import "../container/pages/Community/Community.css";
 import "../Button.css";
 import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import ImageResize from "quill-image-resize";
+import AuthToken from "../container/pages/AuthToken";
+import { useMediaQuery } from "react-responsive";
 
 Quill.register("modules/imageResize", ImageResize);
 
@@ -23,6 +24,9 @@ const CommunityWrite = ({ posttype }) => {
   });
   const [errors, setErrors] = useState({ title: "", content: "" });
   const [currentQuestionId, setCurrentQuestionId] = useState(0);
+  const [file, setFile] = useState(null);
+  const [image, setImage] = useState(null);
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
   const onChange = (e) => {
     const { name, value } = e.target;
@@ -42,18 +46,28 @@ const CommunityWrite = ({ posttype }) => {
     }
   }, []);
 
+  const imageHandler = () => {
+    const input = document.createElement("input");
+    input.setAttribute("type", "file"); //파일 입력요소를 file 타입으로 설정
+    input.setAttribute("accept", "image/*"); //파일 입력요소가 이미지 선택할 수 있게 accept 속성 설정
+    input.click(); //파일 입력요소 클릭
+  };
+
   const modules = useMemo(() => {
     return {
       toolbar: {
         container: [
           [{ header: [1, 2, 3, false] }],
           ["bold", "italic", "underline", "strike"],
-          ["blockquote"],
           [{ list: "ordered" }, { list: "bullet" }],
           [{ color: [] }, { background: [] }],
           [{ align: [] }, "link", "image"],
         ],
+        handlers: {
+          image: imageHandler,
+        },
       },
+
       imageResize: {
         parchment: Quill.import("parchment"),
         modules: ["Resize", "DisplaySize"],
@@ -69,7 +83,6 @@ const CommunityWrite = ({ posttype }) => {
     "italic",
     "underline",
     "strike",
-    "blockquote",
     "list",
     "bullet",
     "indent",
@@ -103,7 +116,7 @@ const CommunityWrite = ({ posttype }) => {
     }
 
     try {
-      const res = await axios.post(
+      const res = await AuthToken.post(
         `http://3.39.190.90/api/questionBoard/create?id=${questionId}`,
         {
           title,
@@ -113,7 +126,9 @@ const CommunityWrite = ({ posttype }) => {
         },
         {
           headers: {
+            Authorization: localStorage.getItem("accessToken"),
             "Content-Type": "application/json",
+            //Cookie: `RefreshToken=${refreshToken}`,
           },
         }
       );
@@ -131,21 +146,24 @@ const CommunityWrite = ({ posttype }) => {
   return (
     <div className="NotDrag">
       <div className="titleWrap" style={{ userSelect: "none" }}>
-        {posttype === "bunri" ? "분리수거" : "나눔"} 게시판 글쓰기
+        {posttype === "bunri" ? "분리수거" : "나눔"} 커뮤니티 &gt;
       </div>
+
+      <p style={{ fontSize: "16px", marginTop: "-5px" }}>글 작성</p>
       <form onSubmit={onSubmit}>
         <div className="write" style={{ userSelect: "none" }}>
+          <p style={{ color: "gray", fontSize: "14px" }}>제목</p>
           <input
             type="text"
             id="title_txt"
             name="title"
-            placeholder="제목"
             value={userInfo.title}
             onChange={onChange}
           />
           {errors.title && <p className="error-message">{errors.title}</p>}
         </div>
         <div style={{ userSelect: "none" }}>
+          <p style={{ color: "gray", fontSize: "14px" }}>내용</p>
           <ReactQuill
             key="quill"
             ref={quillRef}
@@ -153,27 +171,29 @@ const CommunityWrite = ({ posttype }) => {
             formats={formats}
             theme="snow"
             name="content"
-            style={{ width: "800px", height: "250px", marginBottom: "40px" }}
+            className="quill-editor"
             placeholder="내용을 입력해주세요."
             value={userInfo.content}
             onChange={(content) => setUserInfo({ ...userInfo, content })}
-          ></ReactQuill>
+          />
           {errors.content && <p className="error-message">{errors.content}</p>}
         </div>
         {posttype === "nanum" && (
-          <label htmlFor="nanum">
-            <input
-              type="checkbox"
-              id="nanum"
-              name="nanum"
-              checked={userInfo.nanum}
-              onChange={(e) =>
-                setUserInfo({ ...userInfo, nanum: e.target.checked })
-              }
-              style={{ marginTop: "20px" }}
-            />
-            나눔 완료
-          </label>
+          <div>
+            <label htmlFor="nanum">
+              <input
+                type="checkbox"
+                id="nanum"
+                name="nanum"
+                checked={userInfo.nanum}
+                onChange={(e) =>
+                  setUserInfo({ ...userInfo, nanum: e.target.checked })
+                }
+                style={{ marginTop: "40px" }}
+              />
+              나눔 완료
+            </label>
+          </div>
         )}
         <div className="button-container">
           <button className="greenbutton" type="submit">
@@ -181,6 +201,7 @@ const CommunityWrite = ({ posttype }) => {
           </button>
           <button
             className="cancelbutton"
+            type="button"
             onClick={() => navigate(`/community-${posttype}`)}
           >
             취소

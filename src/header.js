@@ -41,6 +41,12 @@ const Header = () => {
     alert("로그아웃되었습니다.");
     setIsLoggedIn(false);
     localStorage.removeItem("accessToken");
+    localStorage.removeItem("accountName");
+    localStorage.removeItem("email");
+    localStorage.removeItem("currentUserId");
+    localStorage.removeItem("nickname");
+    localStorage.removeItem("latitude");
+    localStorage.removeItem("longitude");
     navigate("/");
   };
 
@@ -86,11 +92,11 @@ const Header = () => {
                 <li>
                   <a style={{ color: "darkgray" }}>커뮤니티</a>
                 </li>
-                /*
+
                 <li>
                   <a href="/community-nanum">나눔</a>
                 </li>
-                */
+
                 <li>
                   <a href="/community-bunri">분리수거</a>
                 </li>

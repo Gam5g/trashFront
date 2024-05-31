@@ -66,6 +66,7 @@ const LoginForm = () => {
       localStorage.setItem("accountName", formData.id);
       //setCookie("accessToken", accessToken, { path: "/" });
 
+      alert("로그인되었습니다. 환영합니다!");
       console.log("Access Token:", accessToken);
       console.log("Refresh Token:", refreshToken);
 
@@ -127,7 +128,12 @@ const LoginForm = () => {
           </div>
           <p style={{ color: "red" }}>{errors.password?.message}</p>
           <div className="login-container">
-            <button className="loginbutton" type="submit" disabled={isLoading}>
+            <button
+              className="write-green-button"
+              type="submit"
+              style={{ width: "360px" }}
+              disabled={isLoading}
+            >
               로그인
             </button>
           </div>

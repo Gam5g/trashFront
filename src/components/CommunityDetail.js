@@ -65,6 +65,28 @@ const CommunityDetail = ({ posts, postsType }) => {
     setToggleLikes((prevToggle) => !prevToggle);
   };
 
+  // const togglePressLike = async () => {
+  //   const questionBoardId = localStorage;
+  //   try {
+  //     const response = await AuthToken.post(
+  //       `http://3.39.190.90/api/recommendBoard/${questionBoardId}?=accountId={userId}`,
+  //       {
+  //         headers: {
+  //           Authorization: localStorage.getItem("accessToken"),
+  //         },
+  //       }
+  //     );
+  //     setAccount(response.data);
+  //   } catch (error) {
+  //     console.error("게시글 정보를 가져오는 데 실패했습니다.", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+  //const handleComment = async () => {
+  //  const response = await AuthToken.post(`http://3.39.190.90/api/recommendBoard/${questionBoardId}?=accountId={userId}`)
+
+  //}
   const deletePost = async () => {
     if (window.confirm("게시글을 삭제하시겠습니까?")) {
       // const updatedPosts = posts.filter((post) => post.id !== id);
@@ -76,10 +98,11 @@ const CommunityDetail = ({ posts, postsType }) => {
     // 게시글 수정 로직 구현
   };
   return (
-    <div className="NotDrag" style={{ marginTop: "-300px" }}>
+    <div className="NotDrag">
       <div className="titleWrap" style={{ userSelect: "none" }}>
         {postsType === "bunri" ? "분리수거" : "나눔"} 커뮤니티 ＞
       </div>
+      <p style={{ fontSize: "16px", marginTop: "-5px" }}>글 보기</p>
       <div className="container">
         {post && (
           <div className="post">
@@ -116,7 +139,8 @@ const CommunityDetail = ({ posts, postsType }) => {
             👍 {likes}
           </button>
         </div>
-        <h3>답변</h3>
+        <hr style={{ border: "0.5px solid #d9d9d9" }}></hr>
+        <h3>{postsType === "bunri" ? "답변" : "댓글"}</h3>
         <hr style={{ border: "0.5px solid #d9d9d9" }}></hr>
         <div className="commentbox">
           <h5>{getAccountName}</h5>
@@ -130,7 +154,9 @@ const CommunityDetail = ({ posts, postsType }) => {
             <input placeholder="로그인하세요" disabled></input>
           )}
           <br />
-          <button className="submitButton">등록</button>
+          <button /*onClick={handleComment}*/ className="submitButton">
+            등록
+          </button>
         </div>
         {getAccountName === post?.accountName ? (
           <div className="buttons">

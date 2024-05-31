@@ -5,9 +5,11 @@ import MedicineMap from "./MedicineMap";
 import MedicineAgreedMap from "./MedicineAgreedMap";
 import { useRecoilValue } from "recoil";
 import { isLoggedInState } from "../../state/authState";
+import { useMediaQuery } from "react-responsive";
 import "../../Button.css";
 
 const MedicineForm = () => {
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const isLoggedIn = useRecoilValue(isLoggedInState);
   const [locationData, setLocationData] = useState(null);
   const navigate = useNavigate();
@@ -44,20 +46,11 @@ const MedicineForm = () => {
     <div>
       <h1>대구광역시 수거함 위치 ＞</h1>
       <div
-        className="button-container"
+        className="location-button-container"
         style={{ marginTop: "40px", marginBottom: "20px" }}
       >
-        <button
-          className="write-green-button"
-          style={{ width: "220px", marginLeft: "0px" }}
-        >
-          폐의약품 수거함
-        </button>
-        <button
-          className="gray-button"
-          onClick={navigateToBattery}
-          style={{ marginLeft: "10px" }}
-        >
+        <button className="location-green-button">폐의약품 수거함</button>
+        <button className="gray-button" onClick={navigateToBattery}>
           폐건전지/폐형광등 수거함
         </button>
       </div>
