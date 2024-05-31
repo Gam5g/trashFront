@@ -24,10 +24,11 @@ import SearchEditForm from "./container/pages/SearchEditForm";
 import SwaggerDocs from "./SwaggerDocs";
 import NotFound from "./container/pages/NotFound";
 import Header from "./header";
-import { RecoilRoot } from "recoil";
-import { isLoggedInState } from "./state/authState";
 import Loading from "./container/pages/LoadingForm";
 import AdminForm from "./container/pages/AdminForm";
+import DaeguPolicy from "./container/pages/DaeguPolicy";
+import { RecoilRoot } from "recoil";
+import { isLoggedInState } from "./state/authState";
 
 function App() {
   const initializeState = ({ set }) => {
@@ -78,6 +79,7 @@ function App() {
             />
             <Route path="/battery" element={<BatteryForm />} />
             <Route path="/medicine" element={<MedicineForm />} />
+            <Route path="/daegu-bunri-policy" element={<DaeguPolicy />} />
             <Route path="/*" element={<NotFound />} />
           </Routes>
         </Router>
