@@ -1,11 +1,11 @@
 import React from "react";
 import { useMediaQuery } from "react-responsive";
 import CommunityList from "../../../components/CommunityList";
-import { BunriPosts } from "./BunriPosts";
 import "../../../Button.css";
 
 const CommunityBunriList = () => {
   const isMobile = useMediaQuery({ query: "(max-width: 1000px)" });
+
   return (
     <div>
       <h1
@@ -26,7 +26,7 @@ const CommunityBunriList = () => {
           괜찮아요!
         </h3>
       )}
-      <CommunityList posts={BunriPosts} postType="bunri" />
+      <CommunityList postType="bunri" />
     </div>
   );
 };

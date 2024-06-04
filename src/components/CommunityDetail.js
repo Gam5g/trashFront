@@ -24,7 +24,7 @@ const CommunityDetail = ({ posts, postsType }) => {
         const foundPost = posts.find((post) => post.id === id);
         setPost(foundPost);
         if (foundPost) {
-          setLikes(foundPost?.likes);
+          setLikes(foundPost?.recommend);
         }
       } catch (error) {
         console.error("Error fetching post:", error);
@@ -83,10 +83,16 @@ const CommunityDetail = ({ posts, postsType }) => {
   //     setLoading(false);
   //   }
   // };
-  //const handleComment = async () => {
-  //  const response = await AuthToken.post(`http://3.39.190.90/api/recommendBoard/${questionBoardId}?=accountId={userId}`)
-
-  //}
+  const handleComment = async () => {
+    const response = await AuthToken.post(
+      //`http://3.39.190.90/api/questionComment/questionBoardId=${questionBoardId}?=accountId={userId}`,
+      {
+        headers: {
+          Authorization: localStorage.getItem("accessToken"),
+        },
+      }
+    );
+  };
   const deletePost = async () => {
     if (window.confirm("게시글을 삭제하시겠습니까?")) {
       // const updatedPosts = posts.filter((post) => post.id !== id);
@@ -111,7 +117,7 @@ const CommunityDetail = ({ posts, postsType }) => {
               글쓴이: {post.nickname}
               <p>
                 조회수: {post.views} | 작성일: {post.date} | 좋아요:{" "}
-                {post.likes}
+                {post.recommend}
                 {postsType === "nanum" && (
                   <span>| 나눔 완료 상태: {post.nanum}</span>
                 )}

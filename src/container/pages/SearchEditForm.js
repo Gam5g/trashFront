@@ -5,7 +5,7 @@ import { isLoggedInState } from "../../state/authState";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { Trash } from "./trash";
-import DiffViewer from "react-diff-viewer";
+
 
 const SearchEditForm = () => {
   const location = useLocation();
@@ -126,12 +126,7 @@ const SearchEditForm = () => {
       />
       <h3>기존 배출요령: {rules}</h3>
       <h3>변경 사항 비교:</h3>
-      <DiffViewer
-        oldValue={rules}
-        newValue={editedRules}
-        splitView={true}
-        showDiffOnly={false}
-      />
+
       <div
         style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}
       >

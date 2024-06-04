@@ -6,7 +6,7 @@ import { MdAlternateEmail } from "react-icons/md";
 import { LuUserSquare2 } from "react-icons/lu";
 import { RiLockPasswordFill, RiLockPasswordLine } from "react-icons/ri";
 import { useForm } from "react-hook-form";
-import axios from "axios";
+import AuthToken from "./AuthToken";
 import "../../App.css";
 
 const RegisterForm = () => {
@@ -44,7 +44,7 @@ const RegisterForm = () => {
     }
   };
 
-  const submitForm = (latitude = null, longitude = null) => {
+  const submitForm = async (latitude = null, longitude = null) => {
     const formData = {
       id: watch("id"),
       password: watch("password"),
@@ -54,24 +54,23 @@ const RegisterForm = () => {
       latitude,
       longitude,
     };
-    axios
-      .post(
-        "http://3.39.190.90/api/auth/sign-up",
-        {
-          accountName: formData.id,
-          password: formData.password,
-          email: formData.email,
-          nickname: formData.nickname,
-          region: formData.region,
-          latitude: formData.latitude,
-          longitude: formData.longitude,
+    await AuthToken.post(
+      "http://3.39.190.90/api/auth/sign-up",
+      {
+        accountName: formData.id,
+        password: formData.password,
+        email: formData.email,
+        nickname: formData.nickname,
+        region: formData.region,
+        latitude: formData.latitude,
+        longitude: formData.longitude,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
         },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
+      }
+    )
       .then((response) => {
         if (response.status !== 200) {
           throw new Error("Network response was not ok");

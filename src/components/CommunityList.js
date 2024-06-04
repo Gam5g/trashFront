@@ -1,16 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 import { useRecoilValue } from "recoil";
 import { isLoggedInState } from "../state/authState";
 import Paging from "../container/pages/Community/Paging";
+import AuthToken from "../container/pages/AuthToken";
 import "../Button.css";
 import "../container/pages/Community/Community.css";
 
-const CommunityList = ({ posts, postType }) => {
+const CommunityList = ({ postType }) => {
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const [selectedPost, setSelectedPost] = useState(null);
   const [searchResults, setSearchResults] = useState([]);
+  const [boardList, setBoardList] = useState([
+    {
+      id: "",
+      title: "",
+      recommend: "",
+      writer: "",
+      adopted: "",
+      view: "",
+    },
+  ]);
   const [isFocused, setIsFocused] = useState(false);
   const [query, setQuery] = useState("");
   const [sortBy, setSortBy] = useState("page");
@@ -40,12 +51,47 @@ const CommunityList = ({ posts, postType }) => {
     setSearchBy(e.target.value);
   };
 
+  useEffect(() => {
+    const fetchBoardData = async () => {
+      try {
+        const accessToken = localStorage.getItem("accessToken");
+        if (postType === "bunri") {
+          const response = await AuthToken.get(
+            `http://3.39.190.90/api/questionBoard/read/paging?page=${page}`,
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
+          localStorage.setItem(
+            "bunri-totalElements",
+            response.data.totalElements
+          );
+          const inputData = await response.data.content.map((data) => ({
+            id: data.id,
+            title: data.title,
+            recommend: data.recommend,
+            writer: data.writer,
+            adopted: data.adopted,
+            view: data.view,
+          }));
+          setBoardList(inputData);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchBoardData();
+  }, [postType]);
+
   const handleSearch = () => {
-    const filtered = posts.filter((post) => {
+    const filtered = boardList.filter((post) => {
       if (searchBy === "title") {
         return post.title.includes(query);
-      } else if (searchBy === "nickname") {
-        return post.nickname.includes(query);
+      } else if (searchBy === "writer") {
+        return post.writer.includes(query);
       }
       return false;
     });
@@ -57,20 +103,20 @@ const CommunityList = ({ posts, postType }) => {
     }
   };
 
-  const sortedPostsByCriteria = (posts) => {
+  const sortedPostsByCriteria = (boardList) => {
     if (sortBy === "nanum") {
-      return posts.filter((post) => post.nanum);
+      return boardList.filter((post) => post.nanum);
     }
-    return [...posts].sort((a, b) => {
+    return [...boardList].sort((a, b) => {
       switch (sortBy) {
         case "page":
           return b.id - a.id;
-        case "date":
-          return new Date(a.date) - new Date(b.date);
-        case "likes":
-          return b.likes - a.likes;
-        case "views":
-          return b.views - a.views;
+        //case "date":
+        //return new Date(a.date) - new Date(b.date);
+        case "recommend":
+          return b.recommend - a.recommend;
+        case "view":
+          return b.view - a.view;
         default:
           return 0;
       }
@@ -78,7 +124,7 @@ const CommunityList = ({ posts, postType }) => {
   };
 
   const paginatedPosts = sortedPostsByCriteria(
-    searchResults.length > 0 ? searchResults : posts
+    searchResults.length > 0 ? searchResults : boardList
   ).slice((page - 1) * 10, page * 10);
 
   return (
@@ -95,10 +141,14 @@ const CommunityList = ({ posts, postType }) => {
                 </p>
                 <div>
                   <p className="info">
-                    {post.nickname} | 조회수 {post.views} | 추천수 {post.likes}{" "}
+                    {post.writer} | 조회수 {post.view} | 추천수 {post.recommend}{" "}
                     | {post.date}
                     {postType === "nanum" &&
                       (post.nanum === "O" ? " | 나눔 완료" : " | 나눔 진행 중")}
+                    {postType === "bunri" &&
+                      (post.adopted === "true"
+                        ? " | 채택 완료"
+                        : " | 채택 미완료")}
                   </p>
                 </div>
               </tr>
@@ -113,7 +163,7 @@ const CommunityList = ({ posts, postType }) => {
                 <th>글쓴이</th>
                 <th>조회수</th>
                 <th>추천수</th>
-                <th>작성날짜</th>
+                {postType === "bunri" && <th>채택 완료</th>}
                 {postType === "nanum" && <th>나눔 완료</th>}
               </tr>
             </thead>
@@ -126,10 +176,10 @@ const CommunityList = ({ posts, postType }) => {
                       ? post.title.slice(0, 30) + "..."
                       : post.title}
                   </td>
-                  <td>{post.nickname}</td>
-                  <td>{post.views}</td>
-                  <td>{post.likes}</td>
-                  <td>{post.date}</td>
+                  <td>{post.writer}</td>
+                  <td>{post.view}</td>
+                  <td>{post.recommend}</td>
+                  {postType === "bunri" && <td>{post.adopted}</td>}
                   {postType === "nanum" && <td>{post.nanum}</td>}
                 </tr>
               ))}
@@ -147,9 +197,11 @@ const CommunityList = ({ posts, postType }) => {
             onChange={handleSortChange}
           >
             <option value="page">페이지 번호순 정렬</option>
-            <option value="likes">추천순 정렬</option>
-            <option value="views">조회순 정렬</option>
-            <option value="date">작성날짜순 정렬</option>
+            <option value="recommend">추천순 정렬</option>
+            <option value="view">조회순 정렬</option>
+            {postType === "bunri" && (
+              <option value="bunri">채택완료순 정렬</option>
+            )}
             {postType === "nanum" && (
               <option value="nanum">나눔완료순 정렬</option>
             )}
@@ -162,7 +214,7 @@ const CommunityList = ({ posts, postType }) => {
               onChange={handleSearchChange}
             >
               <option value="title">제목</option>
-              <option value="nickname">글쓴이</option>
+              <option value="writer">글쓴이</option>
             </select>
             <input
               type="text"
@@ -192,7 +244,9 @@ const CommunityList = ({ posts, postType }) => {
         <div>
           <Paging
             totalItemsCount={
-              searchResults.length > 0 ? searchResults.length : posts.length
+              searchResults.length > 0
+                ? searchResults.length
+                : localStorage.getItem("bunri-totalElements")
             }
             onPageChange={handlePageChange}
           />

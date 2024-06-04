@@ -1,4 +1,4 @@
-export const BunriPosts = [
+/*export const BunriPosts = [
   {
     id: 1,
     title: "플라스틱 병과 캔은 어떻게 분리수거해야 하나요?",
@@ -198,4 +198,4 @@ export const BunriPosts = [
     date: "2024-03-31",
     likes: 45,
   },
-];
+];*/
