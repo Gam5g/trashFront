@@ -9,6 +9,7 @@ import "react-quill/dist/quill.snow.css";
 import ImageResize from "quill-image-resize";
 import AuthToken from "../container/pages/AuthToken";
 import { useMediaQuery } from "react-responsive";
+import { S3_BUCKET } from "../S3Upload";
 
 Quill.register("modules/imageResize", ImageResize);
 
@@ -37,20 +38,19 @@ const CommunityWrite = ({ posttype }) => {
     }));
   };
 
-  useEffect(() => {
-    const storedQuestionId = localStorage.getItem("currentQuestionId");
-    if (storedQuestionId) {
-      setCurrentQuestionId(parseInt(storedQuestionId, 10));
-    } else {
-      localStorage.setItem("currentQuestionId", "0");
-    }
-  }, []);
-
   const imageHandler = () => {
     const input = document.createElement("input");
     input.setAttribute("type", "file"); //파일 입력요소를 file 타입으로 설정
     input.setAttribute("accept", "image/*"); //파일 입력요소가 이미지 선택할 수 있게 accept 속성 설정
     input.click(); //파일 입력요소 클릭
+    input.addEventListener("change", async () => {
+      const file = input.files[0];
+      try {
+        const name = Date.now();
+      } catch (error) {
+        console.log(error);
+      }
+    });
   };
 
   const modules = useMemo(() => {
@@ -128,16 +128,11 @@ const CommunityWrite = ({ posttype }) => {
           headers: {
             Authorization: localStorage.getItem("accessToken"),
             "Content-Type": "application/json",
-            //Cookie: `RefreshToken=${refreshToken}`,
           },
         }
       );
-      if (res.data.success === true) {
-        navigate("/post");
-        const newQuestionId = questionId + 1;
-        setCurrentQuestionId(newQuestionId);
-        localStorage.setItem("currentQuestionId", newQuestionId.toString());
-      }
+      alert("글을 작성했습니다.");
+      navigate(`/community-${posttype}`);
     } catch (error) {
       alert("글 등록에 실패했습니다. 다시 시도해주세요.");
     }

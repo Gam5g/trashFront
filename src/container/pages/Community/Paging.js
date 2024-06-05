@@ -2,24 +2,26 @@ import React, { useState } from "react";
 import Pagination from "react-js-pagination";
 import "./Paging.css";
 
-const Paging = ({ totalItemsCount, onPageChange }) => {
-  const [activePage, setActiveChange] = useState(1);
+const Paging = ({ totalItemsCount, onPageChange, activePage }) => {
+  const [internalActivePage, setInternalActivePage] = useState(activePage);
 
   const handlePageChange = (page) => {
-    setActiveChange(page);
+    setInternalActivePage(page);
     onPageChange(page); // 부모 컴포넌트로 페이지 변경을 알림
   };
+
+  const totalCount = parseInt(totalItemsCount);
 
   return (
     <Pagination
       style={{ justifyContent: "center" }}
-      activePage={activePage}
-      itemsCountPerPage={10} // 한 페이지랑 보여줄 아이템 갯수
-      totalItemsCount={totalItemsCount} // 총 아이템 갯수
-      pageRangeDisplayed={5} // paginator의 페이지 범위
-      prevPageText={"‹"} // "이전"을 나타낼 텍스트
-      nextPageText={"›"} // "다음"을 나타낼 텍스트
-      onChange={handlePageChange} // 페이지 변경을 핸들링하는 함수
+      activePage={internalActivePage} // 내부적으로 설정한 activePage 상태를 사용
+      itemsCountPerPage={10}
+      totalItemsCount={totalCount}
+      pageRangeDisplayed={5}
+      prevPageText={"‹"}
+      nextPageText={"›"}
+      onChange={handlePageChange}
     />
   );
 };

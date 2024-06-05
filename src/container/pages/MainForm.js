@@ -237,7 +237,7 @@ function MainForm() {
               onClick={handleImageClick}
               onDragOver={(e) => e.preventDefault()}
               onDrop={handleFileChange}
-              style={{ width: "90%", height: "80%" }}
+              style={{ width: "350px", height: "350px" }}
             >
               클릭이나 드래그로 사진 업로드
             </button>

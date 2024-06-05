@@ -5,9 +5,8 @@
   }
   
   .post {
-    background-color: #f9f9f9;
-    width : 700px;
-    border-radius: 8px;
+    border : 0.2px solid #acacac;
+    width : 1000px;
     padding: 20px;
     margin-bottom: 20px;
   }

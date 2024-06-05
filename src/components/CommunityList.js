@@ -12,6 +12,7 @@ const CommunityList = ({ postType }) => {
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const [selectedPost, setSelectedPost] = useState(null);
   const [searchResults, setSearchResults] = useState([]);
+  const [sortedBoardList, setSortedBoardList] = useState([]);
   const [boardList, setBoardList] = useState([
     {
       id: "",
@@ -68,7 +69,7 @@ const CommunityList = ({ postType }) => {
             "bunri-totalElements",
             response.data.totalElements
           );
-          const inputData = await response.data.content.map((data) => ({
+          const inputData = response.data.content.map((data) => ({
             id: data.id,
             title: data.title,
             recommend: data.recommend,
@@ -84,7 +85,7 @@ const CommunityList = ({ postType }) => {
     };
 
     fetchBoardData();
-  }, [postType]);
+  }, [postType, page]);
 
   const handleSearch = () => {
     const filtered = boardList.filter((post) => {
@@ -99,40 +100,44 @@ const CommunityList = ({ postType }) => {
       window.confirm("검색 결과가 없습니다.");
     } else {
       setSearchResults(filtered);
-      setPage(1);
     }
   };
 
-  const sortedPostsByCriteria = (boardList) => {
-    if (sortBy === "nanum") {
-      return boardList.filter((post) => post.nanum);
+  const sortedPostsByCriteria = (list) => {
+    let sortedList = [...list];
+    switch (sortBy) {
+      case "page":
+        sortedList.sort((a, b) => b.id - a.id);
+        break;
+      case "recommend":
+        sortedList.sort((a, b) => b.recommend - a.recommend);
+        break;
+      case "view":
+        sortedList.sort((a, b) => b.view - a.view);
+        break;
+      case "adopted":
+        sortedList = sortedList.filter((post) => post.adopted === "true");
+        break;
+      case "nanum":
+        sortedList = sortedList.filter((post) => post.nanum === "O");
+        break;
+      default:
+        break;
     }
-    return [...boardList].sort((a, b) => {
-      switch (sortBy) {
-        case "page":
-          return b.id - a.id;
-        //case "date":
-        //return new Date(a.date) - new Date(b.date);
-        case "recommend":
-          return b.recommend - a.recommend;
-        case "view":
-          return b.view - a.view;
-        default:
-          return 0;
-      }
-    });
+    return sortedList;
   };
 
-  const paginatedPosts = sortedPostsByCriteria(
-    searchResults.length > 0 ? searchResults : boardList
-  ).slice((page - 1) * 10, page * 10);
+  useEffect(() => {
+    let list = searchResults.length > 0 ? searchResults : boardList;
+    setSortedBoardList(sortedPostsByCriteria(list));
+  }, [boardList, searchResults, sortBy]);
 
   return (
     <>
       <div className="NotDrag">
         {isMobile ? (
           <table className="mobile-table-container">
-            {paginatedPosts.map((post) => (
+            {sortedBoardList.map((post) => (
               <tr key={post.id} onClick={() => handlePostClick(post)}>
                 <p className="title">
                   {post.title.length > 40
@@ -163,23 +168,40 @@ const CommunityList = ({ postType }) => {
                 <th>글쓴이</th>
                 <th>조회수</th>
                 <th>추천수</th>
-                {postType === "bunri" && <th>채택 완료</th>}
                 {postType === "nanum" && <th>나눔 완료</th>}
               </tr>
             </thead>
             <tbody>
-              {paginatedPosts.map((post) => (
+              {sortedBoardList.map((post) => (
                 <tr key={post.id} onClick={() => handlePostClick(post)}>
                   <td>{post.id}</td>
                   <td>
-                    {post.title.length > 30
-                      ? post.title.slice(0, 30) + "..."
-                      : post.title}
+                    {post.adopted === true ? (
+                      <>
+                        <img
+                          src="images/adopted.png"
+                          alt="adopted"
+                          className="adopted-icon"
+                          style={{
+                            width: "15%",
+                            height: "10%",
+                          }}
+                        />
+                        {post.title.length > 30 ? (
+                          <>{post.title.slice(0, 30) + "..."}</>
+                        ) : (
+                          <>{post.title}</>
+                        )}
+                      </>
+                    ) : post.title.length > 30 ? (
+                      <>{post.title.slice(0, 30) + "..."}</>
+                    ) : (
+                      <>{post.title}</>
+                    )}
                   </td>
                   <td>{post.writer}</td>
                   <td>{post.view}</td>
                   <td>{post.recommend}</td>
-                  {postType === "bunri" && <td>{post.adopted}</td>}
                   {postType === "nanum" && <td>{post.nanum}</td>}
                 </tr>
               ))}
@@ -220,7 +242,11 @@ const CommunityList = ({ postType }) => {
               type="text"
               placeholder="입력"
               className="community-search-input"
-              onChange={(e) => setQuery(e.target.value)}
+              value={query}
+              onChange={(e) => {
+                console.log("Query Changed : ", e.target.value);
+                setQuery(e.target.value);
+              }}
               onFocus={() => setIsFocused(true)}
               onBlur={() => setIsFocused(false)}
             />
@@ -248,7 +274,8 @@ const CommunityList = ({ postType }) => {
                 ? searchResults.length
                 : localStorage.getItem("bunri-totalElements")
             }
-            onPageChange={handlePageChange}
+            onPageChange={setPage}
+            activePage={page}
           />
           {isMobile &&
             (isLoggedIn ? (

@@ -10,8 +10,8 @@ import AuthToken from "./AuthToken";
 import "../../App.css";
 
 const RegisterForm = () => {
-  const [latitude, setLatitude] = useState(null);
-  const [longitude, setLongitude] = useState(null);
+  //const [latitude, setLatitude] = useState(null);
+  //const [longitude, setLongitude] = useState(null);
   const {
     register,
     watch,
@@ -117,7 +117,7 @@ const RegisterForm = () => {
   const [passwordVisible, setPasswordVisible] = useState("");
   const [passwordConfirmVisible, setPasswordConfirmVisible] = useState("");
   const [agreed, setAgreed] = useState(false);
-  const [position, setPosition] = useState(null);
+  //const [position, setPosition] = useState(null);
 
   const navigate = useNavigate();
   const NavigateToLogin = () => {
