@@ -12,7 +12,7 @@ const FindPassword = () => {
   const navigate = useNavigate();
 
   const navigateToLogin = () => {
-    navigate("../login");
+    navigate("../sign-in");
   };
   return (
     <div>

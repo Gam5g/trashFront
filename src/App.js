@@ -8,6 +8,8 @@ import WithdrawalForm from "./container/pages/WithdrawalForm";
 import FindID from "./container/pages/FindID";
 import FindPassword from "./container/pages/FindPassword";
 import Station from "./container/pages/Station";
+import SoultionCreate from "./container/pages/SolutionCreate";
+import CommunityUpdate from "./components/CommunityUpdate";
 import CommunityNanumList from "./container/pages/Community/CommunityNanumList";
 import CommunityBunriList from "./container/pages/Community/CommunityBunriList";
 import CommunityNanumWrite from "./container/pages/Community/CommunityNanumWrite";
@@ -26,6 +28,7 @@ import NotFound from "./container/pages/NotFound";
 import Header from "./header";
 import Loading from "./container/pages/LoadingForm";
 import AdminForm from "./container/pages/AdminForm";
+import AdminResponseForm from "./container/pages/AdminResponseForm";
 import DaeguPolicy from "./container/pages/DaeguPolicy";
 import { RecoilRoot } from "recoil";
 import { isLoggedInState } from "./state/authState";
@@ -44,12 +47,13 @@ function App() {
           <Routes>
             <Route exact path="/" element={<MainForm />} />
             <Route path="/admin" element={<AdminForm />} />
-            <Route path="/api/auth/sign-up" element={<RegisterForm />} />
-            <Route path="/api/auth/sign-in" element={<LoginForm />} />
             <Route
-              path="/api/account/withdrawal"
-              element={<WithdrawalForm />}
+              path="/admin/list/request"
+              elemtent={<AdminResponseForm />}
             />
+            <Route path="/sign-up" element={<RegisterForm />} />
+            <Route path="/sign-in" element={<LoginForm />} />
+            <Route path="/withdrawal" element={<WithdrawalForm />} />
             <Route path="/find-id" element={<FindID />} />
             <Route path="/find-password" element={<FindPassword />} />
             <Route path="/station" element={<Station />} />
@@ -61,6 +65,10 @@ function App() {
             <Route path="/my-page/update" element={<MyPageUpdateForm />} />
             <Route path="/my-page/list" element={<MyCommunityList />} />
             <Route path="/loading" element={<Loading />} />
+            <Route
+              path="/community-:postsType/update/:questionBoardId"
+              element={<CommunityUpdate />}
+            />
             <Route
               path="/community-nanum/:id"
               element={<CommunityNanumDetail />}
@@ -77,6 +85,7 @@ function App() {
               path="/community-bunri/write"
               element={<CommunityBunriWrite />}
             />
+            <Route path="/solution/create" element={<SoultionCreate />} />
             <Route path="/battery" element={<BatteryForm />} />
             <Route path="/medicine" element={<MedicineForm />} />
             <Route path="/daegu-bunri-policy" element={<DaeguPolicy />} />

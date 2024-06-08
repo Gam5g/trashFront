@@ -1,0 +1,96 @@
+textarea.solution-input {
+    width: 350px;
+    height: 75px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+    resize: vertical;
+    font-family: 'Pretendard-Bold';
+  }
+  
+  .char-count {
+    text-align: right;
+    font-size: 14px;
+    color: #666;
+    margin-top: 5px;
+  }
+
+  .info-title {
+    margin : 0 auto;
+    text-align: center;
+    background-color: #3B855D;
+    border-radius: 22px;
+    margin-bottom :20px;
+    color : white;
+    font-size : 45px;
+    width : 355px;
+    height : 65px;
+
+}
+
+.info-container{
+  height : 750px;
+}
+.info-expand-container {
+  height : 900px;
+}
+
+.info-upload-container {
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  justify-content: center;
+  width: 100%;
+}
+
+.info-expand-container, .info-container{
+  border: 6px solid #3B855D;
+  border-radius: 22px;
+  width : 600px;
+}
+
+.solution-font {
+  color : green;
+  font-size : 25px;
+  margin-right: 15px;
+}
+
+.solution-upload-button {
+  margin : 0 auto;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  background-color: white;
+  color: #4CAF50;
+  border: 2px dashed #4CAF50;
+  border-radius: 10px;
+  width : 420px;
+  height: 240px;
+  text-align : center;
+  line-height: 120px;
+  cursor: pointer;
+  padding: 15px 30px;
+  font-size: 16px;
+  font-weight: bold;
+  font-family: 'Pretendard-Bold';
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.solution-upload-button:hover, .solution-upload-button.active {
+  background-color: #e8f5e9;
+  color:#388E3c;
+  border-color:  #388e3c;
+}
+
+.solution-uploaded-image {
+  margin : 0 auto;
+  width: 40%;
+  height: 40%;
+}
+
+  @font-face {
+    font-family: 'Pretendard-Bold';
+    src: url("../../fonts/Pretendard-Bold.woff2") format('truetype');
+  }

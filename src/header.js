@@ -23,7 +23,7 @@ const Header = () => {
   };
 
   const handleLogin = () => {
-    navigate("/api/auth/sign-in");
+    navigate("/sign-in");
   };
 
   const handleLogout = (e) => {

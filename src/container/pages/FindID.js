@@ -49,7 +49,7 @@ const FindID = () => {
   };
 
   /*const navigateToLogin = () => {
-    navigate("../api/auth/sign-in");
+    navigate("../sign-in");
   };*/
   return (
     <div>
