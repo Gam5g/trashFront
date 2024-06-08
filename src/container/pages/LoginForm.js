@@ -157,7 +157,7 @@ const LoginForm = () => {
             비밀번호 찾기
           </Link>
           <Link
-            to="../api/auth/sign-up"
+            to="../sign-up"
             style={{
               color: "gray",
               margin: "20px 10px 0",

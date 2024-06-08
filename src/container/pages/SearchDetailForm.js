@@ -1,16 +1,13 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Trash } from "./trash";
 import Medicine from "./MedicineMap";
 import "../../style.css";
-import MainForm from "./MainForm";
 
 function SearchDetailForm() {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const query = queryParams.get("query");
   const navigate = useNavigate();
-  const searchResult = Trash.find((item) => item.name === query);
 
   const navigateToHome = () => {
     navigate("/");
@@ -21,6 +18,10 @@ function SearchDetailForm() {
 
   const navigateToCommunity = () => {
     navigate(`/community-bunri`);
+  };
+
+  const navigateToSolution = () => {
+    navigate(`/solution/create`);
   };
 
   const formatRules = (rules) => {
@@ -127,6 +128,13 @@ function SearchDetailForm() {
             style={{ width: "600px" }}
           >
             분리수거 게시판에 글 쓰러 가기
+          </button>
+          <button
+            className="white-button"
+            onClick={navigateToSolution}
+            style={{ width: "600px" }}
+          >
+            새로운 솔루션 작성하기
           </button>
         </div>
       )}

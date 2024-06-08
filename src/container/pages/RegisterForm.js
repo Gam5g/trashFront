@@ -79,7 +79,7 @@ const RegisterForm = () => {
       })
       .then((result) => {
         console.log("결과:", result);
-        navigate("../api/auth/sign-in");
+        navigate("../sign-in");
       })
       .catch((error) => {
         console.error("에러:", error);
@@ -121,7 +121,7 @@ const RegisterForm = () => {
 
   const navigate = useNavigate();
   const NavigateToLogin = () => {
-    navigate("../login");
+    navigate("../sign-in");
   };
   const NavigateToMain = () => {
     navigate("../");
