@@ -72,18 +72,22 @@ const MyPageUpdateForm = () => {
     }
   };
 
+  const navigateToMyPage = () => {
+    navigate("/my-page");
+  };
+
   if (loading) {
     return <div className="loading">Loading...</div>;
   }
 
   return (
-    <div className="myPage">
+    <div className="myPage" style={{ userSelect: "none" }}>
       <h1>정보 수정 페이지</h1>
       <form onSubmit={handleUpdate}>
         <div className="form-group">
           <label>이메일</label>
           <input
-            className="inputWrap"
+            className="inputContent"
             type="email"
             name="email"
             value={account.email}
@@ -94,7 +98,7 @@ const MyPageUpdateForm = () => {
         <div className="form-group">
           <label>닉네임</label>
           <input
-            className="inputWrap"
+            className="inputContent"
             type="text"
             name="nickname"
             value={account.nickname}
@@ -109,9 +113,16 @@ const MyPageUpdateForm = () => {
         <div className="form-group">
           <div>현재 경도 : {account.longitude}</div>
         </div>
-        <div className="white-button-container">
-          <button type="submit" className="white-button">
+        <div className="button-container">
+          <button type="submit" className="submitbutton">
             수정
+          </button>
+          <button
+            type="button"
+            onClick={navigateToMyPage}
+            className="cancelbutton"
+          >
+            돌아가기
           </button>
         </div>
       </form>
