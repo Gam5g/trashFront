@@ -1,13 +1,12 @@
 import React from "react";
 import { useMediaQuery } from "react-responsive";
 import CommunityList from "../../../components/CommunityList";
-import { NanumPosts } from "./NanumPosts";
 import "../../../Button.css";
 
 const CommunityNanumList = () => {
   const isMobile = useMediaQuery({ query: "(max-width: 1000px)" });
   return (
-    <div>
+    <div className="NotDrag">
       <h1
         style={
           isMobile ? { textAlign: "center", marginTop: "100px" } : undefined
@@ -22,7 +21,7 @@ const CommunityNanumList = () => {
       ) : (
         <h3>사람들과 나눔을 시작하고 환경에 한 걸음 더 가까워져요</h3>
       )}
-      <CommunityList posts={NanumPosts} postType="nanum" />
+      <CommunityList postType="nanum" />
     </div>
   );
 };

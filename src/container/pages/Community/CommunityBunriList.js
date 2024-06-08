@@ -5,9 +5,8 @@ import "../../../Button.css";
 
 const CommunityBunriList = () => {
   const isMobile = useMediaQuery({ query: "(max-width: 1000px)" });
-
   return (
-    <div>
+    <div className="NotDrag">
       <h1
         style={
           isMobile ? { textAlign: "center", marginTop: "100px" } : undefined

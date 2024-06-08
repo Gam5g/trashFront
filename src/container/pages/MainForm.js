@@ -3,8 +3,6 @@ import { useForm } from "react-hook-form";
 import { FaSearch } from "react-icons/fa";
 import { HiXCircle } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
-import { Trash } from "./trash";
-import axios from "axios";
 import "../../Button.css";
 import "../../style.css";
 import AuthToken from "./AuthToken";
@@ -13,12 +11,13 @@ import { useMediaQuery } from "react-responsive";
 function MainForm() {
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const [isActive, setActive] = useState(false);
-  const [inputValue, setInputValue] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
   const [query, setQuery] = useState("");
   const [image, setImage] = useState(null);
   const [lastFile, setLastFile] = useState(null);
   const [isSearchFocused, setSearchFocused] = useState(false);
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset, watch } = useForm();
+  const accessToken = localStorage.getItem("accessToken");
 
   const prevInputValueRef = useRef("");
   const inputRef = useRef(null);
@@ -38,10 +37,12 @@ function MainForm() {
       setActive(true);
     }
   };
+
   const handleImageClick = () => {
     inputRef.current.click();
     setActive(!isActive);
   };
+
   const handleImageRemove = () => {
     alert("파일 업로드가 취소되었습니다.");
     setImage(null);
@@ -50,7 +51,9 @@ function MainForm() {
     inputRef.current.value = null;
     cameraInputRef.current.value = null;
   };
+
   const isAdmin = localStorage.getItem("accountName") === "admin";
+
   const handleUploadComplete = async () => {
     if (lastFile) {
       console.log("GET 요청 파일명 :", lastFile.name);
@@ -58,7 +61,6 @@ function MainForm() {
         const imageURL = encodeURIComponent(lastFile.name); // URL 인코딩
         const response = await AuthToken.get(
           `http://3.39.190.90/api/separation?url=${imageURL}`,
-
           {
             url: imageURL,
           },
@@ -76,41 +78,47 @@ function MainForm() {
       }
     }
   };
-  const onSubmit = (data) => {
+
+  const onSubmit = async (data) => {
     const searchTerm = data.searchTerm.trim();
-    if (searchTerm) {
-      axios
-        .get(
-          `http://3.39.190.90/api/separation/${encodeURIComponent(searchTerm)}`
-        ) // 배출방법 현재 없다고 나옴
-        .then((response) => {
-          console.log("Search Results :", response.data);
-          navigate(`/search/${searchTerm}`);
-        })
-        .catch((error) => {
-          console.error("Search error : ", error);
-        });
+    if (!searchTerm) {
+      return; // 검색어가 비어있으면 종료
+    }
+    console.log(data);
+    try {
+      const response = await AuthToken.get(
+        `http://3.39.190.90/api/solution/keyword`,
+        {
+          keyword: searchTerm,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      setSearchResults([response.data]);
+      console.log(searchTerm);
+      navigateToSearch(searchTerm);
+    } catch (error) {
+      console.log(error);
     }
     reset();
-    /*if (prevInputValueRef.current !== inputValue) {
-      prevInputValueRef.current = inputValue;
-      setQuery(inputValue);
-    }
-    if (query.trim() !== "") {
-      navigate(`/search?query=${encodeURIComponent(query)}`);
-    } */
   };
+
+  const handleSearchButtonClick = async (e) => {
+    e.preventDefault();
+    handleSubmit(onSubmit)();
+  };
+
   const navigateToSearch = (selectedQuery) => {
     console.log(selectedQuery);
     navigate(`/search?query=${encodeURIComponent(selectedQuery)}`);
   };
-  const handleSearchButtonClick = () => {
-    if (query && query.trim() !== "") {
-      const targetItem = Trash.find((item) => item.name.includes(query));
-      if (targetItem) {
-        navigateToSearch(targetItem.name);
-      }
-    }
+
+  const navigateTowrite = () => {
+    navigate(`/solution/create`);
   };
   const ScrollToTop = () => {
     window.scrollTo({
@@ -118,8 +126,9 @@ function MainForm() {
       behavior: "smooth",
     });
   };
+
   return (
-    <div>
+    <div className="upload-container">
       <h2>찾고자 하는 쓰레기를 검색해보세요!</h2>
       <div
         className={query ? "search-active-container" : "trash-search-container"}
@@ -136,19 +145,14 @@ function MainForm() {
                 type="text"
                 placeholder="이름 또는 태그로 검색하기"
                 className="search-input"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                onFocus={() => {
-                  setSearchFocused(true);
-                }}
-                onBlur={() => {
-                  setSearchFocused(false);
-                }}
+                onFocus={() => setSearchFocused(true)}
+                onBlur={() => setSearchFocused(false)}
               />
-              {query && query.length > 0 && (
+
+              {watch("searchTerm") && watch("searchTerm").length > 0 && (
                 <HiXCircle
                   className="clear-search-button"
-                  onClick={() => setQuery("")}
+                  onClick={() => reset({ searchTerm: "" })}
                   style={{ color: "gray" }}
                 />
               )}
@@ -160,26 +164,14 @@ function MainForm() {
               >
                 <FaSearch className="search-icon" />
               </button>
-              {query && query.length > 0 && (
-                <div className="list">
-                  {Trash.filter((target) => target.name.includes(query))
-                    .slice(0, 5)
-                    .map((target) => (
-                      <ul
-                        key={target.id}
-                        className="list-item"
-                        onClick={() => navigateToSearch(target.name)}
-                      >
-                        {target.name}
-                      </ul>
-                    ))}
-                </div>
-              )}
             </div>
           </div>
         </form>
       </div>
-      <div>
+      <div onClick={navigateTowrite} className="direct-write-button">
+        등록되지 않은 쓰레기 배출 방법을 직접 작성하기
+      </div>
+      <div className="upload-container">
         <h2>찾고자 하는 쓰레기를 업로드해보세요!</h2>
         <div>
           <input
@@ -199,34 +191,20 @@ function MainForm() {
             onChange={handleFileChange}
           />
           {image ? (
-            <div
-              style={{
-                justifyContent: "center",
-                alignItems: "center",
-                position: "flex",
-              }}
-            >
-              <button
-                className="white-button"
-                onClick={() => inputRef.current.click()}
-              >
-                사진 촬영
-              </button>
-              <button className="white-button" onClick={handleUploadComplete}>
-                업로드 완료
-              </button>
-              <div />
-              <img
-                src={image}
-                className="uploaded-image"
-                alt="Uploaded"
-                style={{
-                  width: "50%",
-                  height: "50%",
-                  objectFit: "cover",
-                }}
-              />
-              <div />
+            <div className="upload-container">
+              <div className="upload-buttons">
+                <button
+                  className="white-button"
+                  onClick={() => inputRef.current.click()}
+                >
+                  사진 촬영
+                </button>
+                <button className="white-button" onClick={handleUploadComplete}>
+                  업로드 완료
+                </button>
+              </div>
+              <img src={image} className="uploaded-image" alt="Uploaded" />
+              <br />
               <button className="white-button" onClick={handleImageRemove}>
                 사진 지우기
               </button>
@@ -237,7 +215,6 @@ function MainForm() {
               onClick={handleImageClick}
               onDragOver={(e) => e.preventDefault()}
               onDrop={handleFileChange}
-              style={{ width: "350px", height: "350px" }}
             >
               클릭이나 드래그로 사진 업로드
             </button>
@@ -255,4 +232,5 @@ function MainForm() {
     </div>
   );
 }
+
 export default MainForm;
