@@ -23,11 +23,9 @@
   }
 }
 
-
 .App-header {
-  padding-top:20px;
   background-color: #282c34;
-  min-height: 100vh;
+  padding-top: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -80,10 +78,15 @@
   margin-top: 8px;
   background-color: white;
   border: 1px solid #e2e0e0;
+  pointer-events: none;
 }
 
 .inputWrap:focus-within {
   border: 1px solid #00A54C;
+}
+
+.inputWrap input {
+  pointer-events: auto;
 }
 
 .inputContent {
