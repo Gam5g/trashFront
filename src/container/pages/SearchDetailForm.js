@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Medicine from "./MedicineMap";
+import AuthToken from "./AuthToken";
 import "../../style.css";
 
 function SearchDetailForm() {
@@ -8,10 +9,44 @@ function SearchDetailForm() {
   const queryParams = new URLSearchParams(location.search);
   const query = queryParams.get("query");
   const navigate = useNavigate();
+  const [searchResult, setSearchResult] = useState({
+    categories: [],
+    imageUrl: "",
+    nickName: "",
+    solution: " ",
+    solutionName: "",
+    state: "",
+    tags: [],
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const accessToken = localStorage.getItem("accessToken");
+      try {
+        const response = await AuthToken.get(
+          `/solution/keyword?keyword=${encodeURIComponent(query)}`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        setSearchResult(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    if (query) {
+      fetchData();
+    }
+  }, [query]);
 
   const navigateToHome = () => {
     navigate("/");
   };
+
   const handleEdit = () => {
     navigate(`/search/edit?query=${encodeURIComponent(query)}`);
   };
@@ -25,6 +60,7 @@ function SearchDetailForm() {
   };
 
   const formatRules = (rules) => {
+    if (!rules) return null;
     return rules.split("\n").map((line, index) => (
       <span key={index}>
         {line}
@@ -38,7 +74,7 @@ function SearchDetailForm() {
       {searchResult ? (
         <div>
           <div>
-            <h1 style={{ textAlign: "center" }}>{searchResult.name}</h1>
+            <h1 style={{ textAlign: "center" }}>{searchResult.solutionName}</h1>
             <div
               style={{
                 display: "flex",
@@ -46,14 +82,16 @@ function SearchDetailForm() {
                 justifyContent: "center",
               }}
             >
-              <img
-                src={searchResult.image}
-                style={{
-                  width: "30%",
-                  height: "30%",
-                }}
-                alt={searchResult.name}
-              />
+              {searchResult.imageUrl && (
+                <img
+                  src={searchResult.imageUrl}
+                  style={{
+                    width: "30%",
+                    height: "30%",
+                  }}
+                  alt={searchResult.solutionName}
+                />
+              )}
             </div>
             <div style={{ textAlign: "center" }}>
               <p
@@ -65,7 +103,7 @@ function SearchDetailForm() {
               >
                 재질
               </p>
-              {searchResult.quality}
+              {searchResult.categories.join(", ")}
               <p
                 style={{
                   textAlign: "center",
@@ -75,7 +113,7 @@ function SearchDetailForm() {
               >
                 키워드
               </p>
-              {searchResult.keywords}
+              {searchResult.tags.join(", ")}
               <p
                 style={{
                   textAlign: "center",
@@ -85,7 +123,7 @@ function SearchDetailForm() {
               >
                 배출 요령
               </p>
-              <p>{formatRules(searchResult.rules)}</p>
+              <p>{formatRules(searchResult.solution)}</p>
             </div>
             <div className="button-container">
               <button
@@ -103,17 +141,16 @@ function SearchDetailForm() {
                 돌아가기
               </button>
             </div>
-            {searchResult.name === "폐의약품" ||
-              (searchResult.name === "폐의약품" && (
+            {searchResult.solutionName === "폐의약품" && (
+              <div>
                 <div>
-                  <div>
-                    <h1>근처에 폐의약품이나 폐건전지 수거함을 찾아보세요</h1>
-                  </div>
-                  <div>
-                    <Medicine />
-                  </div>
+                  <h1>근처에 폐의약품이나 폐건전지 수거함을 찾아보세요</h1>
                 </div>
-              ))}
+                <div>
+                  <Medicine />
+                </div>
+              </div>
+            )}
           </div>
         </div>
       ) : (

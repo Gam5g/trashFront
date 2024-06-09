@@ -35,7 +35,7 @@ function MainForm() {
         localStorage.setItem("nickname", response.data.nickname);
       } catch (error) {}
     })();
-  });
+  }, [accessToken]);
   const handleFileChange = (e) => {
     e.preventDefault();
     const files = e.target.files || e.dataTransfer.files;
@@ -92,17 +92,15 @@ function MainForm() {
   };
 
   const onSubmit = async (data) => {
+    //searchTerm 인코딩
     const searchTerm = data.searchTerm.trim();
     if (!searchTerm) {
       return; // 검색어가 비어있으면 종료
     }
-    console.log(data);
+    const encodedSearchTerm = encodeURIComponent(searchTerm);
     try {
       const response = await AuthToken.get(
-        `/solution/keyword`,
-        {
-          keyword: searchTerm,
-        },
+        `/solution/keyword?keyword=${encodedSearchTerm}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -111,7 +109,6 @@ function MainForm() {
         }
       );
       setSearchResults([response.data]);
-      console.log(searchTerm);
       navigateToSearch(searchTerm);
     } catch (error) {
       console.log(error);
@@ -125,7 +122,6 @@ function MainForm() {
   };
 
   const navigateToSearch = (selectedQuery) => {
-    console.log(selectedQuery);
     navigate(`/search?query=${encodeURIComponent(selectedQuery)}`);
   };
 
