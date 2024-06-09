@@ -82,21 +82,24 @@ const MyPageUpdateForm = () => {
 
   return (
     <div className="myPage" style={{ userSelect: "none" }}>
-      <h1>정보 수정 페이지</h1>
+      <h1 style={{ textAlign: "center" }}>정보 수정 페이지</h1>
       <form onSubmit={handleUpdate}>
         <div className="form-group">
-          <label>이메일</label>
+          <label style={{ marginBottom: "15px" }}>이메일</label>
           <input
             className="inputContent"
             type="email"
             name="email"
             value={account.email}
             onChange={handleChange}
+            style={{ marginBottom: "15px" }}
           />
-          <div>현재 이메일 : {localStorage.getItem("email")}</div>
+          <div style={{ marginBottom: "15px" }}>
+            현재 이메일 : {localStorage.getItem("email")}
+          </div>
         </div>
         <div className="form-group">
-          <label>닉네임</label>
+          <label style={{ marginBottom: "15px" }}>닉네임</label>
           <input
             className="inputContent"
             type="text"
@@ -104,14 +107,21 @@ const MyPageUpdateForm = () => {
             value={account.nickname}
             disabled={isAdmin}
             onChange={handleChange}
+            style={{ marginBottom: "15px" }}
           />
-          <div>현재 닉네임 : {localStorage.getItem("nickname")}</div>
+          <div style={{ marginBottom: "15px" }}>
+            현재 닉네임 : {localStorage.getItem("nickname")}
+          </div>
         </div>
         <div className="form-group">
-          <div>현재 위도 : {account.latitude}</div>
+          <div style={{ marginBottom: "15px" }}>
+            현재 위도 : {account.latitude}
+          </div>
         </div>
         <div className="form-group">
-          <div>현재 경도 : {account.longitude}</div>
+          <div style={{ marginBottom: "15px" }}>
+            현재 경도 : {account.longitude}
+          </div>
         </div>
         <div className="button-container">
           <button type="submit" className="submitbutton">

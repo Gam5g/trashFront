@@ -1,104 +1,96 @@
 .myPage {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .myPage h2 {
-    color: #333;
-    text-align: center;
-  }
-  
-  .accountInfo {
-    padding: 20px;
-  }
-  
-  .accountInfo ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .accountInfo ul li {
-    margin-bottom: 10px;
-    font-size: 16px;
-    color: #666;
-  }
-  
-  .loading {
-    text-align: center;
-    padding: 50px 0;
-    font-size: 20px;
-    color: #333;
-  }
-  
-  .myPage {
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    width: 300px;
-    margin: 0 auto;
-  }
-  
-  .myPage h1 {
-    text-align: center;
-  }
-  
-  .form-group {
-    margin-bottom: 20px;
-  }
-  
-  .form-group label {
-    display: block;
-    margin-bottom: 5px;
-  }
-  
-  .form-group input {
-    width: 100%;
-    padding: 8px;
-    box-sizing: border-box;
-    margin-bottom: 5px;
-  }
-  
-  .form-group div {
-    color: #666;
-  }
-  
-  .info-update-button {
-    width: 100%;
-    padding: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .info-update-button:hover {
-    background-color: #0056b3;
-  }
-  
-  @font-face {
-    font-family: 'Pretendard-Bold';
-    src: url("../../fonts/Pretendard-Bold.woff2") format('truetype');
-  }
-  .withdrawal-button{
-    width: 100%;
-    padding: 10px;
-    background-color: black;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  .withdrawal-button, .info-update-button {
-    font-family: 'Pretendard-Bold';
-  }
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  user-select: none;
+}
 
-  .white-button-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+.myPage h2 {
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.accountInfo {
+  padding: 20px;
+}
+
+.accountInfo .section {
+  margin-bottom: 20px;
+}
+
+.accountInfo .section h3 {
+  margin-bottom: 10px;
+  font-size: 18px;
+  color: #333;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 5px;
+}
+
+.accountInfo ul {
+  list-style: none;
+  padding: 0;
+}
+
+.accountInfo ul li {
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #666;
+}
+
+.accountInfo ul li:last-child {
+  margin-bottom: 0;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:hover {
+  color : black;
+}
+.select-container {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+select {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.withdrawal-button {
+  width: 100%;
+  padding: 10px;
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: 'Pretendard-Bold';
+  margin-bottom: 10px;
+}
+
+.withdrawal-button:hover {
+  background-color: #333;
+}
+
+.info-update-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: 'Pretendard-Bold';
+}
+
+.info-update-button:hover {
+  background-color: #0056b3;
+}

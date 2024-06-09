@@ -13,10 +13,6 @@ function MyPageForm() {
   const [loading, setLoading] = useState(true);
   const [cookies, setCookie] = useCookies(["accessToken"]);
 
-  const navigateToOut = () => {
-    navigate("/api/account/withdrawal");
-  };
-
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
     if (!isLoggedIn) {
@@ -45,12 +41,23 @@ function MyPageForm() {
     }
   }, [isLoggedIn, navigate]);
 
+  const navigateToOut = () => {
+    navigate("/withdrawal");
+  };
   const onUpdate = async () => {
     navigate("/my-page/update");
   };
 
   const navigateToList = () => {
     navigate("list");
+  };
+
+  const navigateToModifiedList = () => {
+    navigate("/my-page/request/modified-list");
+  };
+
+  const navigateToCreateList = () => {
+    navigate("/my-page/request/create-list");
   };
 
   if (loading) {
@@ -63,33 +70,58 @@ function MyPageForm() {
 
   return (
     <div className="myPage">
-      <h2>내 정보</h2>
+      <h2>회원정보</h2>
       {account ? (
         <div className="accountInfo">
-          <ul>
-            <li>아이디: {account.accountName}</li>
-            <li>이메일: {account.email}</li>
-            <li>닉네임: {account.nickname}</li>
-            <li>경도: {account.latitude}</li>
-            <li>위도: {account.longitude}</li>
-          </ul>
-          <button
-            className="withdrawal-button"
-            onClick={navigateToOut}
-            style={{ marginBottom: "15px" }}
-          >
-            회원 탈퇴
-          </button>
-          <button className="info-update-button" onClick={onUpdate}>
-            정보 수정
-          </button>
+          <div className="section">
+            <h3>계정</h3>
+            <ul>
+              <li>아이디: {account.accountName}</li>
+              <li>닉네임: {account.nickname}</li>
+              <li>이메일: {account.email}</li>
+              <li className="clickable" onClick={onUpdate}>
+                이메일 또는 닉네임 변경
+              </li>
+            </ul>
+          </div>
+          <div className="section">
+            <h3>커뮤니티</h3>
+            <ul>
+              <li className="clickable" onClick={navigateToList}>
+                내 게시물 보기
+              </li>
+            </ul>
+          </div>
+          <div className="section">
+            <h3>나의 위키 편집 요청</h3>
+            <ul>
+              <li className="clickable" onClick={navigateToModifiedList}>
+                내가 수정 요청한 정보 보기
+              </li>
+              <li className="clickable" onClick={navigateToCreateList}>
+                내가 생성 요청한 정보 보기
+              </li>
+            </ul>
+          </div>
+          <div className="section">
+            <h3>위치정보</h3>
+            <ul>
+              <li>경도: {account.latitude}</li>
+              <li>위도: {account.longitude}</li>
+            </ul>
+          </div>
+          <div className="section">
+            <h3>기타</h3>
+            <ul>
+              <li className="clickable" onClick={navigateToOut}>
+                탈퇴하기
+              </li>
+            </ul>
+          </div>
         </div>
       ) : (
         <div>계정 정보를 찾을 수 없습니다.</div>
       )}
-      <button className="info-update-button" onClick={navigateToList}>
-        내 게시글 보기
-      </button>
     </div>
   );
 }
