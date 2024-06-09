@@ -43,7 +43,6 @@ const Header = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("accountName");
     localStorage.removeItem("email");
-    localStorage.removeItem("currentUserId");
     localStorage.removeItem("nickname");
     localStorage.removeItem("latitude");
     localStorage.removeItem("longitude");

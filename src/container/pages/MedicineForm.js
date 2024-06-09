@@ -7,13 +7,20 @@ import { useRecoilValue } from "recoil";
 import { isLoggedInState } from "../../state/authState";
 import { useMediaQuery } from "react-responsive";
 import "../../Button.css";
+import Paging from "./Community/Paging";
 
 const MedicineForm = () => {
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const isLoggedIn = useRecoilValue(isLoggedInState);
   const [locationData, setLocationData] = useState(null);
   const navigate = useNavigate();
+  const [activePage, setActivePage] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
+  const itemsPerPage = 10;
 
+  const handlePageChange = async (pageNumber) => {
+    setActivePage(pageNumber);
+  };
   const navigateToBattery = () => {
     navigate("/battery");
   };
@@ -43,7 +50,7 @@ const MedicineForm = () => {
   }, [isLoggedIn]);
 
   return (
-    <div style={{ marginTop: "250px" }}>
+    <div className="NotDrag" style={{ marginTop: "250px" }}>
       <h1>대구광역시 수거함 위치 ＞</h1>
       <div
         className="location-button-container"
@@ -55,6 +62,11 @@ const MedicineForm = () => {
         </button>
       </div>
       <MedicineMap />
+      <Paging
+        totalItemsCount={totalItems}
+        onPageChange={handlePageChange}
+        activePage={activePage}
+      />
     </div>
   );
 };

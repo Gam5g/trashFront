@@ -21,6 +21,7 @@ const Paging = ({ totalItemsCount, onPageChange, activePage }) => {
       pageRangeDisplayed={5}
       prevPageText={"‹"}
       nextPageText={"›"}
+      activeClass="active-page"
       onChange={handlePageChange}
     />
   );
