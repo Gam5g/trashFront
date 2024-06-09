@@ -25,11 +25,14 @@ const CommunityWrite = ({ posttype }) => {
   const [nanumInfo, setNanumInfo] = useState({
     title: "",
     content: "",
-    nanum: false,
+    shareTarget: "",
+    location: "",
     imageUrl: "",
+    collection: false,
   });
   const [errors, setErrors] = useState({ title: "", content: "" });
   const questionId = null;
+  const recycleId = null;
   const ACCESS_KEY = process.env.REACT_APP_ACCESS_KEY;
   const SECRET_ACCESS_KEY = process.env.REACT_APP_SECRET_ACCESS_KEY;
   const REGION = process.env.REACT_APP_REGION;
@@ -149,7 +152,7 @@ const CommunityWrite = ({ posttype }) => {
   const onSubmit = async (e) => {
     e.preventDefault();
     let url = "";
-    let title, content, imageUrl, nanum;
+    let title, content, imageUrl, shareTarget, location;
     if (!isLoggedIn) {
       alert("로그인 한 후에 글을 작성할 수 있습니다.");
       return;
@@ -157,13 +160,23 @@ const CommunityWrite = ({ posttype }) => {
     if (posttype === "bunri") {
       ({ title, content, imageUrl } = bunriInfo);
     } else if (posttype === "nanum") {
-      ({ title, content, imageUrl, nanum } = nanumInfo);
+      ({ title, content, imageUrl, shareTarget, location } = nanumInfo);
     }
     if (!title.trim()) {
       setErrors((prev) => ({ ...prev, title: "제목은 필수 항목입니다." }));
       return;
     }
-
+    if (!shareTarget.trim()) {
+      setErrors((prev) => ({
+        ...prev,
+        shareTarget: "나눔할 항목을 작성하세요.",
+      }));
+      return;
+    }
+    if (!location.trim()) {
+      setErrors((prev) => ({ ...prev, location: "나눔할 위치를 작성하세요." }));
+      return;
+    }
     if (content.trim().length < 10) {
       setErrors((prev) => ({
         ...prev,
@@ -173,15 +186,15 @@ const CommunityWrite = ({ posttype }) => {
     }
 
     if (posttype === "bunri") {
-      url = `http://3.39.190.90/api/questionBoard/create?id=${questionId}`;
+      url = `/questionBoard/create?id=${questionId}`;
     } else if (posttype === "nanum") {
-      url = ``;
+      url = `/recycleBoard/create?id=${recycleId}`;
     }
     try {
       const payload =
         posttype === "bunri"
           ? { title, content, imageUrl }
-          : { title, content, imageUrl, nanum };
+          : { title, content, imageUrl, shareTarget, location };
 
       const res = await AuthToken.post(url, payload, {
         headers: {
@@ -215,6 +228,65 @@ const CommunityWrite = ({ posttype }) => {
           />
           {errors.title && <p className="error-message">{errors.title}</p>}
         </div>
+        {posttype === "nanum" && (
+          <>
+            <div>
+              <div className="button-container">
+                <p
+                  style={{
+                    color: "gray",
+                    fontSize: "14px",
+                    marginLeft: "-70px",
+                    marginRight: "10px",
+                  }}
+                >
+                  공유 대상
+                </p>
+                <label htmlFor="shareTarget" className="inputWrap">
+                  <input
+                    className="inputContent"
+                    type="text"
+                    id="shareTarget"
+                    name="shareTarget"
+                    value={nanumInfo.shareTarget}
+                    onChange={onChange}
+                  />
+                </label>
+              </div>
+              {errors.shareTarget && (
+                <p className="error-message">{errors.shareTarget}</p>
+              )}
+            </div>
+            <div>
+              <div className="button-container">
+                <p
+                  style={{
+                    marginLeft: "-75px",
+                    color: "gray",
+                    fontSize: "14px",
+                    marginRight: "30px",
+                  }}
+                >
+                  {" "}
+                  위치
+                </p>
+                <label htmlFor="location" className="inputWrap">
+                  <input
+                    className="inputContent"
+                    type="text"
+                    id="location"
+                    name="location"
+                    value={nanumInfo.location}
+                    onChange={onChange}
+                  />
+                </label>
+              </div>
+              {errors.location && (
+                <p className="error-message">{errors.location}</p>
+              )}
+            </div>
+          </>
+        )}
         <div style={{ userSelect: "none" }}>
           <p style={{ color: "gray", fontSize: "14px" }}>내용</p>
           <ReactQuill
@@ -235,23 +307,7 @@ const CommunityWrite = ({ posttype }) => {
           />
           {errors.content && <p className="error-message">{errors.content}</p>}
         </div>
-        {posttype === "nanum" && (
-          <div>
-            <label htmlFor="nanum">
-              <input
-                type="checkbox"
-                id="nanum"
-                name="nanum"
-                checked={nanumInfo.nanum}
-                onChange={(e) =>
-                  setNanumInfo({ ...nanumInfo, nanum: e.target.checked })
-                }
-                style={{ marginTop: "40px" }}
-              />
-              나눔 완료
-            </label>
-          </div>
-        )}
+
         <div className="button-container">
           <button className="greenbutton" type="submit">
             등록

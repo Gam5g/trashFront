@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, useState } from "react";
+import React, { useRef, useMemo, useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { isLoggedInState } from "../state/authState";
@@ -17,25 +17,34 @@ const CommunityUpdate = ({ posttype }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const isLoggedIn = useRecoilValue(isLoggedInState);
-  const post = location.state;
+  const [post, setPost] = useState(
+    location.state?.post || {
+      title: "",
+      content: "",
+      writer: "",
+      adopted: false,
+      imageUrl: "",
+      shareTarget: "",
+      location: "",
+    }
+  );
   const [bunriInfo, setBunriInfo] = useState({
-    title: "",
-    content: "",
-    imageUrl: "",
+    title: post.title,
+    content: post.content,
+    imageUrl: post.imageUrl,
   });
-
   const [nanumInfo, setNanumInfo] = useState({
-    title: "",
-    content: "",
-    nanum: false,
-    imageUrl: "",
+    title: post.title,
+    content: post.content,
+    collection: post.collection || false,
+    shareTarget: post.shareTarget,
+    location: post.location,
+    imageUrl: post.imageUrl,
   });
   const [errors, setErrors] = useState({ title: "", content: "" });
-  const [currentQuestionId, setCurrentQuestionId] = useState(0);
-  const [file, setFile] = useState(null);
-  const [image, setImage] = useState(null);
+  const questionBoardId = posttype === "bunri" ? location.state?.boardId : null;
+  const recycleBoardId = posttype === "nanum" ? location.state?.boardId : null;
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
-  let questionId = null;
 
   const onChange = (e) => {
     const { name, value } = e.target;
@@ -106,19 +115,18 @@ const CommunityUpdate = ({ posttype }) => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+
     if (!isLoggedIn) {
       alert("로그인 한 후에 글을 작성할 수 있습니다.");
       return;
     }
-    let url = "";
-    let title, content, imageUrl, nanum;
-    if (posttype === "bunri") {
-      url = `http://3.39.190.90/api/questionBoard/update?id=${questionId}`;
-      ({ title, content, imageUrl } = bunriInfo);
-    } else if (posttype === "nanum") {
-      url = ``;
-      ({ title, content, imageUrl, nanum } = nanumInfo);
-    }
+
+    const title = posttype === "bunri" ? bunriInfo.title : nanumInfo.title;
+    const content =
+      posttype === "bunri"
+        ? bunriInfo.content?.replace(/^<p>|<\/p>$/g, "")
+        : nanumInfo.content?.replace(/^<p>|<\/p>$/g, "");
+
     if (!title.trim()) {
       setErrors((prev) => ({ ...prev, title: "제목은 필수 항목입니다." }));
       return;
@@ -132,17 +140,41 @@ const CommunityUpdate = ({ posttype }) => {
       return;
     }
 
+    let url = "";
+    let checkUrl = "";
+    let payload = {};
+    if (posttype === "bunri") {
+      url = `http://3.39.190.90/api/questionBoard/update/${questionBoardId}`;
+      payload = { title, content, imageUrl: bunriInfo.imageUrl };
+    } else if (posttype === "nanum") {
+      url = `http://3.39.190.90/api/recycleBoard/update/${recycleBoardId}`;
+      checkUrl = `http://3.39.190.90/api/recycleBoard/finish/${recycleBoardId}`;
+      payload = {
+        title,
+        content,
+        imageUrl: nanumInfo.imageUrl,
+        shareTarget: nanumInfo.shareTarget,
+        location: nanumInfo.location,
+        collection: nanumInfo.collection,
+      };
+    }
+
     try {
-      const payload =
-        posttype === "bunri"
-          ? { title, content, imageUrl }
-          : { title, content, imageUrl, nanum };
-      const res = await AuthToken.post(url, payload, {
+      await AuthToken.put(url, payload, {
         headers: {
           Authorization: localStorage.getItem("accessToken"),
           "Content-Type": "application/json",
         },
       });
+
+      if (posttype === "nanum" && nanumInfo.collection === true) {
+        await AuthToken.put(checkUrl, payload, {
+          headers: {
+            Authorization: localStorage.getItem("accessToken"),
+            "Content-Type": "application/json",
+          },
+        });
+      }
       alert("글을 수정했습니다.");
       navigate(`/community-${posttype}`);
     } catch (error) {
@@ -169,6 +201,65 @@ const CommunityUpdate = ({ posttype }) => {
           />
           {errors.title && <p className="error-message">{errors.title}</p>}
         </div>
+        {posttype === "nanum" && (
+          <>
+            <div>
+              <div className="button-container">
+                <p
+                  style={{
+                    color: "gray",
+                    fontSize: "14px",
+                    marginLeft: "-70px",
+                    marginRight: "10px",
+                  }}
+                >
+                  공유 대상
+                </p>
+                <label htmlFor="shareTarget" className="inputWrap">
+                  <input
+                    className="inputContent"
+                    type="text"
+                    id="shareTarget"
+                    name="shareTarget"
+                    value={nanumInfo.shareTarget}
+                    onChange={onChange}
+                  />
+                </label>
+              </div>
+              {errors.shareTarget && (
+                <p className="error-message">{errors.shareTarget}</p>
+              )}
+            </div>
+            <div>
+              <div className="button-container">
+                <p
+                  style={{
+                    marginLeft: "-75px",
+                    color: "gray",
+                    fontSize: "14px",
+                    marginRight: "30px",
+                  }}
+                >
+                  {" "}
+                  위치
+                </p>
+                <label htmlFor="location" className="inputWrap">
+                  <input
+                    className="inputContent"
+                    type="text"
+                    id="location"
+                    name="location"
+                    value={nanumInfo.location}
+                    onChange={onChange}
+                  />
+                </label>
+              </div>
+              {errors.location && (
+                <p className="error-message">{errors.location}</p>
+              )}
+            </div>
+          </>
+        )}
         <div style={{ userSelect: "none" }}>
           <p style={{ color: "gray", fontSize: "14px" }}>내용</p>
           <ReactQuill
@@ -196,19 +287,21 @@ const CommunityUpdate = ({ posttype }) => {
                 type="checkbox"
                 id="nanum"
                 name="nanum"
-                checked={nanumInfo.nanum}
+                checked={nanumInfo.collection}
+                disabled={nanumInfo.collection === true}
                 onChange={(e) =>
-                  setNanumInfo({ ...nanumInfo, nanum: e.target.checked })
+                  setNanumInfo({ ...nanumInfo, collection: e.target.checked })
                 }
                 style={{ marginTop: "40px" }}
               />
               나눔 완료
             </label>
+            <p>나눔 완료에 처음 체크했을 경우, 다시 수정할 수 없습니다.</p>
           </div>
         )}
         <div className="button-container">
           <button className="greenbutton" type="submit">
-            등록
+            수정
           </button>
           <button
             className="cancelbutton"

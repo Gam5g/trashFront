@@ -72,6 +72,7 @@ const CommunityList = ({ posttype }) => {
           recommend: data.recommend,
           writer: data.writer,
           adopted: data.adopted,
+          collection: data.collection,
           view: data.view,
         }));
         setBoardList(inputData);
@@ -121,11 +122,11 @@ const CommunityList = ({ posttype }) => {
                           {post.writer} | 조회수 {post.view} | 추천수{" "}
                           {post.recommend} | {post.date}
                           {posttype === "nanum" &&
-                            (post.nanum === "O"
+                            (post.collection === true
                               ? " | 나눔 완료"
                               : " | 나눔 진행 중")}
                           {posttype === "bunri" &&
-                            (post.adopted === "true"
+                            (post.adopted === true
                               ? " | 채택 완료"
                               : " | 채택 미완료")}
                         </p>
@@ -144,7 +145,7 @@ const CommunityList = ({ posttype }) => {
                 <th>제목</th>
                 <th>글쓴이</th>
                 <th>조회수</th>
-                <th>추천수</th>
+                {posttype === "bunri" && <th>추천수</th>}
                 {posttype === "nanum" && <th>나눔 완료</th>}
               </tr>
             </thead>
@@ -179,8 +180,9 @@ const CommunityList = ({ posttype }) => {
                     </td>
                     <td>{post.writer}</td>
                     <td>{post.view}</td>
-                    <td>{post.recommend}</td>
-                    {posttype === "nanum" && <td>{post.nanum}</td>}
+                    {posttype === "bunri" && <td>{post.recommend}</td>}
+                    {posttype === "nanum" &&
+                      (post.collection === true ? <td>O</td> : <td>X</td>)}
                   </tr>
                 )
               )}
@@ -200,12 +202,6 @@ const CommunityList = ({ posttype }) => {
             <option value="1">페이지 번호순 정렬</option>
             <option value="2">추천순 정렬</option>
             <option value="3">조회순 정렬</option>
-            {posttype === "bunri" && (
-              <option value="bunri">채택완료순 정렬</option>
-            )}
-            {posttype === "nanum" && (
-              <option value="nanum">나눔완료순 정렬</option>
-            )}
           </select>
           {isMobile ? <div style={{ marginBottom: "15px" }} /> : <></>}
           <div className="search-container">
