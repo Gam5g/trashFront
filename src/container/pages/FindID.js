@@ -99,7 +99,7 @@ const FindID = () => {
           비밀번호 찾기
         </Link>
         <Link
-          to="/api/auth/sign-in"
+          to="/sign-in"
           style={{
             color: "gray",
             margin: "20px 10px 0",

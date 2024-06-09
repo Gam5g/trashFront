@@ -55,7 +55,7 @@ const RegisterForm = () => {
       longitude,
     };
     await AuthToken.post(
-      "http://3.39.190.90/api/auth/sign-up",
+      "/auth/sign-up",
       {
         accountName: formData.id,
         password: formData.password,

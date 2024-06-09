@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { FaSearch } from "react-icons/fa";
 import { HiXCircle } from "react-icons/hi";
@@ -24,6 +24,18 @@ function MainForm() {
   const cameraInputRef = useRef(null);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await AuthToken.get(`/account/me`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        localStorage.setItem("nickname", response.data.nickname);
+      } catch (error) {}
+    })();
+  });
   const handleFileChange = (e) => {
     e.preventDefault();
     const files = e.target.files || e.dataTransfer.files;
@@ -60,7 +72,7 @@ function MainForm() {
       try {
         const imageURL = encodeURIComponent(lastFile.name); // URL 인코딩
         const response = await AuthToken.get(
-          `http://3.39.190.90/api/separation?url=${imageURL}`,
+          `/separation?url=${imageURL}`,
           {
             url: imageURL,
           },
@@ -87,7 +99,7 @@ function MainForm() {
     console.log(data);
     try {
       const response = await AuthToken.get(
-        `http://3.39.190.90/api/solution/keyword`,
+        `/solution/keyword`,
         {
           keyword: searchTerm,
         },

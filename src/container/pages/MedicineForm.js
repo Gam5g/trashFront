@@ -28,15 +28,12 @@ const MedicineForm = () => {
     const fetchLocationData = async () => {
       try {
         const userCity = localStorage.getItem("userCity");
-        const response = await axios.get(
-          `http://3.39.190.90/api/location/medicine`,
-          {
-            params: {
-              state: "대구",
-              city: userCity,
-            },
-          }
-        );
+        const response = await axios.get(`/location/medicine`, {
+          params: {
+            state: "대구",
+            city: userCity,
+          },
+        });
         setLocationData(response.data);
         console.log("Location data fetched:", response.data);
       } catch (error) {

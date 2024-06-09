@@ -99,15 +99,11 @@ const SolutionCreate = () => {
       formData.append("solution", solutionList.solution);
       formData.append("tags", solutionList.tags.join(","));
 
-      const response = await AuthToken.post(
-        "http://3.39.190.90/api/solution/${wasteId}/wiki",
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      await AuthToken.post("/solution/${wasteId}/wiki", formData, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
       alert("솔루션 제출이 완료되었습니다. 감사합니다!");
       navigate("/");
     } catch (error) {

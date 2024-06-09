@@ -42,21 +42,18 @@ const CompareForm = ({ type }) => {
   useEffect(() => {
     if (!isLoggedIn) {
       alert("로그인 한 후에 글을 작성할 수 있습니다.");
-      navigate("/api/auth/sign-in");
+      navigate("/sign-in");
     }
   }, [isLoggedIn, navigate]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await AuthToken.get(
-          `http://3.39.190.90/api/wiki/${wikiId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
+        const response = await AuthToken.get(`/wiki/${wikiId}`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
         const data = response.data;
         const originCreatedDate = new Date(
           data.origin.createdDate
@@ -163,15 +160,11 @@ const CompareForm = ({ type }) => {
     formData.append("solution", modifiedList.solution);
     formData.append("tags", modifiedList.tags.join(","));
     try {
-      await AuthToken.post(
-        `http://3.39.190.90/api/solution/${wasteId}/wiki`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      await AuthToken.post(`/solution/${wasteId}/wiki`, formData, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
     } catch (error) {
       if (
         error.response.data.cause === "EXIST_WIKI" ||
@@ -183,14 +176,11 @@ const CompareForm = ({ type }) => {
   };
   const handleAdminAccept = async (e) => {
     try {
-      const response = await AuthToken.put(
-        `http://3.39.190.90/api/wiki/{wikiId}/accepted`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      await AuthToken.put(`/wiki/{wikiId}/accepted`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
       alert("해당 위키의 요청이 승인되었습니다.");
     } catch (error) {
       alert(error);
@@ -199,14 +189,11 @@ const CompareForm = ({ type }) => {
 
   const handleAdminRejected = async (e) => {
     try {
-      const response = await AuthToken.put(
-        `http://3.39.190.90/api/wiki/{wikiId}/rejected`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      await AuthToken.put(`/wiki/{wikiId}/rejected`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
       alert("해당 위키의 요청이 거부되었습니다.");
     } catch (error) {
       if (error.response.data.cause === "EMPTY_WIKI") {

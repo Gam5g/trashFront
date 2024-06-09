@@ -68,7 +68,7 @@ const FindPassword = () => {
       >
         아이디 찾기
       </Link>
-      <Link to="/api/auth/sign-in" style={{ color: "gray" }}>
+      <Link to="/sign-in" style={{ color: "gray" }}>
         로그인
       </Link>
     </div>

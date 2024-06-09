@@ -35,17 +35,14 @@ const WithdrawalForm = () => {
         timeToLive: new Date().toISOString(),
       };
 
-      const response = await AuthToken.delete(
-        `http://3.39.190.90/api/account/withdrawal?id=${userId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            "Content-Type": "application/json",
-          },
-          data: accessTokenObject,
-          withCredentials: true,
-        }
-      );
+      await AuthToken.delete(`/account/withdrawal?id=${userId}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+        data: accessTokenObject,
+        withCredentials: true,
+      });
       localStorage.removeItem("accessToken");
       setIsLoggedIn(false);
       navigate("/");

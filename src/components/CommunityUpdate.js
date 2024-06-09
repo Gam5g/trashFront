@@ -144,11 +144,11 @@ const CommunityUpdate = ({ posttype }) => {
     let checkUrl = "";
     let payload = {};
     if (posttype === "bunri") {
-      url = `http://3.39.190.90/api/questionBoard/update/${questionBoardId}`;
+      url = `/questionBoard/update/${questionBoardId}`;
       payload = { title, content, imageUrl: bunriInfo.imageUrl };
     } else if (posttype === "nanum") {
-      url = `http://3.39.190.90/api/recycleBoard/update/${recycleBoardId}`;
-      checkUrl = `http://3.39.190.90/api/recycleBoard/finish/${recycleBoardId}`;
+      url = `/recycleBoard/update/${recycleBoardId}`;
+      checkUrl = `/recycleBoard/finish/${recycleBoardId}`;
       payload = {
         title,
         content,

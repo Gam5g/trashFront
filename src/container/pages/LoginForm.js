@@ -40,7 +40,7 @@ const LoginForm = () => {
     setIsLoading(true);
     try {
       const response = await AuthToken.post(
-        "http://3.39.190.90/api/auth/sign-in",
+        "/auth/sign-in",
         {
           accountName: formData.id,
           password: formData.password,

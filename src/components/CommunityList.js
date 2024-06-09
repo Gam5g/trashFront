@@ -51,10 +51,10 @@ const CommunityList = ({ posttype }) => {
         let storageKey = "";
 
         if (posttype === "bunri") {
-          url = `http://3.39.190.90/api/questionBoard/read/${option}/paging?page=${page}`;
+          url = `/questionBoard/read/${option}/paging?page=${page}`;
           storageKey = "bunri-totalElements";
         } else if (posttype === "nanum") {
-          url = `http://3.39.190.90/api/recycleBoard/read/${option}/paging?page=${page}`;
+          url = `/recycleBoard/read/${option}/paging?page=${page}`;
           storageKey = "nanum-totalElements";
         } else if (posttype === "mylist") {
           url = ``;

@@ -21,14 +21,11 @@ function MyPageForm() {
     } else {
       (async () => {
         try {
-          const response = await AuthToken.get(
-            `http://3.39.190.90/api/account/me`,
-            {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-              },
-            }
-          );
+          const response = await AuthToken.get(`/account/me`, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          });
           setAccount(response.data);
           localStorage.setItem("email", response.data.email);
           localStorage.setItem("nickname", response.data.nickname);

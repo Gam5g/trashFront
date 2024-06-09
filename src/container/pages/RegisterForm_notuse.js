@@ -256,7 +256,7 @@ const RegisterForm = () => {
     } else return;
 
     axios
-      .post("http://3.39.190.90/api/auth/sign-up", {
+      .post("/auth/sign-up", {
         id: form.id,
         password: form.password,
         nickname: form.nickname,

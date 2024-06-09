@@ -20,14 +20,11 @@ const MyPageUpdateForm = () => {
   useEffect(() => {
     const fetchAccountData = async () => {
       try {
-        const response = await AuthToken.get(
-          `http://3.39.190.90/api/account/me?id=${userId}`,
-          {
-            headers: {
-              Authorization: cookies.accessToken,
-            },
-          }
-        );
+        const response = await AuthToken.get(`/account/me?id=${userId}`, {
+          headers: {
+            Authorization: cookies.accessToken,
+          },
+        });
         setAccount(response.data);
       } catch (error) {
         console.error("계정 정보를 가져오는 데 실패했습니다.", error);
@@ -50,7 +47,7 @@ const MyPageUpdateForm = () => {
     e.preventDefault();
     try {
       await AuthToken.put(
-        `http://3.39.190.90/api/account/me?id=${userId}`,
+        `/account/me?id=${userId}`,
         {
           email: account.email,
           nickname: account.nickname,

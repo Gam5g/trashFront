@@ -141,7 +141,7 @@ const CommunityDetail = ({ posttype }) => {
   //   const questionBoardId = localStorage;
   //   try {
   //     const response = await AuthToken.post(
-  //       `http://3.39.190.90/api/recommendBoard/${questionBoardId}?=accountId={userId}`,
+  //       `/recommendBoard/${questionBoardId}?=accountId={userId}`,
   //       {
   //         headers: {
   //           Authorization: `Bearer ${accessToken}`,
