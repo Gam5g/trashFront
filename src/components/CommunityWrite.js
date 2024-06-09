@@ -9,48 +9,100 @@ import "react-quill/dist/quill.snow.css";
 import ImageResize from "quill-image-resize";
 import AuthToken from "../container/pages/AuthToken";
 import { useMediaQuery } from "react-responsive";
-import { S3_BUCKET } from "../S3Upload";
+import S3Upload from "../S3Upload";
+import AWS from "aws-sdk";
 
 Quill.register("modules/imageResize", ImageResize);
 
 const CommunityWrite = ({ posttype }) => {
   const navigate = useNavigate();
   const isLoggedIn = useRecoilValue(isLoggedInState);
-  const [userInfo, setUserInfo] = useState({
+  const [bunriInfo, setBunriInfo] = useState({
+    title: "",
+    content: "",
+    imageUrl: "",
+  });
+  const [nanumInfo, setNanumInfo] = useState({
     title: "",
     content: "",
     nanum: false,
     imageUrl: "",
-    category: posttype === "bunri" ? "분리수거" : "나눔",
   });
   const [errors, setErrors] = useState({ title: "", content: "" });
-  const [currentQuestionId, setCurrentQuestionId] = useState(0);
-  const [file, setFile] = useState(null);
-  const [image, setImage] = useState(null);
-  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
+  const questionId = null;
+  const ACCESS_KEY = process.env.REACT_APP_ACCESS_KEY;
+  const SECRET_ACCESS_KEY = process.env.REACT_APP_SECRET_ACCESS_KEY;
+  const REGION = process.env.REACT_APP_REGION;
+  const S3_BUCKET = process.env.REACT_APP_S3_BUCKET;
 
+  AWS.config.update({
+    accessKeyId: ACCESS_KEY,
+    secretAccessKey: SECRET_ACCESS_KEY,
+  });
+
+  const myBucket = new AWS.S3({
+    params: { Bucket: S3_BUCKET },
+    region: REGION,
+  });
+
+  const uploadFileToS3 = (file) => {
+    return new Promise((resolve, reject) => {
+      const params = {
+        ACL: "public-read",
+        Body: file,
+        Bucket: S3_BUCKET,
+        Key: `${Date.now()}-${file.name}`,
+      };
+
+      myBucket.putObject(params).send((err, data) => {
+        if (err) {
+          console.log(err);
+          reject(err);
+        } else {
+          const imageUrl = `https://${S3_BUCKET}.s3.${REGION}.amazonaws.com/${params.Key}`;
+          resolve(imageUrl);
+        }
+      });
+    });
+  };
+
+  const handleUploadSuccess = (url) => {
+    if (posttype === "bunri") {
+      setBunriInfo((prev) => ({ ...prev, imageUrl: url }));
+    } else if (posttype === "nanum") {
+      setNanumInfo((prev) => ({ ...prev, imageUrl: url }));
+    }
+  };
   const onChange = (e) => {
     const { name, value } = e.target;
     setErrors((prev) => ({ ...prev, [name]: "" }));
-    setUserInfo((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    if (posttype === "bunri") {
+      setBunriInfo((prev) => ({ ...prev, [name]: value }));
+    } else if (posttype === "nanum") {
+      setNanumInfo((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   const imageHandler = () => {
     const input = document.createElement("input");
-    input.setAttribute("type", "file"); //파일 입력요소를 file 타입으로 설정
-    input.setAttribute("accept", "image/*"); //파일 입력요소가 이미지 선택할 수 있게 accept 속성 설정
-    input.click(); //파일 입력요소 클릭
-    input.addEventListener("change", async () => {
+    input.setAttribute("type", "file");
+    input.setAttribute("accept", "image/*");
+    input.click();
+
+    input.onchange = async () => {
       const file = input.files[0];
-      try {
-        const name = Date.now();
-      } catch (error) {
-        console.log(error);
+      if (file) {
+        try {
+          const imageUrl = await uploadFileToS3(file);
+          const quill = quillRef.current.getEditor();
+          const range = quill.getSelection();
+          quill.insertEmbed(range.index, "image", imageUrl);
+          setBunriInfo((prev) => ({ ...prev, imageUrl }));
+        } catch (error) {
+          console.log(error);
+        }
       }
-    });
+    };
   };
 
   const modules = useMemo(() => {
@@ -96,12 +148,17 @@ const CommunityWrite = ({ posttype }) => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    let url = "";
+    let title, content, imageUrl, nanum;
     if (!isLoggedIn) {
       alert("로그인 한 후에 글을 작성할 수 있습니다.");
       return;
     }
-    const questionId = currentQuestionId;
-    const { title, content, imageUrl, category } = userInfo;
+    if (posttype === "bunri") {
+      ({ title, content, imageUrl } = bunriInfo);
+    } else if (posttype === "nanum") {
+      ({ title, content, imageUrl, nanum } = nanumInfo);
+    }
     if (!title.trim()) {
       setErrors((prev) => ({ ...prev, title: "제목은 필수 항목입니다." }));
       return;
@@ -115,22 +172,23 @@ const CommunityWrite = ({ posttype }) => {
       return;
     }
 
+    if (posttype === "bunri") {
+      url = `http://3.39.190.90/api/questionBoard/create?id=${questionId}`;
+    } else if (posttype === "nanum") {
+      url = ``;
+    }
     try {
-      const res = await AuthToken.post(
-        `http://3.39.190.90/api/questionBoard/create?id=${questionId}`,
-        {
-          title,
-          content,
-          category,
-          imageUrl,
+      const payload =
+        posttype === "bunri"
+          ? { title, content, imageUrl }
+          : { title, content, imageUrl, nanum };
+
+      const res = await AuthToken.post(url, payload, {
+        headers: {
+          Authorization: localStorage.getItem("accessToken"),
+          "Content-Type": "application/json",
         },
-        {
-          headers: {
-            Authorization: localStorage.getItem("accessToken"),
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      });
       alert("글을 작성했습니다.");
       navigate(`/community-${posttype}`);
     } catch (error) {
@@ -152,7 +210,7 @@ const CommunityWrite = ({ posttype }) => {
             type="text"
             id="title_txt"
             name="title"
-            value={userInfo.title}
+            value={posttype === "bunri" ? bunriInfo.title : nanumInfo.title}
             onChange={onChange}
           />
           {errors.title && <p className="error-message">{errors.title}</p>}
@@ -168,8 +226,12 @@ const CommunityWrite = ({ posttype }) => {
             name="content"
             className="quill-editor"
             placeholder="내용을 입력해주세요."
-            value={userInfo.content}
-            onChange={(content) => setUserInfo({ ...userInfo, content })}
+            value={posttype === "bunri" ? bunriInfo.content : nanumInfo.content}
+            onChange={(content) =>
+              posttype === "bunri"
+                ? setBunriInfo({ ...bunriInfo, content })
+                : setNanumInfo({ ...nanumInfo, content })
+            }
           />
           {errors.content && <p className="error-message">{errors.content}</p>}
         </div>
@@ -180,9 +242,9 @@ const CommunityWrite = ({ posttype }) => {
                 type="checkbox"
                 id="nanum"
                 name="nanum"
-                checked={userInfo.nanum}
+                checked={nanumInfo.nanum}
                 onChange={(e) =>
-                  setUserInfo({ ...userInfo, nanum: e.target.checked })
+                  setNanumInfo({ ...nanumInfo, nanum: e.target.checked })
                 }
                 style={{ marginTop: "40px" }}
               />

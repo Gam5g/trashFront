@@ -2,7 +2,7 @@ import React from "react";
 import CommunityDetail from "../../../components/CommunityDetail";
 
 const CommunityBunriDetail = () => {
-  return <CommunityDetail postsType="bunri" />;
+  return <CommunityDetail posttype="bunri" />;
 };
 
 export default CommunityBunriDetail;

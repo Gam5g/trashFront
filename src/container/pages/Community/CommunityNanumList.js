@@ -21,7 +21,7 @@ const CommunityNanumList = () => {
       ) : (
         <h3>사람들과 나눔을 시작하고 환경에 한 걸음 더 가까워져요</h3>
       )}
-      <CommunityList postType="nanum" />
+      <CommunityList posttype="nanum" />
     </div>
   );
 };

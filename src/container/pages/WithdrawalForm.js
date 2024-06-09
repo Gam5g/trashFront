@@ -74,7 +74,13 @@ const WithdrawalForm = () => {
         <p style={{ color: "red" }}>
           {errors.confirmation?.message || backendError}
         </p>
-        <button type="submit">탈퇴하기</button>
+        <button
+          type="submit"
+          className="write-green-button"
+          style={{ width: "380px", height: "45px" }}
+        >
+          탈퇴하기
+        </button>
       </form>
     </div>
   );

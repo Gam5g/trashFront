@@ -8,7 +8,7 @@ import AuthToken from "../container/pages/AuthToken";
 import "../Button.css";
 import "../container/pages/Community/Community.css";
 
-const CommunityList = ({ postType }) => {
+const CommunityList = ({ posttype }) => {
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const [selectedPost, setSelectedPost] = useState(null);
   const [searchResults, setSearchResults] = useState([]);
@@ -31,12 +31,12 @@ const CommunityList = ({ postType }) => {
   const isLoggedIn = useRecoilValue(isLoggedInState);
 
   const NavigateToWrite = () => {
-    navigate(`/community-${postType}/write`);
+    navigate(`/community-${posttype}/write`);
   };
 
   const handlePostClick = (post) => {
     setSelectedPost(post);
-    navigate(`/community-${postType}/${post.id}`);
+    navigate(`/community-${posttype}/${post.id}`);
   };
 
   const handleSearchChange = (e) => {
@@ -50,12 +50,14 @@ const CommunityList = ({ postType }) => {
         let url = "";
         let storageKey = "";
 
-        if (postType === "bunri") {
+        if (posttype === "bunri") {
           url = `http://3.39.190.90/api/questionBoard/read/${option}/paging?page=${page}`;
           storageKey = "bunri-totalElements";
-        } else if (postType === "nanum") {
+        } else if (posttype === "nanum") {
           url = `http://3.39.190.90/api/recycleBoard/read/${option}/paging?page=${page}`;
           storageKey = "nanum-totalElements";
+        } else if (posttype === "mylist") {
+          url = ``;
         }
 
         const response = await AuthToken.get(url, {
@@ -79,7 +81,7 @@ const CommunityList = ({ postType }) => {
     };
 
     fetchBoardData();
-  }, [postType, page, option]);
+  }, [posttype, page, option]);
 
   const handleSearch = () => {
     const filtered = boardList.filter((post) => {
@@ -90,8 +92,10 @@ const CommunityList = ({ postType }) => {
       }
       return false;
     });
+
     if (filtered.length === 0) {
       window.confirm("검색 결과가 없습니다.");
+      setSearchResults([]);
     } else {
       setSearchResults(filtered);
     }
@@ -102,31 +106,35 @@ const CommunityList = ({ postType }) => {
       <div className="NotDrag">
         {isMobile ? (
           <table className="mobile-table-container">
-            {searchResults.length > 0
-              ? searchResults
-              : boardList.map((post) => (
+            <tbody>
+              {(searchResults.length > 0 ? searchResults : boardList).map(
+                (post) => (
                   <tr key={post.id} onClick={() => handlePostClick(post)}>
-                    <p className="title">
-                      {post.title.length > 40
-                        ? post.title.slice(0, 40) + "..."
-                        : post.title}
-                    </p>
-                    <div>
-                      <p className="info">
-                        {post.writer} | 조회수 {post.view} | 추천수{" "}
-                        {post.recommend} | {post.date}
-                        {postType === "nanum" &&
-                          (post.nanum === "O"
-                            ? " | 나눔 완료"
-                            : " | 나눔 진행 중")}
-                        {postType === "bunri" &&
-                          (post.adopted === "true"
-                            ? " | 채택 완료"
-                            : " | 채택 미완료")}
+                    <td>
+                      <p className="title">
+                        {post.title.length > 40
+                          ? post.title.slice(0, 40) + "..."
+                          : post.title}
                       </p>
-                    </div>
+                      <div>
+                        <p className="info">
+                          {post.writer} | 조회수 {post.view} | 추천수{" "}
+                          {post.recommend} | {post.date}
+                          {posttype === "nanum" &&
+                            (post.nanum === "O"
+                              ? " | 나눔 완료"
+                              : " | 나눔 진행 중")}
+                          {posttype === "bunri" &&
+                            (post.adopted === "true"
+                              ? " | 채택 완료"
+                              : " | 채택 미완료")}
+                        </p>
+                      </div>
+                    </td>
                   </tr>
-                ))}
+                )
+              )}
+            </tbody>
           </table>
         ) : (
           <table className="table-container">
@@ -137,45 +145,45 @@ const CommunityList = ({ postType }) => {
                 <th>글쓴이</th>
                 <th>조회수</th>
                 <th>추천수</th>
-                {postType === "nanum" && <th>나눔 완료</th>}
+                {posttype === "nanum" && <th>나눔 완료</th>}
               </tr>
             </thead>
             <tbody>
-              {searchResults.length > 0
-                ? searchResults
-                : boardList.map((post) => (
-                    <tr key={post.id} onClick={() => handlePostClick(post)}>
-                      <td>{post.id}</td>
-                      <td>
-                        {post.adopted === true ? (
-                          <>
-                            <img
-                              src="images/adopted.png"
-                              alt="adopted"
-                              className="adopted-icon"
-                              style={{
-                                width: "15%",
-                                height: "10%",
-                              }}
-                            />
-                            {post.title.length > 30 ? (
-                              <>{post.title.slice(0, 30) + "..."}</>
-                            ) : (
-                              <>{post.title}</>
-                            )}
-                          </>
-                        ) : post.title.length > 30 ? (
-                          <>{post.title.slice(0, 30) + "..."}</>
-                        ) : (
-                          <>{post.title}</>
-                        )}
-                      </td>
-                      <td>{post.writer}</td>
-                      <td>{post.view}</td>
-                      <td>{post.recommend}</td>
-                      {postType === "nanum" && <td>{post.nanum}</td>}
-                    </tr>
-                  ))}
+              {(searchResults.length > 0 ? searchResults : boardList).map(
+                (post) => (
+                  <tr key={post.id} onClick={() => handlePostClick(post)}>
+                    <td>{post.id}</td>
+                    <td>
+                      {post.adopted === true ? (
+                        <>
+                          <img
+                            src="images/adopted.png"
+                            alt="adopted"
+                            className="adopted-icon"
+                            style={{
+                              width: "15%",
+                              height: "10%",
+                            }}
+                          />
+                          {post.title.length > 30 ? (
+                            <>{post.title.slice(0, 30) + "..."}</>
+                          ) : (
+                            <>{post.title}</>
+                          )}
+                        </>
+                      ) : post.title.length > 30 ? (
+                        <>{post.title.slice(0, 30) + "..."}</>
+                      ) : (
+                        <>{post.title}</>
+                      )}
+                    </td>
+                    <td>{post.writer}</td>
+                    <td>{post.view}</td>
+                    <td>{post.recommend}</td>
+                    {posttype === "nanum" && <td>{post.nanum}</td>}
+                  </tr>
+                )
+              )}
             </tbody>
           </table>
         )}
@@ -184,14 +192,18 @@ const CommunityList = ({ postType }) => {
           className={isMobile ? "" : "search-controls"}
           style={{ paddingTop: "20px" }}
         >
-          <select className="sort-container" value={option}>
-            <option value="page">페이지 번호순 정렬</option>
-            <option value="recommend">추천순 정렬</option>
-            <option value="view">조회순 정렬</option>
-            {postType === "bunri" && (
+          <select
+            className="sort-container"
+            onChange={(e) => setOption(e.target.value)}
+            value={option}
+          >
+            <option value="1">페이지 번호순 정렬</option>
+            <option value="2">추천순 정렬</option>
+            <option value="3">조회순 정렬</option>
+            {posttype === "bunri" && (
               <option value="bunri">채택완료순 정렬</option>
             )}
-            {postType === "nanum" && (
+            {posttype === "nanum" && (
               <option value="nanum">나눔완료순 정렬</option>
             )}
           </select>
@@ -239,7 +251,9 @@ const CommunityList = ({ postType }) => {
             totalItemsCount={
               searchResults.length > 0
                 ? searchResults.length
-                : localStorage.getItem("bunri-totalElements")
+                : posttype === "bunri"
+                  ? parseInt(localStorage.getItem("bunri-totalElements"), 10)
+                  : parseInt(localStorage.getItem("nanum-totalElements"), 10)
             }
             onPageChange={setPage}
             activePage={page}

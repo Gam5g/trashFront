@@ -18,26 +18,34 @@ const CommunityUpdate = ({ posttype }) => {
   const navigate = useNavigate();
   const isLoggedIn = useRecoilValue(isLoggedInState);
   const post = location.state;
-  const [userInfo, setUserInfo] = useState({
-    title: post ? post.title : "",
-    content: post ? post.content : "",
+  const [bunriInfo, setBunriInfo] = useState({
+    title: "",
+    content: "",
+    imageUrl: "",
+  });
+
+  const [nanumInfo, setNanumInfo] = useState({
+    title: "",
+    content: "",
     nanum: false,
-    imageUrl: post ? post.imageUrl : "",
-    category: posttype === "bunri" ? "분리수거" : "나눔",
+    imageUrl: "",
   });
   const [errors, setErrors] = useState({ title: "", content: "" });
   const [currentQuestionId, setCurrentQuestionId] = useState(0);
   const [file, setFile] = useState(null);
   const [image, setImage] = useState(null);
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
+  let questionId = null;
 
   const onChange = (e) => {
     const { name, value } = e.target;
     setErrors((prev) => ({ ...prev, [name]: "" }));
-    setUserInfo((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+
+    if (posttype === "bunri") {
+      setBunriInfo((prev) => ({ ...prev, [name]: value }));
+    } else if (posttype === "nanum") {
+      setNanumInfo((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   const imageHandler = () => {
@@ -102,8 +110,15 @@ const CommunityUpdate = ({ posttype }) => {
       alert("로그인 한 후에 글을 작성할 수 있습니다.");
       return;
     }
-    const questionId = currentQuestionId;
-    const { title, content, imageUrl, category } = userInfo;
+    let url = "";
+    let title, content, imageUrl, nanum;
+    if (posttype === "bunri") {
+      url = `http://3.39.190.90/api/questionBoard/update?id=${questionId}`;
+      ({ title, content, imageUrl } = bunriInfo);
+    } else if (posttype === "nanum") {
+      url = ``;
+      ({ title, content, imageUrl, nanum } = nanumInfo);
+    }
     if (!title.trim()) {
       setErrors((prev) => ({ ...prev, title: "제목은 필수 항목입니다." }));
       return;
@@ -118,21 +133,16 @@ const CommunityUpdate = ({ posttype }) => {
     }
 
     try {
-      const res = await AuthToken.post(
-        `http://3.39.190.90/api/questionBoard/update?id=${questionId}`,
-        {
-          title,
-          content,
-          category,
-          imageUrl,
+      const payload =
+        posttype === "bunri"
+          ? { title, content, imageUrl }
+          : { title, content, imageUrl, nanum };
+      const res = await AuthToken.post(url, payload, {
+        headers: {
+          Authorization: localStorage.getItem("accessToken"),
+          "Content-Type": "application/json",
         },
-        {
-          headers: {
-            Authorization: localStorage.getItem("accessToken"),
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      });
       alert("글을 수정했습니다.");
       navigate(`/community-${posttype}`);
     } catch (error) {
@@ -154,7 +164,7 @@ const CommunityUpdate = ({ posttype }) => {
             type="text"
             id="title_txt"
             name="title"
-            value={userInfo.title}
+            value={posttype === "bunri" ? bunriInfo.title : nanumInfo.title}
             onChange={onChange}
           />
           {errors.title && <p className="error-message">{errors.title}</p>}
@@ -170,8 +180,12 @@ const CommunityUpdate = ({ posttype }) => {
             name="content"
             className="quill-editor"
             placeholder="내용을 입력해주세요."
-            value={userInfo.content}
-            onChange={(content) => setUserInfo({ ...userInfo, content })}
+            value={posttype === "bunri" ? bunriInfo.content : nanumInfo.content}
+            onChange={(content) =>
+              posttype === "bunri"
+                ? setBunriInfo({ ...bunriInfo, content })
+                : setNanumInfo({ ...nanumInfo, content })
+            }
           />
           {errors.content && <p className="error-message">{errors.content}</p>}
         </div>
@@ -182,9 +196,9 @@ const CommunityUpdate = ({ posttype }) => {
                 type="checkbox"
                 id="nanum"
                 name="nanum"
-                checked={userInfo.nanum}
+                checked={nanumInfo.nanum}
                 onChange={(e) =>
-                  setUserInfo({ ...userInfo, nanum: e.target.checked })
+                  setNanumInfo({ ...nanumInfo, nanum: e.target.checked })
                 }
                 style={{ marginTop: "40px" }}
               />

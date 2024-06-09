@@ -25,7 +25,7 @@ const CommunityBunriList = () => {
           괜찮아요!
         </h3>
       )}
-      <CommunityList postType="bunri" />
+      <CommunityList posttype="bunri" />
     </div>
   );
 };

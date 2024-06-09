@@ -5,7 +5,7 @@ import { isLoggedInState } from "../state/authState";
 import "../container/pages/Community/Detail.css";
 import AuthToken from "../container/pages/AuthToken";
 
-const CommunityDetail = ({ postsType }) => {
+const CommunityDetail = ({ posttype }) => {
   const location = useLocation();
   const isLoggedIn = useRecoilValue(isLoggedInState);
   const id = parseInt(location.pathname.split("/").pop());
@@ -29,6 +29,7 @@ const CommunityDetail = ({ postsType }) => {
   const [loading, setLoading] = useState(true);
   const getAccountName = localStorage.getItem("accountName");
   const [questionBoardId, setQuestionBoardId] = useState();
+  const [recycleBoardId, setRecycleBoardId] = useState();
   const accessToken = localStorage.getItem("accessToken");
 
   useEffect(() => {
@@ -39,8 +40,13 @@ const CommunityDetail = ({ postsType }) => {
   }, [isLoggedIn, navigate]);
 
   useEffect(() => {
-    const questionBoardId = parseInt(location.pathname.split("/").pop());
-    setQuestionBoardId(questionBoardId);
+    if (posttype === "bunri") {
+      const questionBoardId = parseInt(location.pathname.split("/").pop());
+      setQuestionBoardId(questionBoardId);
+    } else if (posttype === "nanum") {
+      const recycleBoardId = parseInt(location.pathname.split("/").pop());
+      setRecycleBoardId(recycleBoardId);
+    }
   }, []);
 
   const fetchBoardData = async () => {
@@ -48,16 +54,20 @@ const CommunityDetail = ({ postsType }) => {
       return;
     }
     try {
-      const response = await AuthToken.get(
-        `http://3.39.190.90/api/questionBoard/read/${questionBoardId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      let url = "";
+      if (posttype === "bunri") {
+        url = `http://3.39.190.90/api/questionBoard/read/${questionBoardId}`;
+      } else if (posttype === "nanum") {
+        url = `http://3.39.190.90/api/recycleBoard/read/${recycleBoardId}`;
+      }
+
+      const response = await AuthToken.get(url, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
       const data = response.data;
-      const createdDate = new Date(data.writer.createdDate).toLocaleString(
+      /*const createdDate = new Date(data.writer.createdDate).toLocaleString(
         "ko-KR",
         {
           year: "numeric",
@@ -76,21 +86,23 @@ const CommunityDetail = ({ postsType }) => {
           hour: "2-digit",
           minute: "2-digit",
         }
-      );
-      const content = data.content.replace(/^<p>|<\/p>$/g, "");
+      );*/
+      const content = data.content
+        ? data.content.replace(/^<p>|<\/p>$/g, "")
+        : "";
       const inputData = {
-        title: data.title,
+        title: data.title || "",
         content: content,
-        recommend: data.recommend,
-        view: data.view,
-        writer: data.writer.nickname,
-        writerName: data.writer.accountName,
+        recommend: data.recommend || 0,
+        view: data.view || 0,
+        writer: data.writer?.nickname || "",
+        writerName: data.writer?.accountName || "",
         //createdDate: createdDate,
         //modifiedDate: modifiedDate,
-        adopted: data.adopted,
-        imageUrl: data.imageUrl,
-        comments: data.comments,
-        adoptedComment: data.adoptedComment,
+        adopted: data.adopted || false,
+        imageUrl: data.imageUrl || "",
+        comments: data.comments || [],
+        adoptedComment: data.adoptedComment || [],
       };
 
       setPost(inputData);
@@ -101,7 +113,7 @@ const CommunityDetail = ({ postsType }) => {
 
   useEffect(() => {
     fetchBoardData();
-  }, [questionBoardId]);
+  }, [questionBoardId, recycleBoardId]);
 
   const togglePressLike = async () => {
     try {
@@ -168,7 +180,7 @@ const CommunityDetail = ({ postsType }) => {
           }
         );
         alert("삭제되었습니다.");
-        navigate(`/community-${postsType}`);
+        navigate(`/community-${posttype}`);
       } catch (error) {
         console.error("게시글 삭제 중 오류 발생:", error);
       }
@@ -197,14 +209,14 @@ const CommunityDetail = ({ postsType }) => {
   return (
     <div className="NotDrag">
       <div className="titleWrap" style={{ userSelect: "none" }}>
-        {postsType === "bunri" ? "분리수거" : "나눔"} 커뮤니티 ＞
+        {posttype === "bunri" ? "분리수거" : "나눔"} 커뮤니티 ＞
       </div>
       <p style={{ fontSize: "16px", marginTop: "-5px" }}>글 보기</p>
       <div className="container">
         <div className="post">
           {post && (
             <>
-              {postsType === "bunri" && post.adopted == true ? (
+              {posttype === "bunri" && post.adopted == true ? (
                 <div className="adopted-content">
                   <h1 className="adopted">채택</h1>
                   <h1>{post.title}</h1>
@@ -221,7 +233,7 @@ const CommunityDetail = ({ postsType }) => {
                 <p>
                   조회수: {post.view} | 작성일: {post.createdDate} | 수정일 :{" "}
                   {post.modifiedDate} | 좋아요: {post.recommend}
-                  {postsType === "nanum" && (
+                  {posttype === "nanum" && (
                     <span>| 나눔 완료 상태: {post.nanum}</span>
                   )}
                 </p>
@@ -249,7 +261,7 @@ const CommunityDetail = ({ postsType }) => {
             </button>
           </div>
           <hr style={{ border: "0.5px solid #d9d9d9" }}></hr>
-          <h3>{postsType === "bunri" ? "답변" : "댓글"}</h3>
+          <h3>{posttype === "bunri" ? "답변" : "댓글"}</h3>
           {post && (
             <div>
               <div>
@@ -326,7 +338,7 @@ const CommunityDetail = ({ postsType }) => {
             </button>
             <button
               className="listButton"
-              onClick={() => navigate(`/community-${postsType}`)}
+              onClick={() => navigate(`/community-${posttype}`)}
             >
               목록
             </button>
@@ -334,7 +346,7 @@ const CommunityDetail = ({ postsType }) => {
         ) : (
           <button
             className="listButton"
-            onClick={() => navigate(`/community-${postsType}`)}
+            onClick={() => navigate(`/community-${posttype}`)}
           >
             목록
           </button>

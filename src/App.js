@@ -30,6 +30,8 @@ import Loading from "./container/pages/LoadingForm";
 import AdminForm from "./container/pages/AdminForm";
 import AdminResponseForm from "./container/pages/AdminResponseForm";
 import DaeguPolicy from "./container/pages/DaeguPolicy";
+import RequestModifiedList from "./container/pages/RequestModifiedList";
+import RequestCreateList from "./container/pages/RequestCreateList";
 import { RecoilRoot } from "recoil";
 import { isLoggedInState } from "./state/authState";
 
@@ -64,6 +66,14 @@ function App() {
             <Route path="/my-page" element={<MyPageForm />} />
             <Route path="/my-page/update" element={<MyPageUpdateForm />} />
             <Route path="/my-page/list" element={<MyCommunityList />} />
+            <Route
+              path="/my-page/request/modified-list"
+              element={<RequestModifiedList />}
+            />
+            <Route
+              path="/my-page/request/create-list"
+              element={<RequestCreateList />}
+            />
             <Route path="/loading" element={<Loading />} />
             <Route
               path="/community-:postsType/update/:questionBoardId"
