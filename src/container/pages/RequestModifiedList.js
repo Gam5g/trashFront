@@ -71,12 +71,12 @@ const RequestModifiedList = () => {
       <div className="request-list">
         <div className="list">
           {requests.map((request) => (
-            <div key={request.id} className="list-item">
-              <div className="list-item-header">
+            <div key={request.id} className="lists-item">
+              <div className="lists-item-header">
                 <span className="changes">{request.changes}</span>
                 <span className="title">{request.title}</span>
               </div>
-              <div className="list-item-footer">
+              <div className="lists-item-footer">
                 <span className="status">
                   반영 여부:{" "}
                   {request.status === "approved"

@@ -291,6 +291,7 @@
     padding: 2px 5px 5px 20px;
     margin-bottom: 20px;
     background-color: #f9f9f9;
+    height : 150px;
   }
   
   .comment-buttons {
@@ -321,6 +322,25 @@
     background-color: #ff6868;
   }
   
+  .comment-textarea {
+    border : none;
+    height : 160px;
+    margin-right:10px;
+    outline: none;
+    resize: none;
+  }
+  .comment-textarea::-webkit-resizer {
+    display: none;
+  }
+  .comment-textarea::placeholder {
+    color: #d9d9d9;
+  }
+
+  .comment-textarea:hover, .comment-textarea:focus {
+    border : none;
+    outline : none;
+  }
+
   .modify-button, .delete-button {
     background-color: #007bff;
     color: #fff;
@@ -396,6 +416,6 @@
     src: url("../../../fonts/Pretendard-Bold.woff2") format('truetype');
   }
   
-.writebutton, .searchBy-container, .community-search-input, .sort-container, .greenbutton, .searchbutton {
+.writebutton, .searchBy-container, .comment-textarea, .community-search-input, .sort-container, .greenbutton, .searchbutton {
     font-family: 'Pretendard-Bold';
 }

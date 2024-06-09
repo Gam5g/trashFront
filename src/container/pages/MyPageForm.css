@@ -94,3 +94,24 @@ select {
 .info-update-button:hover {
   background-color: #0056b3;
 }
+
+.page-inputContent {
+  border-radius: 8px;
+  width : 250px;
+  margin-left: 10px;
+  padding-left: 10px;
+  font-size:20px;
+  font-family: 'Pretendard-Bold';
+}
+
+.page-inputContent:focus-within {
+  border: 1px solid #00A54C;
+}
+
+.page-inputContent input {
+  pointer-events: auto;
+}
+
+@font-face {
+  font-family: 'Pretendard-Bold';
+  src: url("../../fonts/Pretendard-Bold.woff2") format('truetype'); }

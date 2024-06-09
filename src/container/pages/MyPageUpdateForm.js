@@ -87,7 +87,7 @@ const MyPageUpdateForm = () => {
         <div className="form-group">
           <label style={{ marginBottom: "15px" }}>이메일</label>
           <input
-            className="inputContent"
+            className="page-inputContent"
             type="email"
             name="email"
             value={account.email}
@@ -101,7 +101,7 @@ const MyPageUpdateForm = () => {
         <div className="form-group">
           <label style={{ marginBottom: "15px" }}>닉네임</label>
           <input
-            className="inputContent"
+            className="page-inputContent"
             type="text"
             name="nickname"
             value={account.nickname}

@@ -41,16 +41,27 @@
   border-top: 1px solid #ccc;
 }
 
-.list-item {
+.lists-item {
   padding: 15px;
-  height : 55px;
+  height : 45px;
   border-bottom: 1px solid #ccc;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.list-item-header {
+.lists-item:hover{
+  padding: 15px;
+  height : 45px;
+  background-color: #ccc;
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor : pointer;
+}
+
+.lists-item-header {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -67,7 +78,7 @@
   margin-top: 5px;
 }
 
-.list-item-footer {
+.lists-item-footer {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
