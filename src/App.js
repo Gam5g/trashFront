@@ -9,7 +9,8 @@ import FindID from "./container/pages/FindID";
 import FindPassword from "./container/pages/FindPassword";
 import Station from "./container/pages/Station";
 import SoultionCreate from "./container/pages/SolutionCreate";
-import CommunityUpdate from "./components/CommunityUpdate";
+import CommunityNanumUpdate from "./container/pages/Community/CommunityNanumUpdate";
+import CommunityBunriUpdate from "./container/pages/Community/CommunityBunriUpdate";
 import CommunityNanumList from "./container/pages/Community/CommunityNanumList";
 import CommunityBunriList from "./container/pages/Community/CommunityBunriList";
 import CommunityNanumWrite from "./container/pages/Community/CommunityNanumWrite";
@@ -34,6 +35,7 @@ import RequestModifiedList from "./container/pages/RequestModifiedList";
 import RequestCreateList from "./container/pages/RequestCreateList";
 import { RecoilRoot } from "recoil";
 import { isLoggedInState } from "./state/authState";
+import ScrollTop from "./ScrollTop";
 
 function App() {
   const initializeState = ({ set }) => {
@@ -46,6 +48,7 @@ function App() {
       <RecoilRoot initializeState={initializeState}>
         <Router>
           <Header />
+          <ScrollTop />
           <Routes>
             <Route exact path="/" element={<MainForm />} />
             <Route path="/admin" element={<AdminForm />} />
@@ -76,8 +79,12 @@ function App() {
             />
             <Route path="/loading" element={<Loading />} />
             <Route
-              path="/community-:postsType/update/:questionBoardId"
-              element={<CommunityUpdate />}
+              path="/community-bunri/update"
+              element={<CommunityBunriUpdate />}
+            />
+            <Route
+              path="/community-nanum/update"
+              element={<CommunityNanumUpdate />}
             />
             <Route
               path="/community-nanum/:id"
