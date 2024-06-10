@@ -4,7 +4,7 @@ import CompareForm from "../../components/CompareForm";
 const SearchEditForm = () => {
   return (
     <div className="search-edit-container">
-      <div className="modified-rules">
+      <div className="modified-rules" style={{ userSelect: "none" }}>
         <h1>정보 수정에 관한 규칙</h1>
         <ul>
           <li>올바르지 않은 정보를 적는 것은 금지합니다.</li>
