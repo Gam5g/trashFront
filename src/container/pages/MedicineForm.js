@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import MedicineMap from "./MedicineMap";
-import MedicineAgreedMap from "./MedicineAgreedMap";
 import { useRecoilValue } from "recoil";
 import { isLoggedInState } from "../../state/authState";
 import { useMediaQuery } from "react-responsive";
@@ -12,7 +10,7 @@ import Paging from "./Community/Paging";
 const MedicineForm = () => {
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const isLoggedIn = useRecoilValue(isLoggedInState);
-  const [locationData, setLocationData] = useState(null);
+
   const navigate = useNavigate();
   const [activePage, setActivePage] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
@@ -24,27 +22,6 @@ const MedicineForm = () => {
   const navigateToBattery = () => {
     navigate("/battery");
   };
-  useEffect(() => {
-    const fetchLocationData = async () => {
-      try {
-        const userCity = localStorage.getItem("userCity");
-        const response = await axios.get(`/location/medicine`, {
-          params: {
-            state: "대구",
-            city: userCity,
-          },
-        });
-        setLocationData(response.data);
-        console.log("Location data fetched:", response.data);
-      } catch (error) {
-        console.error("Failed to fetch location data", error);
-      }
-    };
-
-    if (isLoggedIn) {
-      fetchLocationData();
-    }
-  }, [isLoggedIn]);
 
   return (
     <div className="NotDrag" style={{ marginTop: "250px" }}>

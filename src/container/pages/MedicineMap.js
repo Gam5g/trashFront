@@ -1,87 +1,40 @@
 import React, { useState, useEffect } from "react";
+import { useRecoilValue } from "recoil";
+import { isLoggedInState } from "../../state/authState";
+import { useMediaQuery } from "react-responsive";
+import AuthToken from "./AuthToken";
 import "../../style.css";
 import "../../Button.css";
-import { useMediaQuery } from "react-responsive";
 const { kakao } = window;
 
 const MedicineMap = () => {
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
-  const initialPositions = [
-    {
-      title: "내당1동행정복지센터",
-      subregion: "서구",
-      location: "대구 서구 서대구로4길 35",
-      mapy: 35.8606528,
-      mapx: 128.5607254,
-    },
-    {
-      title: "내당2.3동행정복지센터",
-      subregion: "서구",
-      location: "대구 서구 큰장로15길 11-1",
-      mapy: 35.86727528,
-      mapx: 128.5745324,
-    },
-    {
-      title: "내당4동행정복지센터",
-      subregion: "서구",
-      location: "대구 서구 서대구로3길 46",
-      mapy: 35.85902046,
-      mapx: 128.5518433,
-    },
-    {
-      title: "성당동행정복지센터",
-      subregion: "달서구",
-      location: "대구 달서구 야외음악당로 38",
-      mapy: 35.84061406,
-      mapx: 128.553148605562,
-    },
-    {
-      title: "두류1.2동행정복지센터",
-      subregion: "달서구",
-      location: "대구 달서구 두류길 141-8",
-      mapy: 35.8577731987934,
-      mapx: 128.567278500004,
-    },
-    {
-      title: "두류3동행정복지센터",
-      subregion: "달서구",
-      location: "대구 달서구 야외음악당로39길 24",
-      mapy: 35.8537053598211,
-      mapx: 128.55547533284,
-    },
-    {
-      title: "대구광역시북구청",
-      subregion: "북구",
-      location: "대구 북구 옥산로 65",
-      mapy: 35.8856842974977,
-      mapx: 128.58278016173,
-    },
-    {
-      title: "고성동 행정복지센터",
-      subregion: "북구",
-      location: "대구 북구 고성로31길 21",
-      mapy: 35.881845842692,
-      mapx: 128.583507567164,
-    },
-    {
-      title: "칠성동 행정복지센터",
-      subregion: "북구",
-      location: "대구 북구 칠성로19길 4",
-      mapy: 35.8792240825644,
-      mapx: 128.600019842249,
-    },
-    {
-      title: "대구광역시남구보건소",
-      subregion: "남구",
-      location: "대구 남구 영선길 34",
-      mapy: 35.85389994,
-      mapx: 128.591523659931,
-    },
-  ];
+  const isLoggedIn = useRecoilValue(isLoggedInState);
   const [map, setMap] = useState(null);
   const [clickedPosition, setClickedPosition] = useState(null);
-  const [positions, setPositions] = useState(initialPositions);
+  const [positions, setPositions] = useState([]);
+  const [locationData, setLocationData] = useState(null);
   const [activeRegion, setActiveRegion] = useState("서구");
+
+  useEffect(() => {
+    const fetchLocationData = async (region) => {
+      try {
+        const userCity = localStorage.getItem("userCity") || "서구";
+        const response = await AuthToken.get(`/location/medicine`, {
+          state: "대구",
+          city: region || userCity,
+        });
+        setLocationData(response.data);
+        console.log("Location data fetched:", response.data);
+      } catch (error) {
+        console.error("Failed to fetch location data", error);
+      }
+    };
+
+    if (isLoggedIn) {
+      fetchLocationData(activeRegion);
+    }
+  }, [isLoggedIn, activeRegion]);
 
   useEffect(() => {
     const container = document.getElementById("map");
@@ -92,58 +45,44 @@ const MedicineMap = () => {
     };
     const mapObj = new kakao.maps.Map(container, options);
     setMap(mapObj);
-
-    initialPositions.forEach((position) => {
-      const markerPosition = new kakao.maps.LatLng(
-        position.mapy,
-        position.mapx
-      );
-      const marker = new kakao.maps.Marker({
-        position: markerPosition,
-        image: new kakao.maps.MarkerImage(
-          "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png",
-          new kakao.maps.Size(24, 35)
-        ),
-        title: position.title,
-      });
-
-      marker.setMap(mapObj);
-
-      kakao.maps.event.addListener(marker, "click", () => {
-        mapObj.setCenter(marker.getPosition());
-        const showWindow = new kakao.maps.InfoWindow({
-          content: `<div>${position.title}`,
-        });
-        showWindow.open(mapObj, marker);
-      });
-    });
-    toggleMarker("서구");
   }, []);
 
+  useEffect(() => {
+    if (map && locationData) {
+      locationData.forEach((position) => {
+        const markerPosition = new kakao.maps.LatLng(
+          position.latitude,
+          position.longitude
+        );
+        const marker = new kakao.maps.Marker({
+          position: markerPosition,
+          image: new kakao.maps.MarkerImage(
+            "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png",
+            new kakao.maps.Size(24, 35)
+          ),
+          title: position.location,
+        });
+
+        marker.setMap(map);
+
+        kakao.maps.event.addListener(marker, "click", () => {
+          map.setCenter(marker.getPosition());
+          const showWindow = new kakao.maps.InfoWindow({
+            content: `<div>${position.location}</div>`,
+          });
+          showWindow.open(map, marker);
+        });
+      });
+    }
+  }, [map, locationData]);
+
   const toggleMarker = (subregion) => {
-    const filteredPositions = initialPositions.filter(
-      (position) => position.subregion === subregion
-    );
-    setPositions(filteredPositions);
-    if (map) {
-      map.setLevel(6);
-    }
-    if (filteredPositions.length > 0) {
-      const center = new kakao.maps.LatLng(
-        filteredPositions[0].mapy,
-        filteredPositions[0].mapx
-      );
-      if (map) {
-        map.panTo(center);
-      }
-      setClickedPosition(filteredPositions[0]);
-    }
     setActiveRegion(subregion);
   };
 
   const handlePositionClick = (position) => {
     map.setLevel(6);
-    const center = new kakao.maps.LatLng(position.mapy, position.mapx);
+    const center = new kakao.maps.LatLng(position.latitude, position.longitude);
     map.panTo(center);
     setClickedPosition(position);
   };
@@ -219,24 +158,25 @@ const MedicineMap = () => {
           gridTemplateColumns: "repeat(2, 1fr)",
         }}
       >
-        {positions.map((position) => (
-          <div
-            key={position.title}
-            className={`position-item ${
-              clickedPosition && clickedPosition.title === position.title
-                ? "active"
-                : ""
-            }`}
-            style={{
-              border: "0.1px solid #c8c8c8",
-              cursor: "pointer",
-            }}
-            onClick={() => handlePositionClick(position)}
-          >
-            <p>{position.title}</p>
-            <p>{position.location}</p>
-          </div>
-        ))}
+        {locationData &&
+          locationData.map((position) => (
+            <div
+              key={position.location}
+              className={`position-item ${
+                clickedPosition &&
+                clickedPosition.location === position.location
+                  ? "active"
+                  : ""
+              }`}
+              style={{
+                border: "0.1px solid #c8c8c8",
+                cursor: "pointer",
+              }}
+              onClick={() => handlePositionClick(position)}
+            >
+              <p>{position.location}</p>
+            </div>
+          ))}
       </div>
     </div>
   );
