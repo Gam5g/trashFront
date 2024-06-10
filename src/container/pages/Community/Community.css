@@ -288,40 +288,71 @@
   .comment {
     border: 1px solid #ddd;
     border-radius: 8px;
-    padding: 2px 5px 5px 20px;
+    padding: 10px;
     margin-bottom: 20px;
     background-color: #f9f9f9;
-    height : 150px;
+    position: relative;
   }
   
-  .comment-buttons {
+  .comment .comment-header {
     display: flex;
-    gap: 10px;
-    margin-left : 805px;
+    align-items: center;
+    margin-bottom: 10px;
   }
-
-  .comment h4 {
-    margin-bottom: 5px;
-    color: #333;
+    
+  .comment .comment-header .nickname {
+    font-weight: bold;
+    margin-right: 10px;
   }
   
-  .comment p {
+  .comment .comment-header .date {
+    color: #888;
+    font-size: 0.9em;
+  }
+  
+  .comment .comment-content {
     margin-bottom: 10px;
     color: #555;
   }
   
-  .comment button {
-    padding: 8px 12px;
+  .comment .comment-buttons {
+    display: flex;
+    gap: 10px;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+  }
+  
+  .comment .comment-buttons button {
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
   }
     
-  .comment button:hover {
-    background-color: #ff6868;
+  .comment .comment-buttons .recommend-button {
+    background-color: transparent;
+    color: red;
+    font-weight: bold;
   }
   
+  .comment .comment-buttons .recommend-button .icon {
+    margin-right: 5px;
+  }
+  
+  
+  .comment-update-textarea {
+    border : none;
+    width : 520px;
+    height : 60px;
+    margin-right:10px;
+    outline: none;
+    resize: none;
+  }
+
   .comment-textarea {
     border : none;
     height : 160px;
@@ -341,21 +372,46 @@
     outline : none;
   }
 
-  .modify-button, .delete-button {
-    background-color: #007bff;
-    color: #fff;
-    margin-right: 10px;
+  .adopted-comment-container {
+    margin-top: 20px;
+    border: 2px solid #4CAF50;
+    border-radius: 8px;
+    padding: 10px 20px;
+    background-color: #e6ffe6;
   }
   
-  .report-button {
-    background-color: #dc3545;
+  .adopted-comment {
+    border-radius: 8px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+
+  .adopted-comment h4 {
+    color: #2e7d32;
+  }
+  
+  .adopted-comment p {
+    color: #4caf50;
+  }
+  
+  .adopted-comment h6 {
+    color: #2e7d32;
+  }
+
+  .comment-button{
+    background-color: #9b9b9b;
     color: #fff;
     margin-right: 10px;
+    font-family: 'Pretendard-Bold';
+  }
+  .comment-button:hover {
+    background-color: #818181;
   }
   
   .adopt-button {
     background-color: #28a745;
     color: #fff;
+    font-family: 'Pretendard-Bold';
   }
 
 .greenbutton {
@@ -416,6 +472,6 @@
     src: url("../../../fonts/Pretendard-Bold.woff2") format('truetype');
   }
   
-.writebutton, .searchBy-container, .comment-textarea, .community-search-input, .sort-container, .greenbutton, .searchbutton {
+.writebutton, .searchBy-container, .comment-textarea, .comment-update-textarea, .community-search-input, .sort-container, .greenbutton, .searchbutton {
     font-family: 'Pretendard-Bold';
 }

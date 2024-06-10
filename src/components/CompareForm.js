@@ -5,7 +5,7 @@ import { isLoggedInState } from "../state/authState";
 import AuthToken from "../container/pages/AuthToken";
 import "../container/pages/Search.css";
 
-const CompareForm = ({ type }) => {
+const CompareForm = ({ type, searchData }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
@@ -33,8 +33,8 @@ const CompareForm = ({ type }) => {
   });
   const [charCount, setCharCount] = useState(0);
   const maxChars = 300;
-  const wikiId = null;
-  const wasteId = null;
+  let wikiId = "";
+  let wasteId = "";
   const [showDiff, setShowDiff] = useState(false);
   /*const [isExpanded, setIsExpanded] = useState(true);*/
   const accessToken = localStorage.getItem("accessToken");

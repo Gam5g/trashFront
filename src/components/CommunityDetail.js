@@ -12,11 +12,13 @@ const CommunityDetail = ({ posttype }) => {
   const navigate = useNavigate();
 
   const [comment, setComment] = useState("");
+  const [editingCommentId, setEditingCommentId] = useState(null);
+  const [editingContent, setEditingContent] = useState("");
   const [bunriPost, setBunriPost] = useState({
     title: "",
     content: "",
     view: "",
-    comments: "",
+    comments: [],
     writer: "",
     imageUrl: "",
     recommend: "",
@@ -134,27 +136,27 @@ const CommunityDetail = ({ posttype }) => {
           Authorization: `Bearer ${accessToken}`,
         },
       });
-    } catch (error) {}
+      fetchBoardData();
+    } catch (error) {
+      console.error("게시글 추천 중 오류 발생:", error);
+    }
   };
 
-  // const togglePressLike = async () => {
-  //   const questionBoardId = localStorage;
-  //   try {
-  //     const response = await AuthToken.post(
-  //       `/recommendBoard/${questionBoardId}?=accountId={userId}`,
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${accessToken}`,
-  //         },
-  //       }
-  //     );
-  //     setAccount(response.data);
-  //   } catch (error) {
-  //     console.error("게시글 정보를 가져오는 데 실패했습니다.", error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+  useEffect(() => {}, [togglePressLike]);
+
+  const recommendComment = async (questionCommentId) => {
+    try {
+      await AuthToken.post(`/questionComment/recommend/${questionCommentId}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      fetchBoardData();
+    } catch (error) {
+      console.error("댓글 추천 중 오류 발생:", error);
+    }
+  };
+
   const handleComment = async () => {
     try {
       if (comment.trim().length < 10 || comment.trim().length >= 100) {
@@ -164,8 +166,14 @@ const CommunityDetail = ({ posttype }) => {
         }));
         return;
       }
+      let url = "";
+      if (posttype === "bunri") {
+        url = `/questionComment/${questionBoardId}/create`;
+      } else if (posttype === "nanum") {
+        url = `/recycleComment/${recycleBoardId}/create`;
+      }
       await AuthToken.post(
-        `/questionComment/${questionBoardId}/create`,
+        url,
         {
           comment: comment,
         },
@@ -180,6 +188,49 @@ const CommunityDetail = ({ posttype }) => {
       setComment("");
     } catch (error) {
       alert("코멘트를 생성하는 데 오류가 발생했습니다. 다시 시도해주세요.");
+    }
+  };
+
+  const startEditingComment = (commentId, content) => {
+    setEditingCommentId(commentId);
+    setEditingContent(content);
+  };
+
+  const handleUpdateComment = async () => {
+    try {
+      if (
+        editingContent.trim().length < 10 ||
+        editingContent.trim().length >= 100
+      ) {
+        setErrors((prev) => ({
+          ...prev,
+          comment: "내용은 10자 이상 100자 이하여야 합니다.",
+        }));
+        return;
+      }
+      let url = "";
+      if (posttype === "bunri") {
+        url = `/questionComment/update/${editingCommentId}`;
+      } else if (posttype === "nanum") {
+        url = `/recycleComment/update/${editingCommentId}`;
+      }
+      await AuthToken.put(
+        url,
+        {
+          comment: editingContent,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      alert("댓글 수정이 완료되었습니다.");
+      setEditingCommentId(null);
+      setEditingContent("");
+      fetchBoardData();
+    } catch (error) {
+      alert("댓글 수정 중 오류가 발생했습니다. 다시 시도해주세요.");
     }
   };
 
@@ -208,8 +259,16 @@ const CommunityDetail = ({ posttype }) => {
   const deleteComment = async (commentId) => {
     if (window.confirm("댓글을 삭제하시겠습니까?")) {
       try {
-        const questionCommentId = commentId;
-        await AuthToken.get(`/questionComment/delete/${questionCommentId}`, {
+        let url = ``;
+
+        if (posttype === "bunri") {
+          const questionCommentId = commentId;
+          url = `/questionComment/delete/${questionCommentId}`;
+        } else if (posttype === "nanum") {
+          const recycleCommentId = commentId;
+          url = `/recycleComment/delete/${recycleCommentId}`;
+        }
+        await AuthToken.get(url, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -237,7 +296,7 @@ const CommunityDetail = ({ posttype }) => {
         alert("해당 댓글이 채택되었습니다.");
         window.location.reload();
       } catch (error) {
-        alert("댓글 삭제 중 오류가 발생했습니다. 다시 시도해주세요.", error);
+        alert("댓글 채택 중 오류가 발생했습니다. 다시 시도해주세요.", error);
       }
     }
   };
@@ -345,6 +404,7 @@ const CommunityDetail = ({ posttype }) => {
                   disabled={!isLoggedIn}
                 >
                   👍
+                  {bunriPost.recommend}
                 </button>
               </div>
               <hr style={{ border: "0.5px solid #d9d9d9" }}></hr>
@@ -355,15 +415,29 @@ const CommunityDetail = ({ posttype }) => {
           {(posttype === "bunri" && bunriPost) ||
           (posttype === "nanum" && nanumPost) ? (
             <div>
-              {posttype === "bunri" && bunriPost.adopted === true && (
-                <div>
-                  <h5>채택 답변</h5>
-                  {bunriPost.adoptedComment &&
-                    bunriPost.adoptedComment.map((comment, index) => (
-                      <div key={index}>{comment}</div>
-                    ))}
-                </div>
-              )}
+              {posttype === "bunri" &&
+                bunriPost.adopted === true &&
+                bunriPost.adoptedComment && (
+                  <div className="adopted-comment-container">
+                    <h2 style={{ color: "green" }}>채택된 답변</h2>
+                    <div className="adopted-comment">
+                      <span
+                        className="nickname"
+                        style={{ marginRight: "10px" }}
+                      >
+                        {bunriPost.adoptedComment.nickname}
+                      </span>
+                      <span className="date">
+                        {formatDate(bunriPost.adoptedComment.createdDate)}
+                      </span>
+                      <div className="comment-content">
+                        <p>
+                          {JSON.parse(bunriPost.adoptedComment.content).comment}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
               <div className="comment-container">
                 {(posttype === "bunri"
                   ? bunriPost.comments
@@ -373,34 +447,84 @@ const CommunityDetail = ({ posttype }) => {
                     : nanumPost.comments
                   ).map((comment, index) => (
                     <div className="comment" key={index}>
-                      <div className="comment-content">
-                        <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                          }}
-                        >
-                          <h4>{comment.nickname}</h4>
-                          <h6>{formatDate(comment.createdDate)}</h6>
-                        </div>
-                        <p>
-                          {comment.content &&
-                            JSON.parse(comment.content).comment}
-                        </p>
+                      <div className="comment-header">
+                        <span className="nickname">{comment.nickname}</span>
+                        <span className="date">
+                          {formatDate(comment.createdDate)}
+                        </span>
                       </div>
+                      {editingCommentId === comment.id ? (
+                        <div>
+                          <textarea
+                            type="text"
+                            value={editingContent}
+                            onChange={(e) => setEditingContent(e.target.value)}
+                            className="comment-update-textarea"
+                          />
+                        </div>
+                      ) : (
+                        <div className="comment-content">
+                          <p>
+                            {comment.content &&
+                              JSON.parse(comment.content).comment}
+                          </p>
+                        </div>
+                      )}
                       <div className="comment-buttons">
-                        {getNickname === comment.nickname ? (
+                        {posttype === "bunri" &&
+                        getNickname !== comment.nickname ? (
+                          <button
+                            type="button"
+                            className="recommend-button"
+                            onClick={() => recommendComment(comment.id)}
+                          >
+                            <span className="icon">👍</span> {comment.recommend}
+                          </button>
+                        ) : (
+                          <div>
+                            {" "}
+                            <span className="icon">👍</span> {comment.recommend}
+                          </div>
+                        )}
+                        {getNickname === comment.nickname &&
+                        editingCommentId !== comment.id ? (
                           <>
-                            <button className="modify-button">수정</button>
                             <button
-                              className="delete-button"
+                              className="comment-button"
+                              onClick={() =>
+                                startEditingComment(
+                                  comment.id,
+                                  JSON.parse(comment.content).comment
+                                )
+                              }
+                            >
+                              수정
+                            </button>
+
+                            <button
+                              className="comment-button"
                               onClick={() => deleteComment(comment.id)}
                             >
                               삭제
                             </button>
                           </>
                         ) : (
-                          <button className="report-button">신고</button>
+                          editingCommentId === comment.id && (
+                            <>
+                              <button
+                                onClick={handleUpdateComment}
+                                className="comment-button"
+                              >
+                                등록
+                              </button>
+                              <button
+                                onClick={() => setEditingCommentId(null)}
+                                className="comment-button"
+                              >
+                                취소
+                              </button>
+                            </>
+                          )
                         )}
                         {posttype === "bunri" &&
                           bunriPost.writer !== comment.nickname &&

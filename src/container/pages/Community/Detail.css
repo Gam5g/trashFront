@@ -6,7 +6,7 @@
   
   .post {
     border : 0.2px solid #acacac;
-    width : 1000px;
+    width : 800px;
     padding: 20px;
     margin-bottom: 20px;
   }
@@ -89,12 +89,24 @@
     font-size : bold 15px;
     background-color: white;
     width : 50px;
-    height:50px;
+    height: 50px;
     color : #3B855D;
     border : 1px solid #3B855D;
     border-radius: 50px 50px 50px 50px;
-    
+    cursor: pointer;
   }
+
+  .dislikesButton {
+    font-size : bold 15px;
+    background-color: #3B855D;
+    width : 50px;
+    height: 50px;
+    color : white;
+    border : 1px solid #3B855D;
+    border-radius: 50px 50px 50px 50px;
+    cursor: pointer;
+  }
+
   .deleteButton {
     background-color: #ff5555;
     color: #fff;
