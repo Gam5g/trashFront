@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import AuthToken from "../container/pages/AuthToken";
 import Paging from "../container/pages/Community/Paging";
 import "../container/pages/Solution.css";
 
 const SolutionList = ({ type }) => {
+  const location = useLocation();
   const navigate = useNavigate();
   const [activePage, setActivePage] = useState(1);
   const [selectedTab, setSelectedTab] = useState("create");
+  const [selectedRequest, setSelectedRequest] = useState(null);
   const [requests, setRequests] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
   const itemsPerPage = 10;
@@ -20,6 +22,13 @@ const SolutionList = ({ type }) => {
   const handlePageChange = async (pageNumber) => {
     setActivePage(pageNumber);
     await fetchPageData(pageNumber);
+  };
+
+  const handleRequestClick = (request) => {
+    setSelectedRequest(request);
+    const wasteId = request.wastId;
+    console.log(request);
+    navigate(`/my-page/request/${wasteId}`); //wastId임
   };
 
   const fetchPageData = async (pageNumber) => {
@@ -41,7 +50,7 @@ const SolutionList = ({ type }) => {
 
   useEffect(() => {
     fetchPageData(activePage);
-  }, []);
+  }, [activePage]);
 
   const marginTopValues = [
     { condition: 10, value: "300px" },
@@ -80,7 +89,11 @@ const SolutionList = ({ type }) => {
       <div className="request-list">
         <div className="list">
           {requests.map((request) => (
-            <div key={request.wastId} className="lists-item">
+            <div
+              key={request.wastId}
+              className="lists-item"
+              onClick={() => handleRequestClick(request)}
+            >
               <div className="lists-item-header">
                 <span className="title">{request.name}</span>
               </div>
