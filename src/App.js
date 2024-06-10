@@ -9,6 +9,7 @@ import FindID from "./container/pages/FindID";
 import FindPassword from "./container/pages/FindPassword";
 import Station from "./container/pages/Station";
 import SoultionCreate from "./container/pages/SolutionCreate";
+import SolutionDetail from "./components/SolutionDetail";
 import CommunityNanumUpdate from "./container/pages/Community/CommunityNanumUpdate";
 import CommunityBunriUpdate from "./container/pages/Community/CommunityBunriUpdate";
 import CommunityNanumList from "./container/pages/Community/CommunityNanumList";
@@ -33,6 +34,7 @@ import AdminResponseForm from "./container/pages/AdminResponseForm";
 import DaeguPolicy from "./container/pages/DaeguPolicy";
 import RequestModifiedList from "./container/pages/RequestModifiedList";
 import RequestCreateList from "./container/pages/RequestCreateList";
+import RequestDetail from "./container/pages/RequestDetail";
 import { RecoilRoot } from "recoil";
 import { isLoggedInState } from "./state/authState";
 import ScrollTop from "./ScrollTop";
@@ -76,6 +78,10 @@ function App() {
             <Route
               path="/my-page/request/create-list"
               element={<RequestCreateList />}
+            />
+            <Route
+              path="/my-page/request/:wasteId"
+              element={<RequestDetail />}
             />
             <Route path="/loading" element={<Loading />} />
             <Route
