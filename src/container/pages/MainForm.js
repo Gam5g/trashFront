@@ -70,22 +70,35 @@ function MainForm() {
     if (lastFile) {
       console.log("GET 요청 파일명 :", lastFile.name);
       try {
-        const imageURL = encodeURIComponent(lastFile.name); // URL 인코딩
-        const response = await AuthToken.get(
-          `/separation?url=${imageURL}`,
-          {
-            url: imageURL,
+        const formData = new FormData();
+        formData.append("image", lastFile);
+
+        const response = await AuthToken.post(`/s3`, formData, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "multipart/form-data",
           },
+        });
+        console.log("data : ", response.data);
+
+        const imageURL = response.data.url;
+        const separationResponse = await AuthToken.get(
+          `/separation?url=${encodeURIComponent(imageURL)}`,
           {
             headers: {
               "Content-Type": "application/json",
             },
           }
         );
-        const data = response.data;
+
+        const data = separationResponse.data;
         console.log("데이터:", data);
         navigate("/loading");
       } catch (error) {
+        if (error.response.data.cause === "MaxUploadSizeExceededException") {
+          alert("업로드할 사진 용량을 초과했습니다.");
+          return;
+        }
         console.error("에러 :", error);
       }
     }
@@ -121,8 +134,10 @@ function MainForm() {
     handleSubmit(onSubmit)();
   };
 
-  const navigateToSearch = (selectedQuery) => {
-    navigate(`/search?query=${encodeURIComponent(selectedQuery)}`);
+  const navigateToSearch = (selectedQuery, searchData) => {
+    navigate(`/search?query=${encodeURIComponent(selectedQuery)}`, {
+      state: searchData,
+    });
   };
 
   const navigateTowrite = () => {
