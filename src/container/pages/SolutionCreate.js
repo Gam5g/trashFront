@@ -19,7 +19,6 @@ const SolutionCreate = () => {
     tags: [],
     solution: "",
   });
-  const [isExpanded, setIsExpanded] = useState(false);
   const [charCount, setCharCount] = useState(0);
   const maxChars = 300;
   const accessToken = localStorage.getItem("accessToken");
@@ -60,10 +59,6 @@ const SolutionCreate = () => {
     if (cameraInputRef.current) {
       cameraInputRef.current.value = null;
     }
-  };
-
-  const toggleIcon = () => {
-    setIsExpanded(!isExpanded);
   };
 
   const handleCategoryChange = (e) => {
@@ -122,16 +117,10 @@ const SolutionCreate = () => {
 
   return (
     <div className="NotDrag" style={{ marginTop: "200px" }}>
-      <div
-        className="info-title"
-        style={isExpanded ? { marginTop: "125px" } : {}}
-      >
+      <div className="info-title" style={{ marginTop: "125px" }}>
         새로운 정보 작성
       </div>{" "}
-      <form
-        onSubmit={handleSubmit}
-        className={isExpanded ? "info-expand-container" : "info-container"}
-      >
+      <form onSubmit={handleSubmit} className="info-container">
         <div className="button-container">
           <h3 className="solution-font">이름</h3>
           <div className="inputWrap">
@@ -148,82 +137,79 @@ const SolutionCreate = () => {
           <h3 className="solution-font">재질</h3>
           <button
             style={{ marginLeft: "5px" }}
-            onClick={toggleIcon}
             className="nothing-button"
             type="button"
-          >
-            {isExpanded ? "▼" : "▶"}
-          </button>
+          ></button>
         </div>
-        {isExpanded && (
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <div style={{ marginRight: "20px" }}>
-              <label>
-                <input
-                  type="checkbox"
-                  value="일반쓰레기"
-                  onChange={handleCategoryChange}
-                />{" "}
-                일반쓰레기
-              </label>
-              <br />
-              <label>
-                <input
-                  type="checkbox"
-                  value="종이류"
-                  onChange={handleCategoryChange}
-                />{" "}
-                종이류
-              </label>
-              <br />
-              <label>
-                <input
-                  type="checkbox"
-                  value="유리"
-                  onChange={handleCategoryChange}
-                />{" "}
-                유리
-              </label>
-              <br />
-              <label>
-                <input
-                  type="checkbox"
-                  value="플라스틱"
-                  onChange={handleCategoryChange}
-                />{" "}
-                플라스틱
-              </label>
-              <br />
-              <label>
-                <input
-                  type="checkbox"
-                  value="무색페트"
-                  onChange={handleCategoryChange}
-                />{" "}
-                무색페트
-              </label>
-              <br />
-              <label>
-                <input
-                  type="checkbox"
-                  value="비닐류"
-                  onChange={handleCategoryChange}
-                />{" "}
-                비닐류
-              </label>
-              <br />
-              <label>
-                <input
-                  type="checkbox"
-                  value="재활용 어려움"
-                  onChange={handleCategoryChange}
-                />{" "}
-                재활용 어려움
-              </label>
-              <br />
-            </div>
+
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <div style={{ marginRight: "20px" }}>
+            <label>
+              <input
+                type="checkbox"
+                value="일반쓰레기"
+                onChange={handleCategoryChange}
+              />{" "}
+              일반쓰레기
+            </label>
+            <br />
+            <label>
+              <input
+                type="checkbox"
+                value="종이류"
+                onChange={handleCategoryChange}
+              />{" "}
+              종이류
+            </label>
+            <br />
+            <label>
+              <input
+                type="checkbox"
+                value="유리"
+                onChange={handleCategoryChange}
+              />{" "}
+              유리
+            </label>
+            <br />
+            <label>
+              <input
+                type="checkbox"
+                value="플라스틱"
+                onChange={handleCategoryChange}
+              />{" "}
+              플라스틱
+            </label>
+            <br />
+            <label>
+              <input
+                type="checkbox"
+                value="무색페트"
+                onChange={handleCategoryChange}
+              />{" "}
+              무색페트
+            </label>
+            <br />
+            <label>
+              <input
+                type="checkbox"
+                value="비닐류"
+                onChange={handleCategoryChange}
+              />{" "}
+              비닐류
+            </label>
+            <br />
+            <label>
+              <input
+                type="checkbox"
+                value="재활용 어려움"
+                onChange={handleCategoryChange}
+              />{" "}
+              재활용 어려움
+            </label>
+            <br />
           </div>
-        )}
+        </div>
+
         <div className="button-container">
           <h3 className="solution-font">태그</h3>
           <div className="inputWrap">
