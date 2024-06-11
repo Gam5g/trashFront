@@ -33,14 +33,18 @@ const SolutionList = ({ type }) => {
 
   const fetchPageData = async (pageNumber) => {
     try {
-      const response = await AuthToken.get(
-        `/solution?page=${pageNumber - 1}&size=${itemsPerPage}`,
-        {
-          headers: {
-            Authorization: localStorage.getItem("accessToken"),
-          },
-        }
-      );
+      let url = "";
+      if (type === "user") {
+        url =
+          "/account/${accountId}/contributions/creation?page=${pageNumber - 1}&size=${itemsPerPage}";
+      } else if (type === "admin") {
+        url = `/solution?page=${pageNumber - 1}&size=${itemsPerPage}`;
+      }
+      const response = await AuthToken.get(url, {
+        headers: {
+          Authorization: localStorage.getItem("accessToken"),
+        },
+      });
       setRequests(response.data.content);
       setTotalItems(response.data.totalElements);
     } catch (error) {
