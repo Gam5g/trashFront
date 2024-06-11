@@ -90,13 +90,7 @@ const RegisterForm = () => {
   password.current = watch("password", "");
 
   const validatePassword = (value) => {
-    if (value !== password.current) {
-      return "비밀번호가 일치하지 않습니다.";
-    }
-    if (errors.passwordConfirm) {
-      errors.passwordConfirm.message = "비밀번호가 일치하지 않습니다.";
-    }
-    return true;
+    return value === password.current || "비밀번호가 일치하지 않습니다.";
   };
 
   const regions = [
@@ -114,8 +108,8 @@ const RegisterForm = () => {
       ],
     },
   ];
-  const [passwordVisible, setPasswordVisible] = useState("");
-  const [passwordConfirmVisible, setPasswordConfirmVisible] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [passwordConfirmVisible, setPasswordConfirmVisible] = useState(false);
   const [agreed, setAgreed] = useState(false);
   //const [position, setPosition] = useState(null);
 
@@ -203,11 +197,13 @@ const RegisterForm = () => {
                 }, */
               })}
             />
-            <div onClick={togglePasswordVisibility}>
+            <div onClick={() => setPasswordVisible(!passwordVisible)}>
               {passwordVisible ? (
-                <AiFillEye style={{ height: "30px" }} />
+                <AiFillEye style={{ height: "30px", cursor: "pointer" }} />
               ) : (
-                <AiFillEyeInvisible style={{ height: "30px" }} />
+                <AiFillEyeInvisible
+                  style={{ height: "30px", cursor: "pointer" }}
+                />
               )}
             </div>
           </div>
@@ -224,11 +220,15 @@ const RegisterForm = () => {
                 validate: validatePassword,
               })}
             />
-            <div onClick={togglePasswordConfirmVisibility}>
+            <div
+              onClick={() => setPasswordConfirmVisible(!passwordConfirmVisible)}
+            >
               {passwordConfirmVisible ? (
-                <AiFillEye style={{ height: "30px" }} />
+                <AiFillEye style={{ height: "30px", cursor: "pointer" }} />
               ) : (
-                <AiFillEyeInvisible style={{ height: "30px" }} />
+                <AiFillEyeInvisible
+                  style={{ height: "30px", cursor: "pointer" }}
+                />
               )}
             </div>
           </div>
@@ -295,7 +295,7 @@ const RegisterForm = () => {
                 type="checkbox"
                 name="agree"
                 id="agree"
-                onChange={handleCheckboxChange}
+                onChange={(e) => setAgreed(e.target.checked)}
               />
               위치확인 동의
             </label>

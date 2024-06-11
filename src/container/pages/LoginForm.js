@@ -120,9 +120,11 @@ const LoginForm = () => {
             />
             <div onClick={togglePasswordVisibility}>
               {passwordVisible ? (
-                <AiFillEye style={{ height: "30px" }} />
+                <AiFillEye style={{ height: "30px", cursor: "pointer" }} />
               ) : (
-                <AiFillEyeInvisible style={{ height: "30px" }} />
+                <AiFillEyeInvisible
+                  style={{ height: "30px", cursor: "pointer" }}
+                />
               )}
             </div>
           </div>
