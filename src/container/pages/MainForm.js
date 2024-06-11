@@ -68,7 +68,6 @@ function MainForm() {
 
   const handleUploadComplete = async () => {
     if (lastFile) {
-      console.log("GET 요청 파일명 :", lastFile.name);
       try {
         const formData = new FormData();
         formData.append("image", lastFile);
@@ -79,11 +78,13 @@ function MainForm() {
             "Content-Type": "multipart/form-data",
           },
         });
-        console.log("data : ", response.data);
 
-        const imageURL = response.data.url;
+        const imageURL = response.data;
+        if (!imageURL) {
+          throw new Error("Image URL not found in response");
+        }
         const separationResponse = await AuthToken.get(
-          `/separation?url=${encodeURIComponent(imageURL)}`,
+          `/solution/image?imageUrl=${imageURL}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -91,9 +92,9 @@ function MainForm() {
           }
         );
 
-        const data = separationResponse.data;
-        console.log("데이터:", data);
-        navigate("/loading");
+        navigate("/search/result", {
+          state: { result: separationResponse.data.result },
+        });
       } catch (error) {
         if (error.response.data.cause === "MaxUploadSizeExceededException") {
           alert("업로드할 사진 용량을 초과했습니다.");

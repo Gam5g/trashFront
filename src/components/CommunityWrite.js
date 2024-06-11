@@ -9,7 +9,6 @@ import "react-quill/dist/quill.snow.css";
 import ImageResize from "quill-image-resize";
 import AuthToken from "../container/pages/AuthToken";
 import { useMediaQuery } from "react-responsive";
-import S3Upload from "../S3Upload";
 import AWS from "aws-sdk";
 
 Quill.register("modules/imageResize", ImageResize);
@@ -30,44 +29,10 @@ const CommunityWrite = ({ posttype }) => {
     imageUrl: "",
     collection: false,
   });
+  const [lastFile, setLastFile] = useState(null);
   const [errors, setErrors] = useState({ title: "", content: "" });
   const questionId = null;
   const recycleId = null;
-  const ACCESS_KEY = process.env.REACT_APP_ACCESS_KEY;
-  const SECRET_ACCESS_KEY = process.env.REACT_APP_SECRET_ACCESS_KEY;
-  const REGION = process.env.REACT_APP_REGION;
-  const S3_BUCKET = process.env.REACT_APP_S3_BUCKET;
-
-  AWS.config.update({
-    accessKeyId: ACCESS_KEY,
-    secretAccessKey: SECRET_ACCESS_KEY,
-  });
-
-  const myBucket = new AWS.S3({
-    params: { Bucket: S3_BUCKET },
-    region: REGION,
-  });
-
-  const uploadFileToS3 = (file) => {
-    return new Promise((resolve, reject) => {
-      const params = {
-        ACL: "public-read",
-        Body: file,
-        Bucket: S3_BUCKET,
-        Key: `${Date.now()}-${file.name}`,
-      };
-
-      myBucket.putObject(params).send((err, data) => {
-        if (err) {
-          console.log(err);
-          reject(err);
-        } else {
-          const imageUrl = `https://${S3_BUCKET}.s3.${REGION}.amazonaws.com/${params.Key}`;
-          resolve(imageUrl);
-        }
-      });
-    });
-  };
 
   const handleUploadSuccess = (url) => {
     if (posttype === "bunri") {
@@ -76,6 +41,7 @@ const CommunityWrite = ({ posttype }) => {
       setNanumInfo((prev) => ({ ...prev, imageUrl: url }));
     }
   };
+
   const onChange = (e) => {
     const { name, value } = e.target;
     setErrors((prev) => ({ ...prev, [name]: "" }));
@@ -92,18 +58,18 @@ const CommunityWrite = ({ posttype }) => {
     input.setAttribute("accept", "image/*");
     input.click();
 
-    input.onchange = async () => {
+    input.onchange = () => {
       const file = input.files[0];
       if (file) {
-        try {
-          const imageUrl = await uploadFileToS3(file);
+        setLastFile(file);
+
+        const reader = new FileReader();
+        reader.onload = () => {
           const quill = quillRef.current.getEditor();
           const range = quill.getSelection();
-          quill.insertEmbed(range.index, "image", imageUrl);
-          setBunriInfo((prev) => ({ ...prev, imageUrl }));
-        } catch (error) {
-          console.log(error);
-        }
+          quill.insertEmbed(range.index, "image", reader.result);
+        };
+        reader.readAsDataURL(file);
       }
     };
   };
@@ -185,6 +151,31 @@ const CommunityWrite = ({ posttype }) => {
       return;
     }
 
+    if (lastFile) {
+      try {
+        const formData = new FormData();
+        formData.append("image", lastFile);
+
+        const response = await AuthToken.post(`/s3`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
+        const imageURL = response.data;
+        if (!imageURL) {
+          throw new Error("Image URL not found in response");
+        }
+        handleUploadSuccess(imageURL);
+      } catch (error) {
+        if (error.response.data.cause === "MaxUploadSizeExceededException") {
+          alert("업로드할 사진 용량을 초과했습니다.");
+          return;
+        }
+        console.error("에러 :", error);
+      }
+    }
+
     if (posttype === "bunri") {
       url = `/questionBoard/create?id=${questionId}`;
     } else if (posttype === "nanum") {
@@ -198,7 +189,6 @@ const CommunityWrite = ({ posttype }) => {
 
       const res = await AuthToken.post(url, payload, {
         headers: {
-          Authorization: localStorage.getItem("accessToken"),
           "Content-Type": "application/json",
         },
       });
