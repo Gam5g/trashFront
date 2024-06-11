@@ -9,7 +9,6 @@ import FindID from "./container/pages/FindID";
 import FindPassword from "./container/pages/FindPassword";
 import Station from "./container/pages/Station";
 import SoultionCreate from "./container/pages/SolutionCreate";
-import SolutionDetail from "./components/SolutionDetail";
 import CommunityNanumUpdate from "./container/pages/Community/CommunityNanumUpdate";
 import CommunityBunriUpdate from "./container/pages/Community/CommunityBunriUpdate";
 import CommunityNanumList from "./container/pages/Community/CommunityNanumList";
@@ -23,6 +22,7 @@ import MyPageUpdateForm from "./container/pages/MyPageUpdateForm";
 import MyCommunityList from "./container/pages/MyCommunityList";
 import BatteryForm from "./container/pages/BatteryForm";
 import MedicineForm from "./container/pages/MedicineForm";
+import SearchImageResultForm from "./container/pages/SearchImageResultForm";
 import SearchDetailForm from "./container/pages/SearchDetailForm";
 import SearchEditForm from "./container/pages/SearchEditForm";
 import SwaggerDocs from "./SwaggerDocs";
@@ -64,6 +64,7 @@ function App() {
             <Route path="/find-id" element={<FindID />} />
             <Route path="/find-password" element={<FindPassword />} />
             <Route path="/station" element={<Station />} />
+            <Route path="/search/result" element={<SearchImageResultForm />} />
             <Route path="/search" element={<SearchDetailForm />} />
             <Route path="/search/edit" element={<SearchEditForm />} />
             <Route path="/community-nanum" element={<CommunityNanumList />} />
