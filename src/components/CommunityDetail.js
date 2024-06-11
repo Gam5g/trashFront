@@ -136,7 +136,6 @@ const CommunityDetail = ({ posttype }) => {
           Authorization: `Bearer ${accessToken}`,
         },
       });
-      fetchBoardData();
     } catch (error) {
       console.error("게시글 추천 중 오류 발생:", error);
     }
