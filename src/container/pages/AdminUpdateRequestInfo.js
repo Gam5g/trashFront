@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-const AdminForm = () => {
+import CompareForm from "../../components/CompareForm";
+
+const AdminUpdateRequestInfo = () => {
   const isAdmin = localStorage.getItem("accountName") === "admin";
   const navigate = useNavigate();
 
@@ -11,10 +13,12 @@ const AdminForm = () => {
     }
   }, [isAdmin, navigate]);
   return (
-    <div>
-      <p>관리자만 볼 수 있어요</p>
+    <div style={{ marginTop: "300px" }}>
+      <p>관리자 로그인</p>
+      <h1>수정 요청 받은 정보 ＞</h1>
+      <CompareForm type="admin" />
     </div>
   );
 };
 
-export default AdminForm;
+export default AdminUpdateRequestInfo;

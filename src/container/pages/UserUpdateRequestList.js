@@ -3,12 +3,12 @@ import SolutionList from "../../components/SolutionList";
 import "./Community/Paging.css";
 import "./RequestList.css";
 
-const RequestCreateList = () => {
+const UserUpdateRequestList = () => {
   return (
     <div>
-      <SolutionList type="create" />
+      <SolutionList type="user" mode="update" />
     </div>
   );
 };
 
-export default RequestCreateList;
+export default UserUpdateRequestList;

@@ -31,10 +31,10 @@ textarea.solution-input {
 }
 
 .info-container{
-  height : 750px;
-}
-.info-expand-container {
-  height : 900px;
+  border: 6px solid #3B855D;
+  border-radius: 22px;
+  width : 550px;
+  height : 800px;
 }
 
 .info-upload-container {
@@ -44,12 +44,6 @@ textarea.solution-input {
   align-items: center; 
   justify-content: center;
   width: 100%;
-}
-
-.info-expand-container, .info-container{
-  border: 6px solid #3B855D;
-  border-radius: 22px;
-  width : 600px;
 }
 
 .solution-font {
@@ -90,6 +84,11 @@ textarea.solution-input {
   height: 40%;
 }
 
+.solution-detail-font {
+  text-align: center;
+  color: green;
+  font-size: 25px;
+}
   @font-face {
     font-family: 'Pretendard-Bold';
     src: url("../../fonts/Pretendard-Bold.woff2") format('truetype');

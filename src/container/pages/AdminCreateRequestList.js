@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import CompareForm from "../../components/CompareForm";
-
-const AdminResponseForm = () => {
+import SolutionList from "../../components/SolutionList";
+const AdminCreateRequestList = () => {
   const isAdmin = localStorage.getItem("accountName") === "admin";
   const navigate = useNavigate();
 
@@ -14,11 +13,9 @@ const AdminResponseForm = () => {
   }, [isAdmin, navigate]);
   return (
     <div>
-      <p>관리자 로그인</p>
-      <h1>수정 요청 받은 정보 ＞</h1>
-      <CompareForm type="admin" />
+      <SolutionList type="admin" mode="create" />
     </div>
   );
 };
 
-export default AdminResponseForm;
+export default AdminCreateRequestList;
