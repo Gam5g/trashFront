@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import AuthToken from "../container/pages/AuthToken";
 
-const SolutionDetail = () => {
+const SolutionDetail = ({ type }) => {
+  // 현재는 관리자가 솔루션 승인 또는 거절하는 페이지
   const navigate = useNavigate();
   const { wasteId } = useParams();
   const maxChars = 300;
@@ -57,6 +58,20 @@ const SolutionDetail = () => {
     navigate(`/my-page/request/create-list`);
   };
   const handleSubmit = async () => {
+    if (solutionList.categories.length === 0) {
+      alert("적어도 하나의 재질을 선택되어야 합니다.");
+      return;
+    }
+
+    if (!solutionList.solution.trim()) {
+      alert("배출 방법을 입력해야 합니다.");
+      return;
+    }
+
+    if (solutionList.tags.length === 0) {
+      alert("적어도 하나의 태그를 입력해야 합니다.");
+      return;
+    }
     if (window.confirm("정말로 생성 요청을 승인하시겠습니까?")) {
       try {
         await AuthToken.put(`/solution/${wasteId}/accepted`, null, {
@@ -127,10 +142,8 @@ const SolutionDetail = () => {
   };
   return (
     <div>
-      <div className="NotDrag" style={{ marginTop: "200px" }}>
-        <div className="info-title" style={{ marginTop: "125px" }}>
-          새로운 정보 생성
-        </div>{" "}
+      <div className="NotDrag">
+        <div className="info-title">새로운 정보 생성</div>{" "}
         <form onSubmit={handleSubmit} className="info-container">
           <div className="button-container">
             <h3 className="solution-font">이름</h3>
@@ -183,6 +196,16 @@ const SolutionDetail = () => {
               ))}
             </div>
           </div>
+          <div
+            className="button-container"
+            style={{ marginTop: "20px", marginRight: "200px" }}
+          >
+            <h3 className="solution-font">사진</h3>
+            <img
+              src={solutionList.imageUrl}
+              style={{ width: "50%", height: "50%" }}
+            />
+          </div>
           <div className="button-container">
             <h3 className="solution-font">태그</h3>
             <div className="inputWrap">
@@ -210,7 +233,7 @@ const SolutionDetail = () => {
                 value={solutionList.solution}
                 onChange={handleTextareaChange}
                 maxLength={maxChars}
-                style={{ height: "250px" }}
+                style={{ height: "150px" }}
               />
               <div className="char-count">
                 {charCount}/{maxChars} 글자
@@ -218,7 +241,34 @@ const SolutionDetail = () => {
             </div>
           </div>
         </form>
-        {solutionList.state !== "PENDING" ? (
+        {type === "admin " ? (
+          solutionList.state !== "PENDING" ? (
+            <button
+              type="button"
+              onClick={navigateToBack}
+              className="cancelbutton"
+            >
+              돌아가기
+            </button>
+          ) : (
+            <div className="button-container">
+              <button
+                type="submit"
+                onClick={handleSubmit}
+                className="submitbutton"
+              >
+                생성 요청 승인
+              </button>
+              <button
+                type="button"
+                onClick={handleRejectClick}
+                className="cancelbutton"
+              >
+                생성 거절
+              </button>
+            </div>
+          )
+        ) : (
           <button
             type="button"
             onClick={navigateToBack}
@@ -226,23 +276,6 @@ const SolutionDetail = () => {
           >
             돌아가기
           </button>
-        ) : (
-          <div className="button-container">
-            <button
-              type="submit"
-              onClick={handleSubmit}
-              className="submitbutton"
-            >
-              생성 요청 승인
-            </button>
-            <button
-              type="button"
-              onClick={handleRejectClick}
-              className="cancelbutton"
-            >
-              생성 거절
-            </button>
-          </div>
         )}
       </div>
     </div>

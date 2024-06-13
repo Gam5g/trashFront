@@ -91,9 +91,13 @@ const CommunityDetail = ({ posttype }) => {
       });
       const data = response.data;
       const createdDate = formatDate(data.createdDate);
-      const content = data.content
-        ? data.content.replace(/^<p>|<\/p>$/g, "")
-        : "";
+      const content = data.imageUrl
+        ? data.content
+          ? data.content.replace(/<img[^>]*>/g, "").replace(/^<p>|<\/p>$/g, "")
+          : ""
+        : data.content
+          ? data.content.replace(/<img[^>]*>/g, "").replace(/^<p>|<\/p>$/g, "")
+          : "";
       if (posttype === "bunri") {
         setBunriPost({
           title: data.title || "",
@@ -237,9 +241,9 @@ const CommunityDetail = ({ posttype }) => {
     if (window.confirm("게시글을 삭제하시겠습니까?")) {
       let url = "";
       try {
-        if (posttype == "bunri") {
+        if (posttype === "bunri") {
           url = `/questionBoard/delete/${questionBoardId}`;
-        } else if (posttype == "nanum") {
+        } else if (posttype === "nanum") {
           url = `/recycleBoard/delete/${recycleBoardId}`;
         }
         await AuthToken.get(url, {
@@ -372,6 +376,13 @@ const CommunityDetail = ({ posttype }) => {
               <p>
                 조회수: {nanumPost.view} | 작성일 : {nanumPost.createdDate}
               </p>
+              {nanumPost.imageUrl && (
+                <img
+                  src={nanumPost.imageUrl}
+                  style={{ width: "30%", height: "30%" }}
+                />
+              )}
+              <br />
               {nanumPost.content}
             </div>
           ) : (
@@ -381,6 +392,13 @@ const CommunityDetail = ({ posttype }) => {
               <p>
                 조회수: {bunriPost.view} | 추천수: {bunriPost.recommend}
               </p>
+              {bunriPost.imageUrl && (
+                <img
+                  src={bunriPost.imageUrl}
+                  style={{ width: "30%", height: "30%" }}
+                />
+              )}
+              <br />
               {bunriPost.content}
             </div>
           )}
