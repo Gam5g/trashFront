@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Medicine from "./MedicineMap";
 import AuthToken from "./AuthToken";
+import Paging from "./Community/Paging";
 import "../../style.css";
 
 function SearchDetailForm() {
@@ -9,6 +10,8 @@ function SearchDetailForm() {
   const queryParams = new URLSearchParams(location.search);
   const query = queryParams.get("query");
   const navigate = useNavigate();
+  const [activePage, setActivePage] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
   const [searchResult, setSearchResult] = useState({
     categories: [],
     imageUrl: "",
@@ -49,7 +52,11 @@ function SearchDetailForm() {
     navigate("/");
   };
 
-  const handleEdit = (searchData) => {
+  const handlePageChange = async (pageNumber) => {
+    setActivePage(pageNumber);
+  };
+
+  const handleEdit = () => {
     navigate(`/search/edit?query=${encodeURIComponent(query)}`, {
       state: { searchData: searchResult },
     });

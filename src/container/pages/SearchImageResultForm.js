@@ -15,7 +15,7 @@ const SearchImageResultForm = () => {
 
   return (
     <div>
-      <h1>{res.name}으로 추정됩니다.</h1>
+      <h1>사진으로 나온 결과는 다음과 같습니다.</h1>
       <pre>{JSON.stringify(result, null, 2)}</pre>
     </div>
   );

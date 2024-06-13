@@ -29,11 +29,20 @@ import SwaggerDocs from "./SwaggerDocs";
 import NotFound from "./container/pages/NotFound";
 import Header from "./header";
 import Loading from "./container/pages/LoadingForm";
-import AdminForm from "./container/pages/AdminForm";
-import AdminResponseForm from "./container/pages/AdminResponseForm";
+import CategoriesList from "./container/pages/CategoriesList";
+import AdminCreateRequestList from "./container/pages/AdminCreateRequestList";
+import AdminUpdateRequestList from "./container/pages/AdminUpdateRequestList";
+import AdminCreateRequestInfo from "./container/pages/AdminCreateRequestInfo";
+import AdminUpdateRequestInfo from "./container/pages/AdminUpdateRequestInfo";
+import UserCreateRequestList from "./container/pages/UserCreateRequestList";
+import UserCreateRequestInfo from "./container/pages/UserCreateRequestInfo";
+import UserUpdateRequestInfo from "./container/pages/UserUpdateRequestInfo";
+import UserUpdateRequestList from "./container/pages/UserUpdateRequestList";
+import SolutionTotalList from "./container/pages/SolutionTotalList";
+import SolutionDetailForm from "./container/pages/SolutionDetailForm";
 import DaeguPolicy from "./container/pages/DaeguPolicy";
-import RequestModifiedList from "./container/pages/RequestModifiedList";
-import RequestCreateList from "./container/pages/RequestCreateList";
+import RequestModifiedList from "./container/pages/UserUpdateRequestList";
+import RequestCreateList from "./container/pages/UserCreateRequestList";
 import RequestDetail from "./container/pages/RequestDetail";
 import { RecoilRoot } from "recoil";
 import { isLoggedInState } from "./state/authState";
@@ -53,10 +62,21 @@ function App() {
           <ScrollTop />
           <Routes>
             <Route exact path="/" element={<MainForm />} />
-            <Route path="/admin" element={<AdminForm />} />
             <Route
-              path="/admin/list/request"
-              elemtent={<AdminResponseForm />}
+              path="/admin/create/request/list"
+              element={<AdminCreateRequestList />}
+            />
+            <Route
+              path="/admin/update/request/list"
+              element={<AdminUpdateRequestList />}
+            />
+            <Route
+              path="/admin/create/request/info/:wasteId"
+              element={<AdminCreateRequestInfo />}
+            />
+            <Route
+              path="/admin/update/request/info/:wasteId"
+              element={<AdminUpdateRequestInfo />}
             />
             <Route path="/sign-up" element={<RegisterForm />} />
             <Route path="/sign-in" element={<LoginForm />} />
@@ -84,6 +104,15 @@ function App() {
               path="/my-page/request/:wasteId"
               element={<RequestDetail />}
             />
+            <Route path="/categories" element={<CategoriesList />} />
+            <Route
+              path="/solution/total/list"
+              element={<SolutionTotalList />}
+            />
+            <Route
+              path="solution/detail/:wasteId"
+              element={<SolutionDetailForm />}
+            />
             <Route path="/loading" element={<Loading />} />
             <Route
               path="/community-bunri/update"
@@ -109,6 +138,23 @@ function App() {
               path="/community-bunri/write"
               element={<CommunityBunriWrite />}
             />
+            <Route
+              path="/create/request/list"
+              element={<UserCreateRequestList />}
+            />
+            <Route
+              path="/create/request/info"
+              element={<UserCreateRequestInfo />}
+            />
+            <Route
+              path="/update/request/list"
+              element={<UserUpdateRequestList />}
+            />
+            <Route
+              path="/update/request/info"
+              elemtent={<UserUpdateRequestInfo />}
+            />
+
             <Route path="/solution/create" element={<SoultionCreate />} />
             <Route path="/battery" element={<BatteryForm />} />
             <Route path="/medicine" element={<MedicineForm />} />

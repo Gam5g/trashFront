@@ -20,7 +20,7 @@ const MyPageUpdateForm = () => {
   useEffect(() => {
     const fetchAccountData = async () => {
       try {
-        const response = await AuthToken.get(`/account/me?id=${userId}`, {
+        const response = await AuthToken.get(`/account/me`, {
           headers: {
             Authorization: cookies.accessToken,
           },
@@ -33,7 +33,7 @@ const MyPageUpdateForm = () => {
       }
     };
     fetchAccountData();
-  }, [userId, cookies.accessToken]);
+  }, [cookies.accessToken]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -47,7 +47,7 @@ const MyPageUpdateForm = () => {
     e.preventDefault();
     try {
       await AuthToken.put(
-        `/account/me?id=${userId}`,
+        `/account/me`,
         {
           email: account.email,
           nickname: account.nickname,

@@ -5,19 +5,28 @@ import { isLoggedInState } from "../state/authState";
 import AuthToken from "../container/pages/AuthToken";
 import "../container/pages/Search.css";
 
-const CompareForm = ({ type, searchData }) => {
+const CompareForm = ({
+  type,
+  nickName,
+  solutionName,
+  imageUrl,
+  categories,
+  tags,
+  solution,
+  state,
+}) => {
   const location = useLocation();
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
   const query = queryParams.get("query");
   const isLoggedIn = useRecoilValue(isLoggedInState);
   const [originList, setOriginList] = useState({
-    writerName: "",
-    wasteName: "",
-    categories: [],
-    tags: [],
-    solution: "",
-    wikiState: "",
+    writerName: nickName,
+    wasteName: solutionName,
+    categories: categories,
+    tags: tags,
+    solution: solution,
+    wikiState: state,
     createdDate: "",
     modifiedDate: "",
   });
@@ -25,8 +34,8 @@ const CompareForm = ({ type, searchData }) => {
     writerName: "",
     wasteName: "",
     categories: [],
-    tags: [],
-    solution: "",
+    tags: tags || [],
+    solution: solution || "",
     wikiState: "",
     createdDate: "",
     modifiedDate: "",
@@ -125,6 +134,14 @@ const CompareForm = ({ type, searchData }) => {
   /*const toggleIcon = () => {
     setIsExpanded(!isExpanded);
   };*/
+  useEffect(() => {
+    setModifiedList((prev) => ({
+      ...prev,
+      categories: originList.categories,
+      tags: originList.tags,
+      solution: originList.solution,
+    }));
+  }, [originList]);
 
   const handleCategoryChange = (e) => {
     const { checked, value } = e.target;
@@ -154,11 +171,26 @@ const CompareForm = ({ type, searchData }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (modifiedList.categories.length === 0) {
+      alert("적어도 하나의 재질을 선택해야 합니다.");
+      return;
+    }
+
+    if (modifiedList.tags.length === 0) {
+      alert("적어도 하나의 태그를 입력해야 합니다.");
+      return;
+    }
+
+    if (!modifiedList.solution.trim()) {
+      alert("배출 방법을 입력해야 합니다.");
+      return;
+    }
+
     setShowDiff(true);
     const formData = new FormData();
     formData.append("categories", modifiedList.categories);
     formData.append("solution", modifiedList.solution);
-    formData.append("tags", modifiedList.tags.join(","));
+    formData.append("tags", modifiedList.tags);
     try {
       await AuthToken.post(`/solution/${wasteId}/wiki`, formData, {
         headers: {
@@ -166,17 +198,24 @@ const CompareForm = ({ type, searchData }) => {
         },
       });
     } catch (error) {
-      if (
-        error.response.data.cause === "EXIST_WIKI" ||
-        error.response.data.cause === "ConstraintViolationException"
-      ) {
-        alert(error.response.data.message);
-      } else console.error(error);
+      if (error.response) {
+        const { data } = error.response;
+        if (
+          data.cause === "EXIST_WIKI" ||
+          data.cause === "ConstraintViolationException"
+        ) {
+          alert(data.message);
+        } else {
+          console.error(data);
+        }
+      } else {
+        console.error(error);
+      }
     }
   };
   const handleAdminAccept = async (e) => {
     try {
-      await AuthToken.put(`/wiki/{wikiId}/accepted`, {
+      await AuthToken.put(`/wiki/${wikiId}/accepted`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -189,7 +228,7 @@ const CompareForm = ({ type, searchData }) => {
 
   const handleAdminRejected = async (e) => {
     try {
-      await AuthToken.put(`/wiki/{wikiId}/rejected`, {
+      await AuthToken.put(`/wiki/${wikiId}/rejected`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -209,7 +248,10 @@ const CompareForm = ({ type, searchData }) => {
       <div>
         <div className="origin-title">원본</div>
         <div className="origin-container">
-          <p style={{ fontSize: "45px", textAlign: "center" }}>{query}</p>
+          <p style={{ fontSize: "45px", textAlign: "center" }}>
+            {originList.wasteName}
+          </p>
+          <img src={imageUrl} style={{ width: "30%", height: "30%" }} />
           <h3 className="search-font">재질</h3>
           <p>{originList.categories}</p>
           <h3 className="search-font">태그</h3>
@@ -221,7 +263,15 @@ const CompareForm = ({ type, searchData }) => {
       <div>
         <div className="modified-title">수정</div>
         <form onSubmit={handleSubmit} className={"modified-container"}>
-          <p style={{ fontSize: "45px", textAlign: "center" }}>{query}</p>
+          <p
+            style={{
+              fontSize: "45px",
+              textAlign: "center",
+              marginBottom: "-20px",
+            }}
+          >
+            {originList.wasteName}
+          </p>
           <div className="button-container" style={{ marginRight: "330px" }}>
             <h3 className="search-font" style={{ marginBottom: "5px" }}>
               재질
@@ -236,78 +286,28 @@ const CompareForm = ({ type, searchData }) => {
                 paddingLeft: "30px",
               }}
             >
-              <label className="checkbox-label">
-                <input
-                  type="checkbox"
-                  value="일반쓰레기"
-                  onChange={handleCategoryChange}
-                />{" "}
-                일반쓰레기
-              </label>
-              <br />
-              <label className="checkbox-label">
-                <input
-                  type="checkbox"
-                  value="종이류"
-                  onChange={handleCategoryChange}
-                />{" "}
-                종이류
-              </label>
-              <br />
-              <label className="checkbox-label">
-                <input
-                  type="checkbox"
-                  value="유리"
-                  onChange={handleCategoryChange}
-                />{" "}
-                유리
-              </label>
-              <br />
-              <label className="checkbox-label">
-                <input
-                  type="checkbox"
-                  value="플라스틱"
-                  onChange={handleCategoryChange}
-                />{" "}
-                플라스틱
-              </label>
-              <br />
-              <label className="checkbox-label">
-                <input
-                  type="checkbox"
-                  value="캔류"
-                  onChange={handleCategoryChange}
-                />{" "}
-                캔류
-              </label>
-              <br />
-              <label className="checkbox-label">
-                <input
-                  type="checkbox"
-                  value="비닐류"
-                  onChange={handleCategoryChange}
-                />{" "}
-                비닐류
-              </label>
-              <br />
-              <label className="checkbox-label">
-                <input
-                  type="checkbox"
-                  value="스티로폼"
-                  onChange={handleCategoryChange}
-                />{" "}
-                스티로폼
-              </label>
-              <br />
-              <label className="checkbox-label">
-                <input
-                  type="checkbox"
-                  value="재활용 어려움"
-                  onChange={handleCategoryChange}
-                />{" "}
-                재활용 어려움
-              </label>
-              <br />
+              {[
+                "일반쓰레기",
+                "종이류",
+                "유리",
+                "플라스틱",
+                "캔류",
+                "비닐류",
+                "스티로폼",
+                "폐유",
+                "폐건전지",
+                "재활용 어려움",
+              ].map((category) => (
+                <label key={category} className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    name="category"
+                    value={modifiedList.categories}
+                    onChange={handleCategoryChange}
+                  />{" "}
+                  {category}
+                </label>
+              ))}
             </div>
           </div>
           <div>
@@ -325,10 +325,10 @@ const CompareForm = ({ type, searchData }) => {
                 name="tags"
                 placeholder="태그를 입력하세요 (쉼표로 구분)"
                 onChange={handleTagsChange}
+                value={modifiedList.tags}
               />
             </div>
           </div>
-
           <div>
             <h3 className="search-font">배출요령</h3>
             <div>

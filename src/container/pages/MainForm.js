@@ -36,6 +36,7 @@ function MainForm() {
       } catch (error) {}
     })();
   }, [accessToken]);
+
   const handleFileChange = (e) => {
     e.preventDefault();
     const files = e.target.files || e.dataTransfer.files;
@@ -74,7 +75,6 @@ function MainForm() {
 
         const response = await AuthToken.post(`/s3`, formData, {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
             "Content-Type": "multipart/form-data",
           },
         });
@@ -123,7 +123,7 @@ function MainForm() {
         }
       );
       setSearchResults([response.data]);
-      navigateToSearch(searchTerm);
+      navigateToSearch(searchTerm, response.data);
     } catch (error) {
       console.log(error);
     }
@@ -246,8 +246,29 @@ function MainForm() {
           <button onClick={ScrollToTop} className="MoveTopBtn" />
         </div>
         <div>
+          <h2>등록된 쓰레기의 배출방법을 확인해보세요!</h2>
+          <button
+            className="white-button"
+            onClick={() => navigate("/solution/total/list")}
+          >
+            전체 배출방법
+          </button>
+        </div>
+        <div>
+          <h2>카테고리</h2>
+          <button
+            className="white-button"
+            onClick={() => navigate("/categories")}
+          >
+            카테고리
+          </button>
+        </div>
+        <div>
           {isAdmin && (
-            <button className="white-button" onClick={() => navigate("/admin")}>
+            <button
+              className="white-button"
+              onClick={() => navigate("/admin/update/request/list")}
+            >
               수정 요청 관리
             </button>
           )}
