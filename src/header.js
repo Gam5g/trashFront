@@ -46,6 +46,7 @@ const Header = () => {
     localStorage.removeItem("nickname");
     localStorage.removeItem("latitude");
     localStorage.removeItem("longitude");
+    localStorage.removeItem("accountId");
     navigate("/");
   };
 

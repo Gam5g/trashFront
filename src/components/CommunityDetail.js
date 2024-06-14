@@ -140,6 +140,7 @@ const CommunityDetail = ({ posttype }) => {
           Authorization: `Bearer ${accessToken}`,
         },
       });
+      window.location.reload();
     } catch (error) {
       console.error("게시글 추천 중 오류 발생:", error);
     }

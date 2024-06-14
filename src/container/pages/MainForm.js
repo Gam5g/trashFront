@@ -32,7 +32,10 @@ function MainForm() {
             Authorization: `Bearer ${accessToken}`,
           },
         });
+        localStorage.setItem("accountId", response.data.accountId);
         localStorage.setItem("nickname", response.data.nickname);
+        localStorage.setItem("latitude", response.data.latitude);
+        localStorage.setItem("longitude", response.data.longitude);
       } catch (error) {}
     })();
   }, [accessToken]);
@@ -45,7 +48,6 @@ function MainForm() {
       const imageUrl = URL.createObjectURL(file);
       setImage(imageUrl);
       setLastFile(file);
-      console.log("Local file uploaded:", imageUrl);
       e.target.value = null;
       setActive(true);
     }
@@ -73,16 +75,17 @@ function MainForm() {
         const formData = new FormData();
         formData.append("image", lastFile);
 
-        const response = await AuthToken.post(`/s3`, formData, {
+        const res = await AuthToken.post(`/s3`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
 
-        const imageURL = response.data;
+        const imageURL = res.data;
         if (!imageURL) {
           throw new Error("Image URL not found in response");
         }
+
         const separationResponse = await AuthToken.get(
           `/solution/image?imageUrl=${imageURL}`,
           {
@@ -96,11 +99,20 @@ function MainForm() {
           state: { result: separationResponse.data.result },
         });
       } catch (error) {
-        if (error.response.data.cause === "MaxUploadSizeExceededException") {
+        if (
+          error.response &&
+          error.response.data.cause === "IllegalArgumentException"
+        ) {
+          alert(error.response.data.message);
+        } else if (
+          error.response &&
+          error.response.data.cause === "MaxUploadSizeExceededException"
+        ) {
           alert("업로드할 사진 용량을 초과했습니다.");
-          return;
+        } else {
+          console.error("에러 :", error);
+          alert("An unexpected error occurred. Please try again.");
         }
-        console.error("에러 :", error);
       }
     }
   };
@@ -152,7 +164,7 @@ function MainForm() {
   };
 
   return (
-    <div className="upload-container">
+    <div className="upload-container" style={{ marginTop: "200px" }}>
       <h2>찾고자 하는 쓰레기를 검색해보세요!</h2>
       <div
         className={query ? "search-active-container" : "trash-search-container"}
@@ -240,7 +252,7 @@ function MainForm() {
               onDragOver={(e) => e.preventDefault()}
               onDrop={handleFileChange}
             >
-              클릭이나 드래그로 사진 업로드
+              jpg 또는 png 파일만 업로드 가능
             </button>
           )}
           <button onClick={ScrollToTop} className="MoveTopBtn" />
@@ -253,24 +265,26 @@ function MainForm() {
           >
             전체 배출방법
           </button>
-        </div>
-        <div>
-          <h2>카테고리</h2>
           <button
             className="white-button"
             onClick={() => navigate("/categories")}
+            style={{ width: "200px" }}
           >
-            카테고리
+            카테고리별로 보기
           </button>
         </div>
         <div>
           {isAdmin && (
-            <button
-              className="white-button"
-              onClick={() => navigate("/admin/update/request/list")}
-            >
-              수정 요청 관리
-            </button>
+            <div>
+              <br />
+              <button
+                className="white-button"
+                onClick={() => navigate("/admin/update/request/list")}
+                style={{ backgroundColor: "black", border: "none" }}
+              >
+                수정 요청 관리
+              </button>
+            </div>
           )}
         </div>
       </div>
