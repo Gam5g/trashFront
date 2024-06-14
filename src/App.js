@@ -39,11 +39,13 @@ import UserCreateRequestInfo from "./container/pages/UserCreateRequestInfo";
 import UserUpdateRequestInfo from "./container/pages/UserUpdateRequestInfo";
 import UserUpdateRequestList from "./container/pages/UserUpdateRequestList";
 import SolutionTotalList from "./container/pages/SolutionTotalList";
+import CategoriesSolutionList from "./container/pages/CategoriesSolutionList";
 import SolutionDetailForm from "./container/pages/SolutionDetailForm";
 import DaeguPolicy from "./container/pages/DaeguPolicy";
 import RequestModifiedList from "./container/pages/UserUpdateRequestList";
 import RequestCreateList from "./container/pages/UserCreateRequestList";
 import RequestDetail from "./container/pages/RequestDetail";
+import WikiDetailForm from "./container/pages/WikiDetailForm";
 import { RecoilRoot } from "recoil";
 import { isLoggedInState } from "./state/authState";
 import ScrollTop from "./ScrollTop";
@@ -75,7 +77,7 @@ function App() {
               element={<AdminCreateRequestInfo />}
             />
             <Route
-              path="/admin/update/request/info/:wasteId"
+              path="/admin/update/request/info/:wikiId"
               element={<AdminUpdateRequestInfo />}
             />
             <Route path="/sign-up" element={<RegisterForm />} />
@@ -105,6 +107,10 @@ function App() {
               element={<RequestDetail />}
             />
             <Route path="/categories" element={<CategoriesList />} />
+            <Route
+              path="/categories/things"
+              element={<CategoriesSolutionList />}
+            />
             <Route
               path="/solution/total/list"
               element={<SolutionTotalList />}
@@ -143,16 +149,17 @@ function App() {
               element={<UserCreateRequestList />}
             />
             <Route
-              path="/create/request/info"
+              path="/create/request/info/:wasteId"
               element={<UserCreateRequestInfo />}
             />
+            <Route path="/wiki/detail/:wikiId" element={<WikiDetailForm />} />
             <Route
               path="/update/request/list"
               element={<UserUpdateRequestList />}
             />
             <Route
-              path="/update/request/info"
-              elemtent={<UserUpdateRequestInfo />}
+              path="/update/request/info/:wikiId"
+              element={<UserUpdateRequestInfo />}
             />
 
             <Route path="/solution/create" element={<SoultionCreate />} />
