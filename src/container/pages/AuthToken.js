@@ -26,20 +26,29 @@ AuthToken.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    if (error.response.status === 401 && !originalRequest._retry) {
+    if (
+      error.response.status === 401 &&
+      error.response &&
+      !originalRequest._retry
+    ) {
       originalRequest._retry = true;
-
+      const refreshtoken = cookies.get("RefreshToken");
+      //originalRequest.headers.RefreshToken = `${refreshtoken}`;
       try {
         const response = await axios.post("http://3.39.190.90/api/auth/token", {
           headers: {
+            RefreshToken: `${refreshtoken}`,
             "Content-Type": "application/json",
+            withCredentials: true,
           },
         });
-
-        if (response.status === 200) {
-          const newAccessToken = response.headers.authorization;
-          localStorage.setItem("accessToken", newAccessToken);
-          originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
+        /*const response = await axios.post("http://3.39.190.90/api/auth/token?RefreshToken={$RefreshToken}"*/
+        if (response.status === 200 && response.data.accessToken) {
+          cookies.save("Authorization", response.data.accessToken, {});
+          const accessToken = cookies.load("Authorization");
+          //const newAccessToken = response.headers.authorization;
+          //localStorage.setItem("accessToken", newAccessToken);
+          originalRequest.headers["Authorization"] = `Bearer ${accessToken}`;
           return axios(originalRequest);
         }
       } catch (error) {
