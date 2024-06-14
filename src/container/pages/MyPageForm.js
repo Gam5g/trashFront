@@ -7,6 +7,7 @@ import "./MyPageForm.css";
 import { useCookies } from "react-cookie";
 
 function MyPageForm() {
+  const isAdmin = localStorage.getItem("accountName") === "admin";
   const isLoggedIn = useRecoilValue(isLoggedInState);
   const navigate = useNavigate();
   const [account, setAccount] = useState(null);
@@ -50,11 +51,11 @@ function MyPageForm() {
   };
 
   const navigateToModifiedList = () => {
-    navigate("/my-page/request/modified-list");
+    navigate("/update/request/list");
   };
 
   const navigateToCreateList = () => {
-    navigate("/my-page/request/create-list");
+    navigate("/create/request/list");
   };
 
   if (loading) {
@@ -89,17 +90,19 @@ function MyPageForm() {
               </li>
             </ul>
           </div>
-          <div className="section">
-            <h3>나의 위키 편집 요청</h3>
-            <ul>
-              <li className="clickable" onClick={navigateToModifiedList}>
-                내가 수정 요청한 정보 보기
-              </li>
-              <li className="clickable" onClick={navigateToCreateList}>
-                내가 생성 요청한 정보 보기
-              </li>
-            </ul>
-          </div>
+          {!isAdmin && (
+            <div className="section">
+              <h3>나의 위키 편집 요청</h3>
+              <ul>
+                <li className="clickable" onClick={navigateToModifiedList}>
+                  내가 수정 요청한 정보 보기
+                </li>
+                <li className="clickable" onClick={navigateToCreateList}>
+                  내가 생성 요청한 정보 보기
+                </li>
+              </ul>
+            </div>
+          )}
           <div className="section">
             <h3>위치정보</h3>
             <ul>
