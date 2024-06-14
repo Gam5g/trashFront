@@ -31,13 +31,24 @@ const SolutionList = ({ type, mode }) => {
 
   const handleRequestClick = (type, mode, request) => {
     setSelectedRequest(request);
-    const wasteId = request.wastId;
+    const wasteId = request.wasteId;
+    const wikiId = request.wikiId;
     if (type === "admin") {
-      navigate(`/admin/${mode}/request/info/${wasteId}`, {
-        state: { wasteId },
-      });
+      if (mode === "create") {
+        navigate(`/admin/${mode}/request/info/${wasteId}`, {
+          state: { wasteId },
+        });
+      } else {
+        navigate(`/admin/${mode}/request/info/${wikiId}`, {
+          state: { wikiId },
+        });
+      }
     } else if (type === "user") {
-      navigate(`/${mode}/request/info/${wasteId}`, { state: { wasteId } });
+      if (mode === "create") {
+        navigate(`/${mode}/request/info/${wasteId}`, { state: { wasteId } });
+      } else {
+        navigate(`/${mode}/request/info/${wikiId}`, { state: { wikiId } });
+      }
     } else {
       navigate(`/solution/detail/${wasteId}`, { state: { wasteId } });
     }
@@ -46,10 +57,19 @@ const SolutionList = ({ type, mode }) => {
   const fetchPageData = async (pageNumber) => {
     try {
       let url = "";
+      const accountId = localStorage.getItem("accountId");
       if (type === "user") {
-        //url = `/account/${accountId}/contributions/creation?state=pending&page=${pageNumber - 1}&size=10`;
+        if (mode === "create") {
+          url = `/account/${accountId}/contributions/creation?state=pending&page=${pageNumber - 1}&size=10`;
+        } else {
+          url = `/account/${accountId}/contributions/modification?state=pending&page=${pageNumber - 1}&size=10`;
+        }
       } else {
-        url = `/solution?page=${pageNumber - 1}&size=10`;
+        if (mode === "create") {
+          url = `/solution?page=${pageNumber - 1}&size=10`;
+        } else {
+          url = `/wiki?page=${pageNumber - 1}&size=10`;
+        }
       }
       const response = await AuthToken.get(url, {
         headers: {
@@ -89,6 +109,7 @@ const SolutionList = ({ type, mode }) => {
       {type === "admin" && <h3>관리자 로그인</h3>}
       {type === "user" && <h1>나의 요청 리스트</h1>}
       {type === "admin" && <h1>요청 리스트</h1>}
+      {type === "total" && <h1>현재 솔루션 반영 상태</h1>}
       <div className="tabs">
         {type === "user" && (
           <div>
@@ -127,30 +148,41 @@ const SolutionList = ({ type, mode }) => {
         <div className="list">
           {requests.map((request) => (
             <div
-              key={request.wasteId}
+              key={request.wasteId || request.wikiId}
               className="lists-item"
               onClick={() => handleRequestClick(type, mode, request)}
             >
               <div className="lists-item-header">
-                <span className="title">{request.name}</span>
+                <span className="title">{request.wasteName}</span>
               </div>
               <div className="lists-item-footer">
                 <span className="status">
-                  {mode === "create" ? (
+                  {mode === "create" && (
                     <>
                       생성 여부:{" "}
-                      {request.contributedCreationState === "ACCEPTED"
+                      {request.state === "ACCEPTED"
                         ? "✔️"
-                        : request.contributedCreationState === "PENDING"
+                        : request.state === "PENDING"
                           ? "대기"
                           : "❌"}
                     </>
-                  ) : (
+                  )}
+                  {mode === "update" && type === "total" && (
                     <>
                       반영 여부:{" "}
-                      {request.contributedCreationState === "ACCEPTED"
+                      {request.state === "ACCEPTED"
                         ? "✔️"
-                        : request.contributedCreationState === "PENDING"
+                        : request.state === "PENDING"
+                          ? "대기"
+                          : "❌"}
+                    </>
+                  )}
+                  {type === "admin" && mode === "update" && (
+                    <>
+                      반영 여부:{" "}
+                      {request.wikiState === "ACCEPTED"
+                        ? "✔️"
+                        : request.wikiState === "PENDING"
                           ? "대기"
                           : "❌"}
                     </>

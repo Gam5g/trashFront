@@ -1,26 +1,29 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import Medicine from "./MedicineMap";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import AuthToken from "./AuthToken";
-import Paging from "./Community/Paging";
 import "../../style.css";
+import Paging from "./Community/Paging";
+import "./Solution.css";
 
-function SearchDetailForm() {
+const SearchDetailForm = () => {
+  const isAdmin = localStorage.getItem("accountName") === "admin";
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const query = queryParams.get("query");
   const navigate = useNavigate();
-  const [activePage, setActivePage] = useState(1);
-  const [totalItems, setTotalItems] = useState(0);
   const [searchResult, setSearchResult] = useState({
+    wasteId: "",
     categories: [],
     imageUrl: "",
-    nickName: "",
+    accountNickName: "",
     solution: " ",
-    solutionName: "",
+    name: "",
     state: "",
     tags: [],
   });
+  const [wikiResult, setWikiResult] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const wasteId = searchResult.wasteId;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,22 +41,41 @@ function SearchDetailForm() {
         setSearchResult(response.data);
       } catch (error) {
         console.log(error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     if (location.state && location.state.searchData) {
       setSearchResult(location.state.searchData);
+      setIsLoading(false);
     } else if (query) {
       fetchData();
     }
   }, [query, location.state]);
 
+  useEffect(() => {
+    const fetchList = async () => {
+      const accessToken = localStorage.getItem("accessToken");
+      try {
+        const response = await AuthToken.get(`/solution/${wasteId}/wiki`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+        });
+        setWikiResult(response.data.content);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    if (searchResult.wasteId) {
+      fetchList();
+    }
+  }, [searchResult]);
+
   const navigateToHome = () => {
     navigate("/");
-  };
-
-  const handlePageChange = async (pageNumber) => {
-    setActivePage(pageNumber);
   };
 
   const handleEdit = () => {
@@ -72,11 +94,112 @@ function SearchDetailForm() {
     ));
   };
 
+  const SolutionMiniList = ({ type, resource }) => {
+    const [activePage, setActivePage] = useState(1);
+    const [requests, setRequests] = useState([]);
+    const [totalItems, setTotalItems] = useState(0);
+    const wasteId = resource;
+
+    const handlePageChange = async (pageNumber) => {
+      setActivePage(pageNumber);
+    };
+
+    const handleRequestClick = (wikiId) => {
+      navigate(`/wiki/detail/${wikiId}`);
+    };
+
+    const fetchPageData = async (pageNumber) => {
+      try {
+        const response = await AuthToken.get(
+          `/solution/${wasteId}/wiki?page=${pageNumber - 1}&size=5`,
+          {
+            headers: {
+              Authorization: localStorage.getItem("accessToken"),
+            },
+          }
+        );
+
+        if (response.data && response.data.content) {
+          console.log(response.data);
+          setRequests(response.data.content);
+          setTotalItems(response.data.totalElements);
+        } else {
+          console.error("Unexpected response structure:", response.data);
+        }
+      } catch (error) {
+        console.error("데이터를 가져오는 중 오류 발생:", error);
+      }
+    };
+
+    useEffect(() => {
+      fetchPageData(activePage);
+    }, [activePage]);
+
+    return (
+      requests &&
+      requests.length > 0 && (
+        <div className="NotDrag">
+          <p
+            style={{
+              textAlign: "center",
+              color: "green",
+              fontSize: "25px",
+            }}
+          >
+            수정 히스토리
+          </p>
+          <div className="request-list" style={{ width: "70%" }}>
+            <div className="list" style={{ width: "95%" }}>
+              {requests.map((request) => (
+                <div
+                  key={request.wikiId}
+                  className="lists-item"
+                  onClick={() => handleRequestClick(request.wikiId)}
+                >
+                  <div className="lists-item-header">
+                    <span>{request.wasteName}</span>
+                  </div>
+                  <div className="lists-item-footer">
+                    <span className="status">
+                      {request.wikiState === "ACCEPTED"
+                        ? "✔️"
+                        : request.wikiState === "PENDING"
+                          ? "대기"
+                          : "❌"}
+                    </span>
+                    <span className="date">
+                      {new Date(request.createdDate).toLocaleString("ko-KR", {
+                        year: "numeric",
+                        month: "long",
+                        day: "2-digit",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <Paging
+              totalItemsCount={totalItems}
+              onPageChange={handlePageChange}
+              activePage={activePage}
+            />
+          </div>
+        </div>
+      )
+    );
+  };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <div className="NotDrag" style={{ marginTop: "40px" }}>
+    <div className="NotDrag" style={{ marginTop: "250px" }}>
       <div>
         <div>
-          <h1 style={{ textAlign: "center" }}>{searchResult.solutionName}</h1>
+          <h1 style={{ textAlign: "center" }}>{searchResult.name}</h1>
           <div
             style={{
               display: "flex",
@@ -91,7 +214,7 @@ function SearchDetailForm() {
                   width: "30%",
                   height: "30%",
                 }}
-                alt={searchResult.solutionName}
+                alt={searchResult.name}
               />
             )}
           </div>
@@ -143,20 +266,16 @@ function SearchDetailForm() {
               돌아가기
             </button>
           </div>
-          {searchResult.solutionName === "폐의약품" && (
-            <div>
-              <div>
-                <h1>근처에 폐의약품이나 폐건전지 수거함을 찾아보세요</h1>
-              </div>
-              <div>
-                <Medicine />
-              </div>
-            </div>
-          )}
+          <div>
+            <SolutionMiniList
+              type={isAdmin ? "admin" : "user"}
+              resource={wasteId}
+            />
+          </div>
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default SearchDetailForm;
