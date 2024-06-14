@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Medicine from "./MedicineMap";
 import AuthToken from "./AuthToken";
 import "../../style.css";
@@ -7,13 +7,12 @@ import "./Solution.css";
 
 function SolutionDetailForm() {
   const navigate = useNavigate();
-  const location = useLocation();
+  const { wasteId } = useParams();
   const [activePage, setActivePage] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
-  const { wasteId } = location.state || {};
   const [solutionResult, setSolutionResult] = useState({
-    nickName: "",
-    solutionName: "",
+    accountNickName: "",
+    name: "",
     imageUrl: "",
     categories: [],
     tags: [],
@@ -32,7 +31,8 @@ function SolutionDetailForm() {
         });
         const resultData = response.data;
         setSolutionResult({
-          nickName: resultData.nickName,
+          name: resultData.name,
+          accountNickName: resultData.accountNickName,
           solutionName: resultData.solutionName,
           imageUrl: resultData.imageUrl,
           categories: resultData.categories,
@@ -68,7 +68,7 @@ function SolutionDetailForm() {
     <div className="NotDrag" style={{ marginTop: "120px" }}>
       <div>
         <div>
-          <h1 style={{ textAlign: "center" }}>{solutionResult.solutionName}</h1>
+          <h1 style={{ textAlign: "center" }}>{solutionResult.name}</h1>
           <div
             style={{
               display: "flex",
@@ -83,7 +83,7 @@ function SolutionDetailForm() {
                   width: "30%",
                   height: "30%",
                 }}
-                alt={solutionResult.solutionName}
+                alt={solutionResult.name}
               />
             )}
           </div>
@@ -95,7 +95,9 @@ function SolutionDetailForm() {
             <p className="solution-detail-font">배출 요령</p>
             <p>{formatRules(solutionResult.solution)}</p>
             <p className="solution-detail-font">솔루션 작성자</p>
-            {solutionResult.nickName}
+            {solutionResult.accountNickName !== "midas"
+              ? solutionResult.accountNickName
+              : "비공개"}
           </div>
           <p className="solution-detail-font">솔루션 현재 상태</p>
           <p

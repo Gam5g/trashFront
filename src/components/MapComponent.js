@@ -20,15 +20,40 @@ const MapComponent = ({
   const [clickedPosition, setClickedPosition] = useState(null);
   const [locationData, setLocationData] = useState([]);
   const [activeRegion, setActiveRegion] = useState(defaultRegion);
+  const [isChecked, setIsChecked] = useState(false);
+  const [radius, setRadius] = useState(0);
+  const latitude = localStorage.getItem("latitude");
+  const longitude = localStorage.getItem("longitude");
+  const isValidCoordinate = (coord) => {
+    const num = parseFloat(coord);
+    return !isNaN(num) && isFinite(num);
+  };
+
+  const isLocationAvailable =
+    isValidCoordinate(latitude) && isValidCoordinate(longitude);
 
   useEffect(() => {
     const fetchLocationData = async (region) => {
       try {
         setLocationData([]);
         const userCity = localStorage.getItem("userCity") || defaultRegion;
-        const response = await AuthToken.get(
-          `${endpoint}?state=대구&city=${region || userCity}&page=${page - 1}&size=10`
-        );
+        let response;
+        if (isChecked) {
+          const accountId = localStorage.getItem("accountId");
+          const accessToken = localStorage.getItem("accessToken");
+          response = await AuthToken.get(
+            `${endpoint}/coordinate?id=${accountId}&latitude=${latitude}&longitude=${longitude}&radius=${radius}&page=${page - 1}&size=10`,
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
+        } else {
+          response = await AuthToken.get(
+            `${endpoint}?state=대구&city=${region || userCity}&page=${page - 1}&size=10`
+          );
+        }
         setLocationData(response.data.content);
         updateTotalItems(response.data.totalElements);
       } catch (error) {
@@ -39,7 +64,7 @@ const MapComponent = ({
     if (isLoggedIn) {
       fetchLocationData(activeRegion);
     }
-  }, [isLoggedIn, activeRegion, page]);
+  }, [isLoggedIn, activeRegion, page, isChecked, radius, clickedPosition]);
 
   useEffect(() => {
     const container = document.getElementById("map");
@@ -92,6 +117,14 @@ const MapComponent = ({
     setClickedPosition(position);
   };
 
+  const handleCheckboxChange = (e) => {
+    setIsChecked(e.target.checked);
+  };
+
+  const handleRadiusChange = (e) => {
+    setRadius(parseInt(e.target.value, 10));
+  };
+
   return (
     <div className="NotDrag">
       <div
@@ -103,15 +136,41 @@ const MapComponent = ({
             : { width: "660px", height: "500px" }
         }
       ></div>
-      {regionButtons.map((region) => (
-        <button
-          key={region}
-          className={`region-button ${activeRegion === region ? "active" : ""}`}
-          onClick={() => toggleMarker(region)}
-        >
-          {region}
-        </button>
-      ))}
+      <div className="checkbox-container">
+        <label>
+          <input
+            type="checkbox"
+            checked={isChecked}
+            onChange={handleCheckboxChange}
+            disabled={!isLocationAvailable}
+          />
+          반경으로 검색(회원가입에서 위치동의하지 않았을 경우 사용 불가)
+        </label>
+      </div>
+      {!isChecked &&
+        regionButtons.map((region) => (
+          <button
+            key={region}
+            className={`region-button ${activeRegion === region ? "active" : ""}`}
+            onClick={() => toggleMarker(region)}
+          >
+            {region}
+          </button>
+        ))}
+      <div>
+        {isChecked && (
+          <div className="button-container">
+            <input
+              type="number"
+              value={radius}
+              onChange={handleRadiusChange}
+              placeholder="radius"
+              style={{ width: "45px" }}
+            />
+            <p>m 반경 근처에 있는 수거함 목록</p>
+          </div>
+        )}
+      </div>
       <div
         style={{
           display: "grid",

@@ -23,12 +23,12 @@ const SearchEditForm = () => {
         </ul>
       </div>
       <CompareForm
-        type="edit"
-        nickName={searchData.nickName}
-        solutionName={searchData.solutionName}
+        wasteId={searchData.wasteId}
+        nickName={searchData.accountNickName}
+        solutionName={searchData.name}
         imageUrl={searchData.imageUrl}
-        categories={searchData.categories.join(", ")}
-        tags={searchData.tags.join(", ")}
+        categories={searchData.categories}
+        tags={searchData.tags}
         solution={searchData.solution}
         state={searchData.state}
       />

@@ -4,14 +4,13 @@ import { useParams } from "react-router-dom";
 import AuthToken from "../container/pages/AuthToken";
 
 const SolutionDetail = ({ type }) => {
-  // 현재는 관리자가 솔루션 승인 또는 거절하는 페이지
   const navigate = useNavigate();
   const { wasteId } = useParams();
   const maxChars = 300;
   const [charCount, setCharCount] = useState(0);
   const [solutionList, setSolutionList] = useState({
-    nickName: "",
-    solutionName: "",
+    accountNickName: "",
+    name: "",
     imageUrl: "",
     categories: [],
     tags: [],
@@ -22,15 +21,14 @@ const SolutionDetail = ({ type }) => {
     const fetchSolutionData = async () => {
       try {
         const response = await AuthToken.get(`/solution/${wasteId}`, {
-          //wastId임
           headers: {
             Authorization: localStorage.getItem("accessToken"),
           },
         });
         const data = response.data;
         setSolutionList({
-          nickName: data.nickName || "",
-          solutionName: data.solutionName || "",
+          accountNickName: data.accountNickName || "",
+          name: data.name || "",
           imageUrl: data.imageUrl || "",
           categories: data.categories || [],
           tags: data.tags || [],
@@ -54,8 +52,11 @@ const SolutionDetail = ({ type }) => {
     });
   };
 
+  const navigateToAdminBack = () => {
+    navigate(-1);
+  };
   const navigateToBack = () => {
-    navigate(`/my-page/request/create-list`);
+    navigate(-1);
   };
   const handleSubmit = async () => {
     if (solutionList.categories.length === 0) {
@@ -80,7 +81,7 @@ const SolutionDetail = ({ type }) => {
           },
         });
         alert("승인되었습니다.");
-        navigateToBack();
+        navigateToAdminBack();
       } catch (error) {
         if (
           error.response &&
@@ -108,7 +109,7 @@ const SolutionDetail = ({ type }) => {
           },
         });
         alert("생성 거절되었습니다.");
-        navigateToBack();
+        navigateToAdminBack();
       } catch (error) {
         if (
           error.response &&
@@ -152,7 +153,7 @@ const SolutionDetail = ({ type }) => {
                 className="inputContent"
                 type="text"
                 name="name"
-                value={solutionList.solutionName}
+                value={solutionList.name}
                 onChange={handleChange}
               />
             </div>
@@ -241,37 +242,35 @@ const SolutionDetail = ({ type }) => {
             </div>
           </div>
         </form>
-        {type === "admin " ? (
-          solutionList.state !== "PENDING" ? (
-            <button
-              type="button"
-              onClick={navigateToBack}
-              className="cancelbutton"
-            >
-              돌아가기
-            </button>
-          ) : (
-            <div className="button-container">
-              <button
-                type="submit"
-                onClick={handleSubmit}
-                className="submitbutton"
-              >
-                생성 요청 승인
-              </button>
-              <button
-                type="button"
-                onClick={handleRejectClick}
-                className="cancelbutton"
-              >
-                생성 거절
-              </button>
-            </div>
-          )
-        ) : (
+        {type !== "admin" ? (
           <button
             type="button"
             onClick={navigateToBack}
+            className="cancelbutton"
+          >
+            돌아가기
+          </button>
+        ) : solutionList.state === "PENDING" ? (
+          <div className="button-container">
+            <button
+              type="submit"
+              onClick={handleSubmit}
+              className="submitbutton"
+            >
+              생성 요청 승인
+            </button>
+            <button
+              type="button"
+              onClick={handleRejectClick}
+              className="cancelbutton"
+            >
+              생성 거절
+            </button>
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={navigateToAdminBack}
             className="cancelbutton"
           >
             돌아가기

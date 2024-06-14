@@ -6,7 +6,7 @@ import AuthToken from "../container/pages/AuthToken";
 import "../container/pages/Search.css";
 
 const CompareForm = ({
-  type,
+  wasteId,
   nickName,
   solutionName,
   imageUrl,
@@ -22,30 +22,20 @@ const CompareForm = ({
   const isLoggedIn = useRecoilValue(isLoggedInState);
   const [originList, setOriginList] = useState({
     writerName: nickName,
-    wasteName: solutionName,
+    name: solutionName,
     categories: categories,
     tags: tags,
     solution: solution,
     wikiState: state,
-    createdDate: "",
-    modifiedDate: "",
   });
   const [modifiedList, setModifiedList] = useState({
-    writerName: "",
-    wasteName: "",
-    categories: [],
-    tags: tags || [],
-    solution: solution || "",
-    wikiState: "",
-    createdDate: "",
-    modifiedDate: "",
+    categories: [...categories],
+    tags: [...tags],
+    solution: solution,
   });
-  const [charCount, setCharCount] = useState(0);
+  const [charCount, setCharCount] = useState(solution.length);
   const maxChars = 300;
-  let wikiId = "";
-  let wasteId = "";
   const [showDiff, setShowDiff] = useState(false);
-  /*const [isExpanded, setIsExpanded] = useState(true);*/
   const accessToken = localStorage.getItem("accessToken");
 
   useEffect(() => {
@@ -58,82 +48,27 @@ const CompareForm = ({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await AuthToken.get(`/wiki/${wikiId}`, {
+        const response = await AuthToken.get(`/solution/${wasteId}`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
         });
         const data = response.data;
-        const originCreatedDate = new Date(
-          data.origin.createdDate
-        ).toLocaleString("ko-KR", {
-          year: "numeric",
-          month: "long",
-          day: "2-digit",
-          hour: "2-digit",
-          minute: "2-digit",
-        });
-        const originModifiedDate = new Date(
-          data.origin.modifiedDate
-        ).toLocaleString("ko-KR", {
-          year: "numeric",
-          month: "long",
-          day: "2-digit",
-          hour: "2-digit",
-          minute: "2-digit",
-        });
-        const originData = response.data.content.map((data) => ({
+        setOriginList({
           writerName: data.origin.writerName,
-          wasteName: data.origin.wasteName,
+          name: data.origin.name,
           categories: data.origin.categories,
           tags: data.origin.tags,
           solution: data.origin.solution,
           wikiState: data.origin.wikiState,
-          createdDate: originCreatedDate,
-          modifiedDate: originModifiedDate,
-        }));
-        setOriginList(originData);
-        const modifiedCreatedDate = new Date(
-          data.origin.createdDate
-        ).toLocaleString("ko-KR", {
-          year: "numeric",
-          month: "long",
-          day: "2-digit",
-          hour: "2-digit",
-          minute: "2-digit",
         });
-        const modifiedModifiedDate = new Date(
-          data.origin.modifiedDate
-        ).toLocaleString("ko-KR", {
-          year: "numeric",
-          month: "long",
-          day: "2-digit",
-          hour: "2-digit",
-          minute: "2-digit",
-        });
-        const modifiedData = response.data.content.map((data) => ({
-          writerName: data.modified.writerName,
-          wasteName: data.modified.wasteName,
-          categories: data.modified.categories,
-          tags: data.modified.tags,
-          solution: data.modified.solution,
-          wikiState: data.modified.wikiState,
-          createdDate: modifiedCreatedDate,
-          modifiedDate: modifiedModifiedDate,
-        }));
-        setModifiedList(modifiedData);
       } catch (error) {
-        if (error.response.data.cause === "EMPTY_WIKI") {
-          alert("해당 위키가 존재하지 않습니다.");
-        } else console.error(error);
+        console.error(error);
       }
     };
     fetchData();
-  }, [accessToken, navigate]);
+  }, [accessToken, wasteId]);
 
-  /*const toggleIcon = () => {
-    setIsExpanded(!isExpanded);
-  };*/
   useEffect(() => {
     setModifiedList((prev) => ({
       ...prev,
@@ -185,60 +120,22 @@ const CompareForm = ({
       alert("배출 방법을 입력해야 합니다.");
       return;
     }
-
-    setShowDiff(true);
-    const formData = new FormData();
-    formData.append("categories", modifiedList.categories);
-    formData.append("solution", modifiedList.solution);
-    formData.append("tags", modifiedList.tags);
-    try {
-      await AuthToken.post(`/solution/${wasteId}/wiki`, formData, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-    } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        if (
-          data.cause === "EXIST_WIKI" ||
-          data.cause === "ConstraintViolationException"
-        ) {
-          alert(data.message);
-        } else {
-          console.error(data);
-        }
-      } else {
+    if (window.confirm("해당 항목에 대한 수정을 요청하시겠습니까?")) {
+      setShowDiff(true);
+      const formData = new FormData();
+      formData.append("categories", modifiedList.categories.join(","));
+      formData.append("solution", modifiedList.solution);
+      formData.append("tags", modifiedList.tags.join(","));
+      try {
+        await AuthToken.post(`/solution/${wasteId}/wiki`, formData, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        alert("제출되었습니다. 감사합니다!");
+        navigate(`/`);
+      } catch (error) {
         console.error(error);
-      }
-    }
-  };
-  const handleAdminAccept = async (e) => {
-    try {
-      await AuthToken.put(`/wiki/${wikiId}/accepted`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      alert("해당 위키의 요청이 승인되었습니다.");
-    } catch (error) {
-      alert(error);
-    }
-  };
-
-  const handleAdminRejected = async (e) => {
-    try {
-      await AuthToken.put(`/wiki/${wikiId}/rejected`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      alert("해당 위키의 요청이 거부되었습니다.");
-    } catch (error) {
-      if (error.response.data.cause === "EMPTY_WIKI") {
-        alert(error.response.data.message);
-      } else {
-        alert(error);
       }
     }
   };
@@ -249,13 +146,17 @@ const CompareForm = ({
         <div className="origin-title">원본</div>
         <div className="origin-container">
           <p style={{ fontSize: "45px", textAlign: "center" }}>
-            {originList.wasteName}
+            {originList.name}
           </p>
-          <img src={imageUrl} style={{ width: "30%", height: "30%" }} />
+          <img
+            src={imageUrl}
+            style={{ width: "30%", height: "30%" }}
+            alt="solution"
+          />
           <h3 className="search-font">재질</h3>
-          <p>{originList.categories}</p>
+          <p>{originList.categories.join(", ")}</p>
           <h3 className="search-font">태그</h3>
-          <p>{originList.tags}</p>
+          <p>{originList.tags.join(", ")}</p>
           <h3 className="search-font">배출요령</h3>
           <p>{originList.solution}</p>
         </div>
@@ -270,7 +171,7 @@ const CompareForm = ({
               marginBottom: "-20px",
             }}
           >
-            {originList.wasteName}
+            {originList.name}
           </p>
           <div className="button-container" style={{ marginRight: "330px" }}>
             <h3 className="search-font" style={{ marginBottom: "5px" }}>
@@ -302,7 +203,8 @@ const CompareForm = ({
                   <input
                     type="checkbox"
                     name="category"
-                    value={modifiedList.categories}
+                    value={category}
+                    checked={modifiedList.categories.includes(category)}
                     onChange={handleCategoryChange}
                   />{" "}
                   {category}
@@ -314,7 +216,7 @@ const CompareForm = ({
             <h3 className="search-font">태그</h3>
             {originList && (
               <div>
-                <p>{originList.tags}</p>
+                <p>{originList.tags.join(", ")}</p>
                 <hr />
               </div>
             )}
@@ -325,7 +227,7 @@ const CompareForm = ({
                 name="tags"
                 placeholder="태그를 입력하세요 (쉼표로 구분)"
                 onChange={handleTagsChange}
-                value={modifiedList.tags}
+                value={modifiedList.tags.join(", ")}
               />
             </div>
           </div>
@@ -348,6 +250,7 @@ const CompareForm = ({
                 value={modifiedList.solution}
                 onChange={handleTextareaChange}
                 maxLength={maxChars}
+                style={{ width: "480px", marginLeft: "8px" }}
               />
               <div className="char-count">
                 {charCount}/{maxChars} 글자
@@ -355,34 +258,15 @@ const CompareForm = ({
             </div>
           </div>
         </form>
-        {type === "edit" && (
-          <div className="button-container">
-            <button
-              type="submit"
-              onClick={handleSubmit}
-              className="submitbutton"
-            >
-              생성 요청하기
-            </button>
-            <button className="cancelbutton" onClick={navigateToHome}>
-              취소
-            </button>
-          </div>
-        )}
-        {type === "admin" && (
-          <div className="button-container">
-            <button
-              type="submit"
-              onClick={handleAdminAccept}
-              className="submitbutton"
-            >
-              수정 승인
-            </button>
-            <button className="cancelbutton" onClick={handleAdminRejected}>
-              수정 거절
-            </button>
-          </div>
-        )}
+
+        <div className="button-container">
+          <button type="submit" onClick={handleSubmit} className="submitbutton">
+            수정 요청하기
+          </button>
+          <button className="cancelbutton" onClick={navigateToHome}>
+            취소
+          </button>
+        </div>
       </div>
     </div>
   );
