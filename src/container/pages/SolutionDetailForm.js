@@ -50,8 +50,8 @@ function SolutionDetailForm() {
     }
   }, [wasteId]);
 
-  const navigateToList = () => {
-    navigate("/solution/total/list");
+  const navigateToBack = () => {
+    navigate(-1);
   };
 
   const formatRules = (rules) => {
@@ -113,7 +113,7 @@ function SolutionDetailForm() {
         <div className="button-container">
           <button
             className="white-button"
-            onClick={navigateToList}
+            onClick={navigateToBack}
             style={{ marginLeft: "5px" }}
           >
             돌아가기
