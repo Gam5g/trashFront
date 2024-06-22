@@ -54,8 +54,12 @@ const MapComponent = ({
             `${endpoint}?state=대구&city=${region || userCity}&page=${page - 1}&size=10`
           );
         }
-        setLocationData(response.data.content);
-        updateTotalItems(response.data.totalElements);
+        if (response.data.numberOfElements === 0) {
+          setLocationData([{ address: "지정된 위치에 수거함이 없습니다" }]);
+        } else {
+          setLocationData(response.data.content);
+          updateTotalItems(response.data.totalElements);
+        }
       } catch (error) {
         console.error("Failed to fetch location data", error);
       }
@@ -80,6 +84,9 @@ const MapComponent = ({
   useEffect(() => {
     if (map && locationData.length > 0) {
       locationData.forEach((position) => {
+        if (position.address === "지정된 위치에 수거함이 없습니다") {
+          return;
+        }
         const markerPosition = new kakao.maps.LatLng(
           position.latitude,
           position.longitude
@@ -188,7 +195,15 @@ const MapComponent = ({
               }`}
               style={{
                 border: "0.1px solid #c8c8c8",
-                cursor: "pointer",
+                cursor:
+                  position.address === "지정된 위치에 수거함이 없습니다"
+                    ? "default"
+                    : "pointer",
+                padding: "10px",
+                pointerEvents:
+                  position.address === "지정된 위치에 수거함이 없습니다"
+                    ? "none"
+                    : "auto",
               }}
               onClick={() => handlePositionClick(position)}
             >
