@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
@@ -19,7 +19,15 @@ const MapForm = ({
   const [activePage, setActivePage] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
 
+  useEffect(() => {
+    if (!isLoggedIn) {
+      alert("로그인한 후에 접속하세요.");
+      navigate(-1);
+    }
+  }, [isLoggedIn]);
+
   const handlePageChange = async (pageNumber) => {
+    console.log(pageNumber);
     setActivePage(pageNumber);
   };
 

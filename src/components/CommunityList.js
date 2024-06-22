@@ -12,6 +12,7 @@ const CommunityList = ({ posttype }) => {
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const [selectedPost, setSelectedPost] = useState(null);
   const [searchResults, setSearchResults] = useState([]);
+  const [totalItemsCount, setTotalItemsCount] = useState(0);
   const [boardList, setBoardList] = useState([
     {
       id: "",
@@ -48,14 +49,11 @@ const CommunityList = ({ posttype }) => {
       try {
         const accessToken = localStorage.getItem("accessToken");
         let url = "";
-        let storageKey = "";
 
         if (posttype === "bunri") {
           url = `/questionBoard/read/${option}/paging?page=${page}`;
-          storageKey = "bunri-totalElements";
         } else if (posttype === "nanum") {
           url = `/recycleBoard/read/${option}/paging?page=${page}`;
-          storageKey = "nanum-totalElements";
         } else if (posttype === "mylist") {
           url = ``;
         }
@@ -76,6 +74,7 @@ const CommunityList = ({ posttype }) => {
           view: data.view,
         }));
         setBoardList(inputData);
+        setTotalItemsCount(response.data.totalElements);
       } catch (error) {
         console.error(error);
       }
@@ -245,11 +244,7 @@ const CommunityList = ({ posttype }) => {
         <div>
           <Paging
             totalItemsCount={
-              searchResults.length > 0
-                ? searchResults.length
-                : posttype === "bunri"
-                  ? parseInt(localStorage.getItem("bunri-totalElements"), 10)
-                  : parseInt(localStorage.getItem("nanum-totalElements"), 10)
+              searchResults.length > 0 ? searchResults.length : totalItemsCount
             }
             onPageChange={setPage}
             activePage={page}

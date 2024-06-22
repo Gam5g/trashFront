@@ -56,6 +56,7 @@ const MapComponent = ({
         }
         if (response.data.numberOfElements === 0) {
           setLocationData([{ address: "지정된 위치에 수거함이 없습니다" }]);
+          updateTotalItems(0);
         } else {
           setLocationData(response.data.content);
           updateTotalItems(response.data.totalElements);
