@@ -166,7 +166,7 @@ function App() {
             <Route path="/battery" element={<BatteryForm />} />
             <Route path="/medicine" element={<MedicineForm />} />
             <Route path="/daegu-bunri-policy" element={<DaeguPolicy />} />
-            <Route path="/*" element={<NotFound />} />
+            <Route path="/search/not-found" element={<NotFound />} />
           </Routes>
         </Router>
         <SwaggerDocs />

@@ -137,7 +137,15 @@ function MainForm() {
       setSearchResults([response.data]);
       navigateToSearch(searchTerm, response.data);
     } catch (error) {
-      console.log(error);
+      let errorResponse;
+      try {
+        errorResponse = JSON.parse(error.request.response);
+      } catch (e) {
+        console.error("Error parsing response:", e);
+      }
+      if (errorResponse && errorResponse.cause === "WASTE_NOT_FOUND") {
+        navigate(`/search/not-found`);
+      }
     }
     reset();
   };
