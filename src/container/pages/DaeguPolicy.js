@@ -187,7 +187,11 @@ const DaeguPolicy = () => {
         {activeInfo && (
           <div className="region-info">
             <p>{activeInfo.text}</p>
-            <img src={activeInfo.img} alt={`${activeRegion} 이미지`} />
+            <img
+              src={activeInfo.img}
+              style={{ width: "700px" }}
+              alt={`${activeRegion} 이미지`}
+            />
           </div>
         )}
       </div>
