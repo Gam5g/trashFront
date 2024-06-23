@@ -127,22 +127,26 @@ const CommunityWrite = ({ posttype }) => {
       ({ title, content, imageUrl } = bunriInfo);
     } else if (posttype === "nanum") {
       ({ title, content, imageUrl, shareTarget, location } = nanumInfo);
+      if (!title.trim()) {
+        setErrors((prev) => ({ ...prev, title: "제목은 필수 항목입니다." }));
+        return;
+      }
+      if (!shareTarget.trim()) {
+        setErrors((prev) => ({
+          ...prev,
+          shareTarget: "나눔할 항목을 작성하세요.",
+        }));
+        return;
+      }
+      if (!location.trim()) {
+        setErrors((prev) => ({
+          ...prev,
+          location: "나눔할 위치를 작성하세요.",
+        }));
+        return;
+      }
     }
-    if (!title.trim()) {
-      setErrors((prev) => ({ ...prev, title: "제목은 필수 항목입니다." }));
-      return;
-    }
-    if (!shareTarget.trim()) {
-      setErrors((prev) => ({
-        ...prev,
-        shareTarget: "나눔할 항목을 작성하세요.",
-      }));
-      return;
-    }
-    if (!location.trim()) {
-      setErrors((prev) => ({ ...prev, location: "나눔할 위치를 작성하세요." }));
-      return;
-    }
+
     if (content.trim().length < 10) {
       setErrors((prev) => ({
         ...prev,
