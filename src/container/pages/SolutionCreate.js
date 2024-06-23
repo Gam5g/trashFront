@@ -1,6 +1,8 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
+import { useRecoilValue } from "recoil";
+import { isLoggedInState } from "../../state/authState";
 import AuthToken from "./AuthToken";
 import "./Solution.css";
 
@@ -10,6 +12,7 @@ const SolutionCreate = () => {
   const query = queryParams.get("query");
 
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
+  const isLoggedIn = useRecoilValue(isLoggedInState);
   const [isActive, setActive] = useState(false);
   const [image, setImage] = useState(null);
   const [lastFile, setLastFile] = useState(null);
@@ -26,6 +29,13 @@ const SolutionCreate = () => {
   const inputRef = useRef(null);
   const cameraInputRef = useRef(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      alert("로그인한 후에 접속하세요.");
+      navigate(-1);
+    }
+  }, [isLoggedIn]);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
