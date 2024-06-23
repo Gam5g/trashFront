@@ -50,7 +50,7 @@ const SolutionList = ({ type, mode }) => {
         navigate(`/${mode}/request/info/${wikiId}`, { state: { wikiId } });
       }
     } else {
-      navigate(`/solution/detail/${wasteId}`, { state: { wasteId } });
+      navigate(`/solution/detail/${wikiId}`, { state: { wikiId } });
     }
   };
 
