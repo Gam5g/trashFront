@@ -340,13 +340,12 @@ header {
 
 .upload-button {
   background-color: white;
-  color: #4CAF50;
-  border: 2px dashed #4CAF50;
+  color: #acacac;
+  border: 3px dashed #acacac;
   border-radius: 10px;
   width : 350px;
-  height: 240px;
+  height: 120px;
   text-align : center;
-  line-height: 240px;
   margin : 10px;
   cursor: pointer;
   padding: 15px 30px;
@@ -356,9 +355,10 @@ header {
 }
 
 .upload-button:hover, .upload-button.active {
-  background-color: #e8f5e9;
-  color:#388E3c;
-  border-color:  #388e3c;
+  background-color: white;
+  color : #388e3c;
+  border-color: #388e3c;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .uploaded-image {

@@ -260,6 +260,7 @@ function MainForm() {
               onDragOver={(e) => e.preventDefault()}
               onDrop={handleFileChange}
             >
+              촬영이나 사진 업로드하기 <br />
               jpg 또는 png 파일만 업로드 가능
             </button>
           )}
