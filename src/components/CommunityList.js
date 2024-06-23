@@ -199,7 +199,7 @@ const CommunityList = ({ posttype }) => {
             value={option}
           >
             <option value="1">페이지 번호순 정렬</option>
-            <option value="2">추천순 정렬</option>
+            {posttype === "bunri" && <option value="2">추천순 정렬</option>}
             <option value="3">조회순 정렬</option>
           </select>
           {isMobile ? <div style={{ marginBottom: "15px" }} /> : <></>}
