@@ -34,6 +34,7 @@ const SolutionDetail = ({ type }) => {
           tags: data.tags || [],
           solution: data.solution || "",
           state: data.state || "",
+          createdDate: data.createdDate || "",
         });
       } catch (error) {
         console.error(error);
@@ -144,6 +145,21 @@ const SolutionDetail = ({ type }) => {
   return (
     <div>
       <div className="NotDrag">
+        <div className="solution-container">
+          <div className="solution-info">
+            <span className="nickname">{solutionList.accountNickName}</span>
+          </div>
+          <div className="solution-status">
+            {solutionList.state === "ACCEPTED"
+              ? "✔️"
+              : solutionList.state === "PENDING"
+                ? "대기"
+                : "❌"}
+            <div>
+              <span className="date">{solutionList.createdDate}</span>
+            </div>
+          </div>
+        </div>
         <div className="info-title">새로운 정보 생성</div>{" "}
         <form onSubmit={handleSubmit} className="info-container">
           <div className="button-container">
