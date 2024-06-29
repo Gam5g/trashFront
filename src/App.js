@@ -45,6 +45,7 @@ import DaeguPolicy from "./container/pages/DaeguPolicy";
 import RequestModifiedList from "./container/pages/UserUpdateRequestList";
 import RequestCreateList from "./container/pages/UserCreateRequestList";
 import RequestDetail from "./container/pages/RequestDetail";
+import WikiTotalList from "./container/pages/WikiTotalList";
 import WikiDetailForm from "./container/pages/WikiDetailForm";
 import { RecoilRoot } from "recoil";
 import { isLoggedInState } from "./state/authState";
@@ -152,6 +153,7 @@ function App() {
               path="/create/request/info/:wasteId"
               element={<UserCreateRequestInfo />}
             />
+            <Route path="/wiki/total/list" element={<WikiTotalList />} />
             <Route path="/wiki/detail/:wikiId" element={<WikiDetailForm />} />
             <Route
               path="/update/request/list"

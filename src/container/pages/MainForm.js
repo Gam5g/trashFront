@@ -272,7 +272,13 @@ function MainForm() {
             className="white-button"
             onClick={() => navigate("/solution/total/list")}
           >
-            전체 배출방법
+            전체 솔루션 목록
+          </button>
+          <button
+            className="white-button"
+            onClick={() => navigate("/wiki/total/list")}
+          >
+            전체 위키 목록
           </button>
           <button
             className="white-button"
