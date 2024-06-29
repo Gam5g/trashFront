@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Medicine from "./MedicineMap";
 import AuthToken from "./AuthToken";
+import Modal from "./Modal";
 import "../../style.css";
 import "./Solution.css";
 
 function SolutionDetailForm() {
   const navigate = useNavigate();
   const { wasteId } = useParams();
-  const [activePage, setActivePage] = useState(1);
-  const [totalItems, setTotalItems] = useState(0);
+  const [modalOpen, setModalOpen] = useState(false);
   const [solutionResult, setSolutionResult] = useState({
     accountNickName: "",
     name: "",
@@ -32,8 +32,8 @@ function SolutionDetailForm() {
         const resultData = response.data;
         setSolutionResult({
           name: resultData.name,
+          accountId: resultData.accountId,
           accountNickName: resultData.accountNickName,
-          solutionName: resultData.solutionName,
           imageUrl: resultData.imageUrl,
           categories: resultData.categories,
           tags: resultData.tags,
@@ -95,9 +95,10 @@ function SolutionDetailForm() {
             <p className="solution-detail-font">배출 요령</p>
             <p>{formatRules(solutionResult.solution)}</p>
             <p className="solution-detail-font">솔루션 작성자</p>
-            {solutionResult.accountNickName !== "midas"
-              ? solutionResult.accountNickName
-              : "비공개"}
+            <p style={{ cursor: "pointer" }} onClick={() => setModalOpen(true)}>
+              {" "}
+              {solutionResult.accountNickName}{" "}
+            </p>
           </div>
           <p className="solution-detail-font">솔루션 현재 상태</p>
           <p
@@ -119,7 +120,7 @@ function SolutionDetailForm() {
             돌아가기
           </button>
         </div>
-        {solutionResult.solutionName === "폐의약품" && (
+        {solutionResult.name === "폐의약품" && (
           <div>
             <div>
               <h1>근처에 폐의약품이나 폐건전지 수거함을 찾아보세요</h1>
@@ -130,6 +131,11 @@ function SolutionDetailForm() {
           </div>
         )}
       </div>
+      <Modal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        accountId={solutionResult.accountId}
+      />
     </div>
   );
 }

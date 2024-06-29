@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { isLoggedInState } from "../../state/authState";
 import AuthToken from "./AuthToken";
+import Modal from "./Modal";
 import "./Search.css";
 
-const WikiDetailForm = ({ type }) => {
+const WikiDetailForm = ({ type, state }) => {
   const isAdmin = localStorage.getItem("accountName") === "admin";
   const location = useLocation();
   const navigate = useNavigate();
@@ -25,6 +26,7 @@ const WikiDetailForm = ({ type }) => {
   });
   const [showDiff, setShowDiff] = useState(false);
   const accessToken = localStorage.getItem("accessToken");
+  const [modalOpen, setModalOpen] = useState(false);
   const { wikiId } = useParams();
 
   useEffect(() => {
@@ -240,9 +242,20 @@ const WikiDetailForm = ({ type }) => {
       <h1 style={{ marginBottom: "-50px" }}>
         {modifiedList.wasteName} 항목의 수정내용 ＞
       </h1>
-      <div className="button-container">
+      <div
+        className="button-container"
+        style={
+          modifiedList.wikiState !== "PENDING" ? { marginTop: "100px" } : {}
+        }
+      >
         {originList && originList.wasteName && (
-          <div>
+          <div
+            style={
+              modifiedList.wikiState === "PENDING" && state !== "update"
+                ? { marginTop: "100px" }
+                : {}
+            }
+          >
             <div className="origin-title">원본</div>
             <div className="origin-container" style={{ height: "600px" }}>
               <>
@@ -259,7 +272,11 @@ const WikiDetailForm = ({ type }) => {
             </div>
           </div>
         )}
-        <div style={{ marginTop: "100px" }}>
+        <div
+          style={
+            modifiedList.wikiState === "PENDING" ? { marginTop: "100px" } : {}
+          }
+        >
           <div className="modified-title">{originList ? "기본" : "수정"}</div>
           <form
             onSubmit={handleSubmit}
@@ -273,7 +290,12 @@ const WikiDetailForm = ({ type }) => {
               {modifiedList.accountNickname !== "midas" && (
                 <>
                   <h3 className="search-font">작성자</h3>
-                  <p>{modifiedList.accountNickname}</p>{" "}
+                  <p
+                    style={{ cursor: "pointer" }}
+                    onClick={() => setModalOpen(true)}
+                  >
+                    {modifiedList.accountNickname}
+                  </p>{" "}
                 </>
               )}
               <h3 className="search-font">재질</h3>
@@ -351,6 +373,11 @@ const WikiDetailForm = ({ type }) => {
             </button>
           )}
       </div>
+      <Modal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        accountId={modifiedList.accountId}
+      />
     </div>
   );
 };
