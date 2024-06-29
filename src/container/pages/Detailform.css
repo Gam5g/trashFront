@@ -1,0 +1,50 @@
+.solution-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin: 10px 0;
+    font-family: Arial, sans-serif;
+    background-color: #fff;
+  }
+  
+  .solution-status {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .solution-status span {
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .solution-status .accepted {
+    color: green;
+  }
+  
+  .solution-status .pending {
+    color: orange;
+  }
+  
+  .solution-status .rejected {
+    color: red;
+  }
+  
+  .solution-info {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .solution-info .nickname {
+    font-weight: bold;
+    font-size: 16px;
+  }
+  
+  .solution-info .date {
+    font-size: 12px;
+    color: #aaa;
+  }
+  

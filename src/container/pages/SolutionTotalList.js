@@ -3,7 +3,7 @@ import SolutionList from "../../components/SolutionList";
 const SolutionTotalList = () => {
   return (
     <div>
-      <SolutionList type="total" />
+      <SolutionList type="totalSolution" />
     </div>
   );
 };

@@ -13,16 +13,8 @@ const CommunityList = ({ posttype }) => {
   const [selectedPost, setSelectedPost] = useState(null);
   const [searchResults, setSearchResults] = useState([]);
   const [totalItemsCount, setTotalItemsCount] = useState(0);
-  const [boardList, setBoardList] = useState([
-    {
-      id: "",
-      title: "",
-      recommend: "",
-      writer: "",
-      adopted: "",
-      view: "",
-    },
-  ]);
+  const accessToken = localStorage.getItem("accessToken");
+  const [boardList, setBoardList] = useState([]);
   const [option, setOption] = useState(1);
   const [isFocused, setIsFocused] = useState(false);
   const [query, setQuery] = useState("");
@@ -47,7 +39,6 @@ const CommunityList = ({ posttype }) => {
   useEffect(() => {
     const fetchBoardData = async () => {
       try {
-        const accessToken = localStorage.getItem("accessToken");
         let url = "";
 
         if (posttype === "bunri") {
@@ -83,21 +74,35 @@ const CommunityList = ({ posttype }) => {
     fetchBoardData();
   }, [posttype, page, option]);
 
-  const handleSearch = () => {
-    const filtered = boardList.filter((post) => {
-      if (searchBy === "title") {
-        return post.title.includes(query);
-      } else if (searchBy === "writer") {
-        return post.writer.includes(query);
+  const handleSearch = async () => {
+    const keyword = encodeURIComponent(query);
+    try {
+      let url = ``;
+      if (posttype === "bunri") {
+        url = `/questionBoard/search/${option}/paging?page=${page - 1}`;
+      } else {
+        url = `/recycleBoard/search/${option}/paging?page=${page - 1}`;
       }
-      return false;
-    });
-
-    if (filtered.length === 0) {
-      window.confirm("검색 결과가 없습니다.");
-      setSearchResults([]);
-    } else {
-      setSearchResults(filtered);
+      const response = await AuthToken.get(url, {
+        query: query,
+      }); //
+      const filtered = response.data.content.map((data) => ({
+        id: data.id,
+        title: data.title,
+        recommend: data.recommend,
+        writer: data.writer,
+        adopted: data.adopted,
+        collection: data.collection,
+        view: data.view,
+      }));
+      if (filtered.length === 0) {
+        window.confirm("검색 결과가 없습니다.");
+        setSearchResults([]);
+      } else {
+        setSearchResults(filtered);
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 

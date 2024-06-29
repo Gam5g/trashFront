@@ -49,8 +49,12 @@ const SolutionList = ({ type, mode }) => {
       } else {
         navigate(`/${mode}/request/info/${wikiId}`, { state: { wikiId } });
       }
+    } else if (type === "totalSolution") {
+      navigate(`/solution/detail/${wasteId}`, { state: { wasteId } });
+    } else if (type === "totalWiki") {
+      navigate(`/wiki/detail/${wikiId}`, { state: { wikiId } });
     } else {
-      navigate(`/solution/detail/${wikiId}`, { state: { wikiId } });
+      alert("없음");
     }
   };
 
@@ -65,9 +69,9 @@ const SolutionList = ({ type, mode }) => {
           url = `/account/${accountId}/contributions/modification?state=pending&page=${pageNumber - 1}&size=10`;
         }
       } else {
-        if (mode === "create") {
+        if (type === "totalSolution" || mode === "create") {
           url = `/solution?page=${pageNumber - 1}&size=10`;
-        } else {
+        } else if (type === "totalWiki" || mode === "update") {
           url = `/wiki?page=${pageNumber - 1}&size=10`;
         }
       }
@@ -109,7 +113,8 @@ const SolutionList = ({ type, mode }) => {
       {type === "admin" && <h3>관리자 로그인</h3>}
       {type === "user" && <h1>나의 요청 리스트</h1>}
       {type === "admin" && <h1>요청 리스트</h1>}
-      {type === "total" && <h1>현재 솔루션 반영 상태</h1>}
+      {type === "totalSolution" && <h1>현재 솔루션 반영 상태</h1>}
+      {type === "totalWiki" && <h1>현재 위키 반영 상태</h1>}
       <div className="tabs">
         {type === "user" && (
           <div>
@@ -157,36 +162,39 @@ const SolutionList = ({ type, mode }) => {
               </div>
               <div className="lists-item-footer">
                 <span className="status">
-                  {mode === "create" && (
-                    <>
-                      생성 여부:{" "}
-                      {request.state === "ACCEPTED"
-                        ? "✔️"
-                        : request.state === "PENDING"
-                          ? "대기"
-                          : "❌"}
-                    </>
-                  )}
-                  {mode === "update" && type === "total" && (
-                    <>
-                      반영 여부:{" "}
-                      {request.state === "ACCEPTED"
-                        ? "✔️"
-                        : request.state === "PENDING"
-                          ? "대기"
-                          : "❌"}
-                    </>
-                  )}
-                  {type === "admin" && mode === "update" && (
-                    <>
-                      반영 여부:{" "}
-                      {request.wikiState === "ACCEPTED"
-                        ? "✔️"
-                        : request.wikiState === "PENDING"
-                          ? "대기"
-                          : "❌"}
-                    </>
-                  )}
+                  {mode === "create" ||
+                    (type === "totalWiki" && (
+                      <>
+                        생성 여부:{" "}
+                        {request.state === "ACCEPTED"
+                          ? "✔️"
+                          : request.state === "PENDING"
+                            ? "대기"
+                            : "❌"}
+                      </>
+                    ))}
+                  {mode === "update" ||
+                    (type === "totalSolution" && (
+                      <>
+                        반영 여부:{" "}
+                        {request.state === "ACCEPTED"
+                          ? "✔️"
+                          : request.state === "PENDING"
+                            ? "대기"
+                            : "❌"}
+                      </>
+                    ))}
+                  {type === "admin" ||
+                    (mode === "update" && (
+                      <>
+                        반영 여부:{" "}
+                        {request.wikiState === "ACCEPTED"
+                          ? "✔️"
+                          : request.wikiState === "PENDING"
+                            ? "대기"
+                            : "❌"}
+                      </>
+                    ))}
                 </span>
 
                 <span className="date">

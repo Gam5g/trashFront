@@ -4,6 +4,7 @@ import { useRecoilValue } from "recoil";
 import { isLoggedInState } from "../../state/authState";
 import AuthToken from "./AuthToken";
 import Modal from "./Modal";
+import "./Detailform.css";
 import "./Search.css";
 
 const WikiDetailForm = ({ type, state }) => {
@@ -231,17 +232,38 @@ const WikiDetailForm = ({ type, state }) => {
   };
 
   return (
-    <div style={{ userSelect: "none", marginTop: "200px" }}>
+    <div style={{ userSelect: "none" }}>
       {type === "admin" && (
-        <>
+        <div style={{ marginTop: "300px" }}>
           <p>관리자 로그인</p>
           <h1>수정 요청 받은 정보</h1>
-        </>
+        </div>
       )}
-      {type === "user" && <h1>내가 수정 요청한 정보 ＞</h1>}
-      <h1 style={{ marginBottom: "-50px" }}>
-        {modifiedList.wasteName} 항목의 수정내용 ＞
-      </h1>
+
+      {type === "user" ? (
+        <>
+          <h1>내가 수정 요청한 정보 ＞</h1>
+          <h1>{modifiedList.wasteName} 항목의 수정내용 ＞</h1>
+        </>
+      ) : (
+        <h1>{modifiedList.wasteName} 항목의 수정내용 ＞</h1>
+      )}
+
+      <div className="solution-container">
+        <div className="solution-info">
+          <span className="nickname">{modifiedList.accountNickname}</span>
+        </div>
+        <div className="solution-status">
+          {modifiedList.wikiState === "ACCEPTED"
+            ? "✔️"
+            : modifiedList.wikiState === "PENDING"
+              ? "대기"
+              : "❌"}
+          <div>
+            <span className="date">{modifiedList.modifiedDate}</span>
+          </div>
+        </div>
+      </div>
       <div
         className="button-container"
         style={
