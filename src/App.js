@@ -5,8 +5,6 @@ import RegisterForm from "./container/pages/RegisterForm";
 import MainForm from "./container/pages/MainForm";
 import LoginForm from "./container/pages/LoginForm";
 import WithdrawalForm from "./container/pages/WithdrawalForm";
-import FindID from "./container/pages/FindID";
-import FindPassword from "./container/pages/FindPassword";
 import Station from "./container/pages/Station";
 import SoultionCreate from "./container/pages/SolutionCreate";
 import CommunityNanumUpdate from "./container/pages/Community/CommunityNanumUpdate";
@@ -84,8 +82,6 @@ function App() {
             <Route path="/sign-up" element={<RegisterForm />} />
             <Route path="/sign-in" element={<LoginForm />} />
             <Route path="/withdrawal" element={<WithdrawalForm />} />
-            <Route path="/find-id" element={<FindID />} />
-            <Route path="/find-password" element={<FindPassword />} />
             <Route path="/station" element={<Station />} />
             <Route path="/search/result" element={<SearchImageResultForm />} />
             <Route path="/search" element={<SearchDetailForm />} />
