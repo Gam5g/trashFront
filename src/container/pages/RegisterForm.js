@@ -254,7 +254,7 @@ const RegisterForm = () => {
             style={{ marginTop: "5px", width: "360px" }}
             onClick={NavigateToLogin}
           >
-            이메일 인증
+            이메일 중복확인
           </button>
           <p style={{ color: "red" }}>{errors.email?.message}</p>
           <div className="inputWrap">

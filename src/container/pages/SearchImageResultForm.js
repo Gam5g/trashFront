@@ -25,10 +25,6 @@ const SearchImageResultForm = () => {
     }
   }, [result]);
 
-  if (!result || result.length === 0) {
-    return <div>No result data available</div>;
-  }
-
   return (
     <div className="NotDrag">
       {result.length > 0 && (
@@ -48,19 +44,37 @@ const SearchImageResultForm = () => {
               style={{ width: "500px", height: "auto" }}
             />
           </div>
-          <br />
-          <div className="button-container">
-            <h1>결과가 마음에 안 든다면?</h1>
-            <button
-              className="white-button"
-              style={{ marginLeft: "25px", width: "300px" }}
-              onClick={() => navigate(`/community-bunri`)}
-            >
-              분리수거 게시판에 글 쓰러 가기
-            </button>
-          </div>
         </>
       )}
+      <br />
+      <div>
+        <img
+          src={"../../../images/sad.jpg"}
+          style={{ width: "500px" }}
+          alt="없음"
+        />
+        <div />
+        <div
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            display: "flex",
+          }}
+        >
+          {result.length > 0 ? (
+            <h1>결과가 마음에 안 든다면?</h1>
+          ) : (
+            <h1>죄송합니다. 해당 항목에 나온 결과가 없습니다.</h1>
+          )}
+        </div>
+        <button
+          className="white-button"
+          style={{ marginLeft: "25px", width: "500px", marginBottom: "20px" }}
+          onClick={() => navigate(`/community-bunri/write`)}
+        >
+          분리수거 게시판에 글 쓰러 가기
+        </button>
+      </div>
     </div>
   );
 };

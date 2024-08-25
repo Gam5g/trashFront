@@ -232,9 +232,9 @@ const WikiDetailForm = ({ type, state }) => {
   };
 
   return (
-    <div style={{ userSelect: "none" }}>
+    <div style={{ userSelect: "none", marginTop: "250px" }}>
       {type === "admin" && (
-        <div style={{ marginTop: "300px" }}>
+        <div style={{ marginTop: "50px" }}>
           <p>관리자 로그인</p>
           <h1>수정 요청 받은 정보</h1>
         </div>

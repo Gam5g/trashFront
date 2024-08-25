@@ -174,8 +174,8 @@ const SolutionDetail = ({ type }) => {
               />
             </div>
           </div>
-          <div className="button-container" style={{ marginRight: "330px" }}>
-            <h3 className="search-font" style={{ marginBottom: "5px" }}>
+          <div className="button-container" style={{ marginRight: "380px" }}>
+            <h3 className="solution-font" style={{ marginBottom: "5px" }}>
               재질
             </h3>
           </div>
@@ -197,6 +197,7 @@ const SolutionDetail = ({ type }) => {
                 "비닐류",
                 "스티로폼",
                 "폐유",
+                "폐가전",
                 "폐건전지",
                 "재활용 어려움",
               ].map((category) => (

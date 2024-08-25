@@ -29,9 +29,9 @@ function NotFound() {
           alignItems: "center",
           justifyContent: "center",
         }}
-        onClick={() => navigate(`/`)}
+        onClick={() => navigate(`/community-bunri/write`)}
       >
-        돌아가기
+        분리수거 게시판에 글 쓰러 가기
       </button>
     </div>
   );
