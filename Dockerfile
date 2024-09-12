@@ -1,12 +1,10 @@
-FROM node:16.20.2-alpine
+FROM node:16.20.2
 
 WORKDIR /src
 
-COPY package.json .
-
-RUN npm install -g npm@8.19.4 && npm install
-
 COPY . .
+
+RUN npm install
 
 EXPOSE 3000
 
