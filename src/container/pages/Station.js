@@ -4,7 +4,7 @@ import axios from "axios";
 function GetData() {
   const [data, setData] = useState({});
   useEffect(() => {
-    axios.get("http://13.125.237.57/api/user").then((response) => {
+    axios.get("http://54.180.237.99/api/user").then((response) => {
       setData(response.data);
     });
   }, []);
