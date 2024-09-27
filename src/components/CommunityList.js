@@ -15,10 +15,10 @@ const CommunityList = ({ posttype }) => {
   const [totalItemsCount, setTotalItemsCount] = useState(0);
   const accessToken = localStorage.getItem("accessToken");
   const [boardList, setBoardList] = useState([]);
-  const [option, setOption] = useState(1);
+  const [option1, setOption1] = useState(1); // 정렬
+  const [option2, setOption2] = useState(1); //제목 또는 글쓴이 검색
   const [isFocused, setIsFocused] = useState(false);
   const [query, setQuery] = useState("");
-  const [searchBy, setSearchBy] = useState("title");
   const [page, setPage] = useState(1);
   const navigate = useNavigate();
   const isLoggedIn = useRecoilValue(isLoggedInState);
@@ -32,19 +32,15 @@ const CommunityList = ({ posttype }) => {
     navigate(`/community-${posttype}/${post.id}`);
   };
 
-  const handleSearchChange = (e) => {
-    setSearchBy(e.target.value);
-  };
-
   useEffect(() => {
     const fetchBoardData = async () => {
       try {
         let url = "";
 
         if (posttype === "bunri") {
-          url = `/questionBoard/read/${option}/paging?page=${page}`;
+          url = `/questionBoard/read/${option1}/paging?page=${page}`;
         } else if (posttype === "nanum") {
-          url = `/recycleBoard/read/${option}/paging?page=${page}`;
+          url = `/recycleBoard/read/${option1}/paging?page=${page}`;
         } else if (posttype === "mylist") {
           url = ``;
         }
@@ -72,20 +68,18 @@ const CommunityList = ({ posttype }) => {
     };
 
     fetchBoardData();
-  }, [posttype, page, option]);
+  }, [posttype, page, option1]);
 
   const handleSearch = async () => {
     const keyword = encodeURIComponent(query);
     try {
       let url = ``;
       if (posttype === "bunri") {
-        url = `/questionBoard/search/${option}/paging?page=${page - 1}`;
+        url = `/questionBoard/search/${option1}/${option2}/paging?page=${page}&size=1&sort=string&keyword=${keyword}`;
       } else {
-        url = `/recycleBoard/search/${option}/paging?page=${page - 1}`;
+        url = `/recycleBoard/search/${option1}/${option2}/paging?page=${page}&size=1&sort=string&keyword=${keyword}`;
       }
-      const response = await AuthToken.get(url, {
-        query: query,
-      }); //
+      const response = await AuthToken.get(url);
       const filtered = response.data.content.map((data) => ({
         id: data.id,
         title: data.title,
@@ -200,8 +194,8 @@ const CommunityList = ({ posttype }) => {
         >
           <select
             className="sort-container"
-            onChange={(e) => setOption(e.target.value)}
-            value={option}
+            onChange={(e) => setOption1(e.target.value)}
+            value={option1}
           >
             <option value="1">페이지 번호순 정렬</option>
             {posttype === "bunri" && <option value="2">추천순 정렬</option>}
@@ -211,11 +205,11 @@ const CommunityList = ({ posttype }) => {
           <div className="search-container">
             <select
               className="searchBy-container"
-              value={searchBy}
-              onChange={handleSearchChange}
+              value={option2}
+              onChange={(e) => setOption2(e.target.value)}
             >
-              <option value="title">제목</option>
-              <option value="writer">글쓴이</option>
+              <option value="1">제목</option>
+              <option value="2">글쓴이</option>
             </select>
             <input
               type="text"
