@@ -10,8 +10,10 @@ import AuthToken from "./AuthToken";
 import "../../App.css";
 
 const RegisterForm = () => {
-  //const [latitude, setLatitude] = useState(null);
-  //const [longitude, setLongitude] = useState(null);
+  const [checkID, setCheckID] = useState(false);
+  const [checkEmail, setCheckEmail] = useState(false);
+  const [checkNickname, setCheckNickname] = useState(false);
+
   const {
     register,
     watch,
@@ -25,6 +27,19 @@ const RegisterForm = () => {
   });
 
   const onSubmit = () => {
+    if (!checkID) {
+      alert("아이디 중복 확인을 해주세요.");
+      return;
+    }
+    if (!checkEmail) {
+      alert("이메일 중복 확인을 해주세요.");
+      return;
+    }
+    if (!checkNickname) {
+      alert("닉네임 중복 확인을 해주세요.");
+      return;
+    }
+
     if (agreed) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -42,6 +57,57 @@ const RegisterForm = () => {
     } else {
       submitForm();
     }
+  };
+
+  const checkDuplicate = async (value, type) => {
+    if (type === "email" && errors.email) {
+      alert("이메일 형식이 올바르지 않습니다.");
+      return;
+    }
+    if (type === "id" && errors.id) {
+      alert("아이디 형식이 올바르지 않습니다.");
+      return;
+    }
+    if (type === "nickname" && errors.nickname) {
+      alert("닉네임 형식이 올바르지 않습니다.");
+      return;
+    }
+    const url = `/account/duplicate-test/${type}`;
+    await AuthToken.post(
+      url,
+      {
+        duplicate: value,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+      .then((response) => {
+        if (response.status !== 200) {
+          throw new Error("Network response was not ok");
+        }
+        return response.data;
+      })
+      .then((result) => {
+        alert(result);
+        if (
+          result ===
+          `사용가능한 ${type === "id" ? "아이디" : type === "nickname" ? "닉네임" : "이메일"} 입니다.`
+        ) {
+          if (type === "id") {
+            setCheckID(true);
+          } else if (type === "nickname") {
+            setCheckNickname(true);
+          } else {
+            setCheckEmail(true);
+          }
+        }
+      })
+      .catch((error) => {
+        console.error("에러:", error);
+      });
   };
 
   const submitForm = async (latitude = null, longitude = null) => {
@@ -78,6 +144,7 @@ const RegisterForm = () => {
         return response.data;
       })
       .then((result) => {
+        alert("회원가입 성공! 로그인 페이지로 이동합니다.");
         console.log("결과:", result);
         navigate("../sign-in");
       })
@@ -114,22 +181,9 @@ const RegisterForm = () => {
   //const [position, setPosition] = useState(null);
 
   const navigate = useNavigate();
-  const NavigateToLogin = () => {
-    navigate("../sign-in");
-  };
+
   const NavigateToMain = () => {
     navigate("../");
-  };
-  const togglePasswordVisibility = () => {
-    setPasswordVisible(!passwordVisible);
-  };
-
-  const togglePasswordConfirmVisibility = () => {
-    setPasswordConfirmVisible(!passwordConfirmVisible);
-  };
-
-  const handleCheckboxChange = (e) => {
-    setAgreed(e.target.checked);
   };
 
   return (
@@ -168,6 +222,7 @@ const RegisterForm = () => {
           <button
             className="write-green-button"
             style={{ marginTop: "5px", width: "360px" }}
+            onClick={() => checkDuplicate(watch("id"), "id")}
           >
             아이디 중복확인
           </button>
@@ -181,7 +236,7 @@ const RegisterForm = () => {
               placeholder="비밀번호"
               {...register("password", {
                 required: "비밀번호는 필수 입력입니다.",
-                /*                 pattern: {
+                pattern: {
                   value:
                     /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^*+=-])[a-zA-Z0-9!@#$%^*+=-]+$/,
                   message:
@@ -194,7 +249,7 @@ const RegisterForm = () => {
                 maxLength: {
                   value: 15,
                   message: "비밀번호는 최대 15글자입니다.",
-                }, */
+                },
               })}
             />
             <div onClick={() => setPasswordVisible(!passwordVisible)}>
@@ -242,17 +297,17 @@ const RegisterForm = () => {
               placeholder="이메일"
               {...register("email", {
                 required: "이메일은 필수 입력입니다.",
-                /* pattern: {
+                pattern: {
                   value: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
                   message: "올바른 이메일 형식이 아닙니다.",
-                }, */
+                },
               })}
             />
           </div>
           <button
             className="write-green-button"
             style={{ marginTop: "5px", width: "360px" }}
-            onClick={NavigateToLogin}
+            onClick={() => checkDuplicate(watch("email"), "email")}
           >
             이메일 중복확인
           </button>
@@ -284,7 +339,7 @@ const RegisterForm = () => {
           <button
             className="write-green-button"
             style={{ marginTop: "5px", width: "360px" }}
-            onClick={NavigateToLogin}
+            onClick={() => checkDuplicate(watch("nickname"), "nickname")}
           >
             닉네임 중복확인
           </button>
