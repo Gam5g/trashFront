@@ -5,6 +5,7 @@ import { useMediaQuery } from "react-responsive";
 import AuthToken from "../container/pages/AuthToken";
 import "../style.css";
 import "../Button.css";
+import "./MapComponent.css";
 const { kakao } = window;
 
 const MapComponent = ({
@@ -134,7 +135,7 @@ const MapComponent = ({
   };
 
   return (
-    <div className="NotDrag">
+    <div>
       <div
         id="map"
         className="map-container"

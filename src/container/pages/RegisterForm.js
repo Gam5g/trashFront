@@ -1,12 +1,8 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
-import { VscCopilot } from "react-icons/vsc";
-import { MdAlternateEmail } from "react-icons/md";
-import { LuUserSquare2 } from "react-icons/lu";
-import { RiLockPasswordFill, RiLockPasswordLine } from "react-icons/ri";
 import { useForm } from "react-hook-form";
 import AuthToken from "./AuthToken";
+import "./RegisterForm.css";
 import "../../App.css";
 
 const RegisterForm = () => {
@@ -27,25 +23,112 @@ const RegisterForm = () => {
   });
 
   const onSubmit = () => {
+    const formData = {
+      id: watch("id"),
+      password: watch("password"),
+      password_confirm: watch("password_confirm"),
+      email: watch("email"),
+      nickname: watch("nickname"),
+      region: watch("region"),
+      subRegion: watch("subRegion"),
+    };
+    const idPattern = /^[a-zA-Z0-9-_]+$/;
+    if (!watch("id")) {
+      alert("아이디를 입력해주세요.");
+      return;
+    }
+    if (!idPattern.test(formData.id)) {
+      alert("아이디 형식에 맞지 않습니다.");
+      return;
+    }
+    if (formData.id.length < 5) {
+      alert("아이디는 최소 5글자입니다.");
+      return;
+    }
+    if (formData.id.length > 12) {
+      alert("아이디는 최대 12글자입니다.");
+      return;
+    }
+    if (formData.id === "admin") {
+      alert("불가능한 아이디입니다.");
+      return;
+    }
     if (!checkID) {
       alert("아이디 중복 확인을 해주세요.");
+      return;
+    }
+    const passwordPattern =
+      /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^*+=-])[a-zA-Z0-9!@#$%^*+=-]+$/;
+    if (!formData.password) {
+      alert("비밀번호를 입력해주세요.");
+      return;
+    }
+    if (!passwordPattern.test(formData.password)) {
+      alert("비밀번호는 알파벳과 숫자, 특수기호를 포함해야 합니다.");
+      return;
+    }
+    if (formData.password.length < 8) {
+      alert("비밀번호는 최소 8글자입니다.");
+      return;
+    }
+    if (formData.password.length > 15) {
+      alert("비밀번호는 최대 15글자입니다.");
+      return;
+    }
+    if (!formData.password_confirm) {
+      alert("비밀번호 확인란을 입력해주세요.");
+      return;
+    }
+    if (formData.password !== formData.password_confirm) {
+      alert("비밀번호가 일치하지 않습니다.");
+      return;
+    }
+    const emailPattern = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+    if (!formData.email) {
+      alert("이메일을 입력해주세요.");
+      return;
+    }
+    if (!emailPattern.test(formData.email)) {
+      alert("올바른 이메일 형식이 아닙니다.");
       return;
     }
     if (!checkEmail) {
       alert("이메일 중복 확인을 해주세요.");
       return;
     }
+    const nicknamePattern = /^[A-Za-z0-9가-힣]+$/;
+    if (!formData.nickname) {
+      alert("닉네임을 입력해주세요.");
+      return;
+    }
+    if (!nicknamePattern.test(formData.nickname)) {
+      alert("닉네임 형식에 맞지 않습니다.");
+      return;
+    }
+    if (formData.nickname.length < 2) {
+      alert("닉네임은 최소 2글자입니다.");
+      return;
+    }
+    if (formData.nickname.length > 8) {
+      alert("닉네임은 최대 8글자입니다.");
+      return;
+    }
     if (!checkNickname) {
       alert("닉네임 중복 확인을 해주세요.");
       return;
     }
-
+    if (!watch("region") && !agreed) {
+      alert("지역을 선택해주세요.");
+      return;
+    }
+    if (!watch("subRegion") && !agreed) {
+      alert("시군구를 선택해주세요.");
+      return;
+    }
     if (agreed) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-          console.log(latitude);
-          console.log(longitude);
           submitForm(latitude, longitude);
         },
         (error) => {
@@ -187,165 +270,78 @@ const RegisterForm = () => {
   };
 
   return (
-    <div className="NotDrag">
-      <div className="titleWrap"> 회원가입 </div>
+    <div className="register-content-box">
+      <div className="register-title-wrap"> 회원가입 </div>
       <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
-        <div className="contentWrap">
-          <div className="inputWrap">
-            <LuUserSquare2 style={{ height: "30px" }} />
-            <input
-              type="text"
-              name="id"
-              className="inputContent"
-              placeholder="아이디"
-              {...register("id", {
-                required: "아이디는 필수 입력입니다.",
-                pattern: {
-                  value: /^[a-zA-Z0-9-_]+$/,
-                  message: "아이디 형식에 맞지 않습니다.",
-                },
-                minLength: {
-                  value: 5,
-                  message: "아이디는 최소 5글자입니다.",
-                },
-                maxLength: {
-                  value: 12,
-                  message: "아이디는 최대 12글자입니다",
-                },
-                validate: {
-                  notAdmin: (value) =>
-                    value !== "admin" || "불가능한 아이디입니다.",
-                },
-              })}
-            />
-          </div>
+        <div>
+          <p className="register-tag">아이디</p>
+          <input
+            type="text"
+            name="id"
+            className="register-input-content"
+            placeholder="아이디"
+            {...register("id")}
+          />
           <button
-            className="write-green-button"
-            style={{ marginTop: "5px", width: "360px" }}
+            type="button"
+            className="register-duplicate-button"
             onClick={() => checkDuplicate(watch("id"), "id")}
           >
             아이디 중복확인
           </button>
-          <p style={{ color: "red" }}>{errors.id?.message}</p>
-          <div className="inputWrap">
-            <RiLockPasswordLine style={{ height: "30px" }} />
-            <input
-              type={passwordVisible ? "text" : "password"}
-              name="password"
-              className="inputContent"
-              placeholder="비밀번호"
-              {...register("password", {
-                required: "비밀번호는 필수 입력입니다.",
-                pattern: {
-                  value:
-                    /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^*+=-])[a-zA-Z0-9!@#$%^*+=-]+$/,
-                  message:
-                    "비밀번호는 알파벳과 숫자, 특수기호를 포함해야 합니다.",
-                },
-                minLength: {
-                  value: 8,
-                  message: "비밀번호는 최소 8글자입니다.",
-                },
-                maxLength: {
-                  value: 15,
-                  message: "비밀번호는 최대 15글자입니다.",
-                },
-              })}
-            />
-            <div onClick={() => setPasswordVisible(!passwordVisible)}>
-              {passwordVisible ? (
-                <AiFillEye style={{ height: "30px", cursor: "pointer" }} />
-              ) : (
-                <AiFillEyeInvisible
-                  style={{ height: "30px", cursor: "pointer" }}
-                />
-              )}
-            </div>
-          </div>
-          <p style={{ color: "red" }}>{errors.password?.message}</p>
-          <div className="inputWrap">
-            <RiLockPasswordFill style={{ height: "30px" }} />
-            <input
-              type={passwordConfirmVisible ? "text" : "password"}
-              name="password_confirm"
-              className="inputContent"
-              placeholder="비밀번호 확인"
-              {...register("password_confirm", {
-                required: "비밀번호 확인은 필수 입력입니다.",
-                validate: validatePassword,
-              })}
-            />
-            <div
-              onClick={() => setPasswordConfirmVisible(!passwordConfirmVisible)}
-            >
-              {passwordConfirmVisible ? (
-                <AiFillEye style={{ height: "30px", cursor: "pointer" }} />
-              ) : (
-                <AiFillEyeInvisible
-                  style={{ height: "30px", cursor: "pointer" }}
-                />
-              )}
-            </div>
-          </div>
-          <p style={{ color: "red" }}>{errors.password_confirm?.message}</p>
-          <div className="inputWrap">
-            <MdAlternateEmail style={{ height: "30px" }} />
-            <input
-              type="text"
-              name="email"
-              className="inputContent"
-              placeholder="이메일"
-              {...register("email", {
-                required: "이메일은 필수 입력입니다.",
-                pattern: {
-                  value: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
-                  message: "올바른 이메일 형식이 아닙니다.",
-                },
-              })}
-            />
-          </div>
+          <p className="register-tag">비밀번호</p>
+          <input
+            type={passwordVisible ? "text" : "password"}
+            name="password"
+            className="register-input-content"
+            placeholder="비밀번호"
+            {...register("password")}
+          />
+          <input
+            type={passwordConfirmVisible ? "text" : "password"}
+            name="password_confirm"
+            className="register-input-content"
+            placeholder="비밀번호 확인"
+            {...register("password_confirm")}
+          />
+          <p className="register-rule">
+            비밀번호는 최소 8자, 최대 15자로 구성되어야 합니다.
+          </p>
+          <p className="register-rule">
+            비밀번호는 알파벳, 숫자, 특수문자로 구성되어야 합니다.
+          </p>
+          <p className="register-tag">이메일</p>
+          <input
+            type="text"
+            name="email"
+            className="register-input-content"
+            placeholder="이메일"
+            {...register("email")}
+          />
           <button
-            className="write-green-button"
-            style={{ marginTop: "5px", width: "360px" }}
+            type="button"
+            className="register-duplicate-button"
             onClick={() => checkDuplicate(watch("email"), "email")}
           >
             이메일 중복확인
           </button>
-          <p style={{ color: "red" }}>{errors.email?.message}</p>
-          <div className="inputWrap">
-            <VscCopilot style={{ height: "30px" }} />
-            <input
-              type="text"
-              name="nickname"
-              className="inputContent"
-              placeholder="닉네임"
-              {...register("nickname", {
-                required: "닉네임은 필수 입력입니다.",
-                pattern: {
-                  value: /^[A-za-z0-9가-힣]+$/,
-                  message: "닉네임 형식에 맞지 않습니다.",
-                },
-                minLength: {
-                  value: 2,
-                  message: "닉네임은 최소 2글자입니다.",
-                },
-                maxLength: {
-                  value: 8,
-                  message: "닉네임은 최대 8글자입니다.",
-                },
-              })}
-            />
-          </div>
+          <p className="register-tag">닉네임</p>
+          <input
+            type="text"
+            name="nickname"
+            className="register-input-content"
+            placeholder="닉네임"
+            {...register("nickname")}
+          />
           <button
-            className="write-green-button"
-            style={{ marginTop: "5px", width: "360px" }}
+            type="button"
+            className="register-duplicate-button"
             onClick={() => checkDuplicate(watch("nickname"), "nickname")}
           >
             닉네임 중복확인
           </button>
-          <p style={{ color: "red" }}>{errors.nickname?.message}</p>
-          <div>
-            <label for="agree" style={{ marginTop: "20px" }}>
+          <div className="agree-label">
+            <label for="agree">
               <input
                 type="checkbox"
                 name="agree"
@@ -356,11 +352,10 @@ const RegisterForm = () => {
             </label>
           </div>
           {!agreed && (
-            <div>
+            <div className="register-region-container">
               <select
-                className="sort-container"
-                style={{ marginTop: "20px" }}
-                {...register("region", { required: "지역을 선택해주세요." })}
+                className="register-region-select"
+                {...register("region")}
               >
                 <option value="">지역 선택</option>
                 {regions.map((region, index) => (
@@ -369,16 +364,13 @@ const RegisterForm = () => {
                   </option>
                 ))}
               </select>
-              <p style={{ color: "red" }}>{errors.region?.message}</p>
               {watch("region") && (
                 <>
                   <select
                     id="subRegion"
                     name="subRegion"
-                    className="sort-container"
-                    {...register("subRegion", {
-                      required: "시군구를 선택해주세요.",
-                    })}
+                    className="register-region-select"
+                    {...register("subRegion")}
                   >
                     <option value="">시군구 선택</option>
                     {regions
@@ -389,22 +381,21 @@ const RegisterForm = () => {
                         </option>
                       ))}
                   </select>
-                  <p style={{ color: "red" }}>{errors.subRegion?.message}</p>
                 </>
               )}
             </div>
           )}
         </div>
-        <div className="button-container">
+        <div className="register-button-container">
           <button
-            className="submitbutton"
-            onClick={onSubmit}
+            className="register-submit-button"
+            type="submit"
             disabled={isSubmitting}
           >
             완료
           </button>
-          <button className="cancelbutton" onClick={NavigateToMain}>
-            돌아가기
+          <button className="register-cancel-button" onClick={NavigateToMain}>
+            취소
           </button>
         </div>
       </form>

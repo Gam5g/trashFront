@@ -1,0 +1,232 @@
+header {
+    display: flex;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    min-height : 70px;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    z-index: 1000;
+    user-select: none;
+  }
+  
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  font-size: 24px;
+  font-weight: bold;
+  margin-left: 2%;
+  margin-right : 7%;
+  user-select: none;
+  cursor: pointer;
+}
+
+.bunri-logo {
+  color: #639029;
+  font-family: "Kulim Park", sans-serif;
+  letter-spacing: 2px;
+}
+
+.wiki-logo {
+  color: #424D34;
+  font-family: "Kulim Park", sans-serif;
+  letter-spacing: 2px;
+}
+
+.nav-menu {
+    display: flex;
+    gap: 20px;
+  }
+  
+
+.nav-menu a {
+    user-select: none;
+    text-decoration: none;
+    color: #424D34;
+    font-weight: bold;
+}
+.community-container {
+  position: relative;
+  display: inline-block;
+}
+.community-link:hover {
+  color : #6C8D40;
+  cursor: pointer;
+}
+.community-dropdown {
+  display: none;
+  position: absolute;
+  background-color: white;
+  min-width: 80px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  z-index: 1;
+  top: 100%;
+  left: 0;
+  border-radius: 14px;
+  border: 1px solid #DCDCDC;
+}
+
+.community-dropdown a {
+  color: #333;
+  text-decoration: none;
+  align-items: center;
+  display: flex;
+  height: 24px;
+  padding: 14px 4px;
+  justify-content: center;
+  gap: 10px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.community-dropdown a:hover {
+  color : #6C8D40;
+  border-radius: 14px;
+  background-color: #f0f0f0;
+}
+
+.community-container:hover .community-dropdown {
+  display: block;
+}
+
+  .bunri-logo-button {
+    color: #639029;
+    font-family: "Kulim Park";
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: 2.8px;
+    border : none;
+    background-color: #fff;
+    cursor: pointer;
+  }
+
+  .wiki-logo-button {
+    color: #424D34;
+    font-family: "Kulim Park";
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: 2.8px;
+    border : none;
+    background-color: #fff;
+    margin-left : -10px;
+    cursor: pointer;
+  }
+
+  .empty-place {
+    display: flex;
+    align-items: flex-start;
+    flex-grow : 1;
+  }
+
+  .search-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 25%;
+    padding: 0px 24px;
+    border: 1px solid var(--Line, #DCDCDC);
+    border-radius: 25px;
+    background: var(--White, #FFF);
+    user-select: none;
+  }
+  
+  .search-bar input {
+    flex-grow: 1;
+    color: var(--gray, #7E7E7E);
+    font-family: Pretendard;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 28px;
+    border: none;
+    outline: none; 
+    padding-right:10px
+  }
+  
+  .clear-search-button {
+    width : 20px;
+    height : 20px;
+    margin-left: 5px;
+    cursor: pointer;
+    color: var(--gray, #7E7E7E);
+  }
+
+  .search-bar svg{
+    margin-right : -15px;
+  }
+
+  .header-camera-button,
+  .header-search-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px;
+  }
+  
+  .search-bar:focus-within input {
+    outline: none;
+  }
+
+  .related-searches {
+    position: absolute;
+    top: 70%;
+    left: 0;
+    margin-left:53%;
+    width: 25%; 
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 10px;
+    margin-top: 5px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e0;
+    z-index: 100;
+  }
+  
+  .related-search-item {
+    padding: 10px 5px;
+    font-size: 16px;
+    color: #333;
+    cursor: pointer;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .related-search-item:last-child {
+    border-bottom: none;
+  }
+  
+  .related-search-item:hover {
+    background-color: #f0f0f0;
+  }
+  
+
+  
+.auth-links {
+  display: flex;
+  gap: 10px;
+  margin-right:40px;
+  cursor: pointer;
+}
+
+.auth-links a {
+  text-decoration: none;
+  color: #424D34;
+  font-weight: bold;
+}
+  
+  @media (max-width: 768px) {
+    header, .search-bar {
+      padding: 10px 5%;
+    }
+  }
+
+  

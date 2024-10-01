@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { isLoggedInState } from "../state/authState";
+import "./CommunityDetail.css";
 import "../container/pages/Community/Detail.css";
 import AuthToken from "../container/pages/AuthToken";
 
@@ -346,7 +347,7 @@ const CommunityDetail = ({ posttype }) => {
           {posttype === "bunri" ? (
             bunriPost.adopted === true ? (
               <div className="adopted-content">
-                <h1 className="adopted">채택</h1>
+                <h1 className="adopted">채택 완료</h1>
                 <h1>{bunriPost.title}</h1>
               </div>
             ) : (
@@ -408,21 +409,23 @@ const CommunityDetail = ({ posttype }) => {
               <h6 style={{ color: "gray", textAlign: "center" }}>
                 이 게시글이 좋다면
               </h6>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  marginTop: "-20px",
-                  marginBottom: "20px",
-                }}
-              >
+              <div className="likes-container">
                 <button
-                  className="likesButton"
+                  className="likes-button"
                   onClick={togglePressLike}
                   disabled={!isLoggedIn}
                 >
-                  👍
-                  {bunriPost.recommend}
+                  <svg
+                    width="28"
+                    height="27"
+                    viewBox="0 0 28 27"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M16.2105 6.9875e-09C17.3382 -6.39036e-05 18.4233 0.438289 19.2438 1.22537C20.0642 2.01245 20.5654 3.35264 20.6316 4.49796V10.4952H23.5789C24.6623 10.4951 25.708 10.8996 26.5175 11.632C27.3271 12.3644 27.8736 13.3988 28 14.4934V14.9932L26.488 22.8316C25.9265 25.2695 24.2745 27.0237 22.3469 26.9998L10.3158 26.9878C9.95483 26.9877 9.60307 26.732 9.33333 26.488C9.0636 26.244 8.88434 25.8532 8.8421 25.4884L8.84358 11.1909C8.84384 10.928 8.91206 10.6698 9.04139 10.4421C9.17072 10.2145 9.35662 10.0255 9.58042 9.89401C10.3158 9.4957 10.3158 9.4957 10.9486 8.63806C11.3321 8.0113 11.7307 7.03676 11.7792 6.30014L11.7895 4.49796C11.7895 3.30503 12.2553 2.16095 13.0844 1.31742C13.9135 0.473891 15.038 6.9875e-09 16.2105 6.9875e-09ZM4.42105 10.4952C4.78201 10.4953 5.13039 10.6301 5.40013 10.8741C5.66986 11.1182 5.85251 11.6299 5.89474 11.9946V25.4884C5.89469 25.8557 5.76217 26.2101 5.52231 26.4846C5.28246 26.759 4.95195 26.9343 4.59347 26.9773L2.94737 26.9878C2.20378 26.988 1.48759 26.7023 0.94235 26.1879C0.397115 25.6735 0.0631377 24.9684 0.00736874 24.214L1.47763e-07 13.4939C-0.000235169 12.7374 0.280599 12.0087 0.786206 11.454C1.29181 10.8993 2.20588 10.552 2.94737 10.4952H4.42105Z" />
+                  </svg>
+
+                  <p className="likes-number">{bunriPost.recommend}</p>
                 </button>
               </div>
               <hr style={{ border: "0.5px solid #d9d9d9" }}></hr>
@@ -600,7 +603,7 @@ const CommunityDetail = ({ posttype }) => {
                 수정
               </button>
               <button
-                className="listButton"
+                className="list-button"
                 onClick={() => navigate(`/community-${posttype}`)}
               >
                 목록
@@ -608,7 +611,7 @@ const CommunityDetail = ({ posttype }) => {
             </div>
           ) : (
             <button
-              className="listButton"
+              className="list-button"
               onClick={() => navigate(`/community-${posttype}`)}
             >
               목록

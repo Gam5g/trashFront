@@ -1,0 +1,152 @@
+.register-content-box{
+    user-select: none;
+    display: flex;
+    padding: 100px 400px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 90px;
+    border: 1px solid #D9D9D9;
+}
+
+.register-title-wrap{
+    color: #424242;
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.register-rule{
+    font-size:11px;
+    margin-bottom: -10px;
+}
+.register-tag{
+    color: #424242;
+    font-family: Pretendard;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.register-duplicate-button{
+    cursor: pointer;
+    display: flex;
+    width: 400px;
+    height: 50px;
+    padding: 10px 20px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid;
+    border-radius: 16px;
+    background: var(--Btn-Color, #8AAB5F);
+    color: #FFF;
+    font-family: Pretendard;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.register-input-content{
+    display: flex;
+    width: 360px;
+    height: 40px;
+    padding: 10px 20px;
+    align-items: center;
+    gap: 10px;
+    border-radius: 14px;
+    border: 1px solid #A5A5A5;
+    background: #FFF;
+    color: #A5A5A5;
+    font-family: Pretendard;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin-bottom:10px;
+}
+
+.agree-label{
+    margin-top : 23px;
+    margin-bottom : 23px;
+}
+
+.register-region-container{
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom:90px;
+}
+
+.register-region-select{
+    display: flex;
+    width: 96px;
+    height: 34px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 16px;
+    background: #D9D9D9;
+    color: #424242;
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.register-button-container{
+    display: flex;
+    height: 56px;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-top:15px;
+}
+
+.register-submit-button{
+    cursor: pointer;
+    display: flex;
+    width: 180px;
+    height: 56px;
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    border-radius: 16px;
+    background: var(--Btn-Color, #8AAB5F);
+    color: #FFF;
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.register-cancel-button{
+    display: flex;
+    width: 180px;
+    height: 56px;
+    padding: 12px 69px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    border-radius: 16px;
+    background: #C6C6C6;
+    color: #FFF;
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}

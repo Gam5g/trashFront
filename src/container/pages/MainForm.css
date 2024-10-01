@@ -1,0 +1,209 @@
+.main-form-margin{
+    margin-top: 1200px;
+    user-select: none;
+}
+.main-rule-container {
+    user-select: none;
+    width: 100vw;
+    height: auto; 
+    background: linear-gradient(180deg, #FFF 12%, #E7F6D4 100%);
+    padding: 50px 0; 
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.main-rule-title-text {
+    color: var(--Text, #313926);
+    font-family: Pretendard, sans-serif;
+    font-size: 50px;
+    font-weight: 700;
+    line-height: 1.2;
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 0 20px;
+}
+
+.main-rule-subtitle-text {
+    color: var(--gray, #7E7E7E);
+    font-family: Pretendard, sans-serif;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 1.5;
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 0 20px;
+}
+
+.card-container{
+    display: flex;
+    padding: 16px 0px 40px 0px;
+    justify-content: center;
+    align-items: center;
+    gap: 48px;
+    align-self: stretch;
+}
+
+.main-button{
+    display: flex;
+    padding: 12px 22px;
+    margin-left: 15px;
+    justify-content: center;
+    align-items: center;
+    border : 1px solid;
+    border-radius: 50px;
+    background: var(--Btn-Color, #8AAB5F);
+    color: var(--White, #FFF);
+    font-family: Pretendard;
+    font-size:16px;
+    font-style: normal;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.main-button:hover {
+    background-color: #5a7333;
+}
+
+.main-button-frame {
+    display: flex;
+    width: 100%; 
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    padding: 20px 0; 
+    text-align: center;
+}
+
+.main-button-text{
+    color: var(--gray, #7E7E7E);
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.main-button-container{
+    display : flex;
+    justify-content: center;
+    flex-direction: row;
+    gap: 15px;
+}
+
+.two-box-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap : 50px;
+    padding-top:50px;
+    padding-bottom : 50px;
+}
+
+.main-list{
+    border : 0.3px solid;
+    width : 25%;
+    border-radius: 25px;
+    border-color : #adadad;
+}
+
+.main-list-title {
+    display: flex;
+    padding: 0px 40px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    align-self: stretch;
+    border-radius: 16px 16px 0px 0px;
+    border-bottom:#7E7E7E;
+    color: var(--primary-hover, #6C8D40);
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.main-list-content {
+    cursor: pointer;
+    display: flex;
+    height: 80px;
+    padding: 0px 20px;
+    justify-content: space-between;
+    align-items: center;
+    align-self: stretch;
+    border-bottom: 1px solid var(--Line, #DCDCDC);
+}
+
+.main-list-left-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.main-list-left-image {
+    width: 60px;
+    height: 60px;
+    background: var(--Light-gray, #F4F4F4);
+}
+
+.main-list-left-text {
+    color: var(--Text, #313926);
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.main-list-right-wrapper{
+    display: flex;
+    width: 200px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 16px;
+}
+
+.main-list-right-text{
+    color: var(--Text, #313926);
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.main-list-second-content{
+    width: 500px;
+    height: 400px;
+    flex-shrink: 0;
+    background-color: #D9D9D9;
+}
+
+.MoveTopBtn {
+    position: fixed;
+    background: transparent;
+    border: none;
+    bottom:40px;
+    right:40px;
+    width: 60px;
+    height: 60px;
+    background-image: url('../../../public/images/upArrow.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    transition: background-image 0.3s ease-in-out;
+
+}
+
+.MoveTopBtn:hover {
+    background-image: url('../../../public/images/upArrow_hover.png');
+    cursor:pointer;
+}
+

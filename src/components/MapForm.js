@@ -40,7 +40,7 @@ const MapForm = ({
   };
 
   return (
-    <div className="NotDrag" style={{ marginTop: "250px" }}>
+    <div className="NotDrag">
       <h1>대구광역시 수거함 위치 ＞</h1>
       <div
         className="location-button-container"

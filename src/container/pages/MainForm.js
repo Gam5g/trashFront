@@ -1,28 +1,20 @@
-import React, { useState, useRef, useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { FaSearch } from "react-icons/fa";
-import { HiXCircle } from "react-icons/hi";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../../Button.css";
-import "../../style.css";
 import AuthToken from "./AuthToken";
 import { useMediaQuery } from "react-responsive";
+import "./MainForm.css";
+import "../../style.css";
+import "../../components/Card";
+import "../../components/CardContainer";
+import CardContainer from "../../components/CardContainer";
 
 function MainForm() {
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
-  const [isActive, setActive] = useState(false);
-  const [searchResults, setSearchResults] = useState([]);
-  const [query, setQuery] = useState("");
-  const [image, setImage] = useState(null);
-  const [lastFile, setLastFile] = useState(null);
-  const [isSearchFocused, setSearchFocused] = useState(false);
-  const { register, handleSubmit, reset, watch } = useForm();
   const accessToken = localStorage.getItem("accessToken");
-
-  const prevInputValueRef = useRef("");
-  const inputRef = useRef(null);
-  const cameraInputRef = useRef(null);
   const navigate = useNavigate();
+  const [boardList, setBoardList] = useState([]);
+  const [recentBoardList, setRecentBoardList] = useState([]);
+  const [recommendBoardList, setRecommendBoardList] = useState([]);
 
   useEffect(() => {
     (async () => {
@@ -40,130 +32,71 @@ function MainForm() {
     })();
   }, [accessToken]);
 
-  const handleFileChange = (e) => {
-    e.preventDefault();
-    const files = e.target.files || e.dataTransfer.files;
-    if (files.length > 0) {
-      const file = files[0];
-      const imageUrl = URL.createObjectURL(file);
-      setImage(imageUrl);
-      setLastFile(file);
-      e.target.value = null;
-      setActive(true);
-    }
-  };
-
-  const handleImageClick = () => {
-    inputRef.current.click();
-    setActive(!isActive);
-  };
-
-  const handleImageRemove = () => {
-    alert("파일 업로드가 취소되었습니다.");
-    setImage(null);
-    setActive(false);
-    setLastFile(null);
-    inputRef.current.value = null;
-    cameraInputRef.current.value = null;
-  };
-
   const isAdmin = localStorage.getItem("accountName") === "admin";
 
-  const handleUploadComplete = async () => {
-    if (lastFile) {
+  useEffect(() => {
+    const fetchBoardData = async () => {
       try {
-        const formData = new FormData();
-        formData.append("image", lastFile);
-
-        const res = await AuthToken.post(`/s3`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-
-        const imageURL = res.data;
-        if (!imageURL) {
-          throw new Error("Image URL not found in response");
-        }
-
-        const separationResponse = await AuthToken.get(
-          `/solution/image?imageUrl=${imageURL}`,
+        const recent_response = await AuthToken.get(
+          `/solution?page=1&size=10`,
           {
             headers: {
-              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`,
             },
           }
         );
+        const inputData_recent = recent_response.data.content.map((data) => ({
+          wasteId: data.wasteId,
+          wasteName: data.wasteName,
+          state: data.state,
+          createdDate: data.createdDate,
+        }));
+        setRecentBoardList(inputData_recent);
+        const response = await AuthToken.get(
+          `/questionBoard/read/1/paging?page=1`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        const inputData = response.data.content.map((data) => ({
+          id: data.id,
+          title: data.title,
+          writer: data.writer,
+          adopted: data.adopted,
+        }));
+        setBoardList(inputData.slice(0, 6));
 
-        navigate("/search/result", {
-          state: { result: separationResponse.data.result },
-        });
+        const response_recommend = await AuthToken.get(
+          `/questionBoard/read/2/paging?page=1`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        const inputData_recommend = response_recommend.data.content.map(
+          (data) => ({
+            id: data.id,
+            title: data.title,
+            recommend: data.recommend,
+            adopted: data.adopted,
+          })
+        );
+        setRecommendBoardList(inputData_recommend.slice(0, 6));
       } catch (error) {
-        if (
-          error.response &&
-          error.response.data.cause === "IllegalArgumentException"
-        ) {
-          alert(error.response.data.message);
-        } else if (
-          error.response &&
-          error.response.data.cause === "MaxUploadSizeExceededException"
-        ) {
-          alert("업로드할 사진 용량을 초과했습니다.");
-        } else {
-          console.error("에러 :", error);
-          alert("An unexpected error occurred. Please try again.");
-        }
+        console.error(error);
       }
-    }
+    };
+
+    fetchBoardData();
+  }, []);
+
+  const handleRequestClick = (wasteId) => {
+    navigate(`/solution/detail/${wasteId}`, { state: { wasteId } });
   };
 
-  const onSubmit = async (data) => {
-    //searchTerm 인코딩
-    const searchTerm = data.searchTerm.trim();
-    if (!searchTerm) {
-      return; // 검색어가 비어있으면 종료
-    }
-    const encodedSearchTerm = encodeURIComponent(searchTerm);
-    try {
-      const response = await AuthToken.get(
-        `/solution/keyword?keyword=${encodedSearchTerm}`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      setSearchResults([response.data]);
-      navigateToSearch(searchTerm, response.data);
-    } catch (error) {
-      let errorResponse;
-      try {
-        errorResponse = JSON.parse(error.request.response);
-      } catch (e) {
-        console.error("Error parsing response:", e);
-      }
-      if (errorResponse && errorResponse.cause === "WASTE_NOT_FOUND") {
-        navigate(`/search/not-found`);
-      }
-    }
-    reset();
-  };
-
-  const handleSearchButtonClick = async (e) => {
-    e.preventDefault();
-    handleSubmit(onSubmit)();
-  };
-
-  const navigateToSearch = (selectedQuery, searchData) => {
-    navigate(`/search?query=${encodeURIComponent(selectedQuery)}`, {
-      state: searchData,
-    });
-  };
-
-  const navigateTowrite = () => {
-    navigate(`/solution/create`);
-  };
   const ScrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -171,137 +104,130 @@ function MainForm() {
     });
   };
 
-  return (
-    <div className="upload-container" style={{ marginTop: "200px" }}>
-      <h2>찾고자 하는 쓰레기를 검색해보세요!</h2>
-      <div
-        className={query ? "search-active-container" : "trash-search-container"}
-      >
-        <form
-          autoComplete="off"
-          onSubmit={handleSubmit(onSubmit)}
-          className="search-form"
-        >
-          <div className="search-input-container">
-            <div>
-              <input
-                {...register("searchTerm")}
-                type="text"
-                placeholder="이름 또는 태그로 검색하기"
-                className="search-input"
-                onFocus={() => setSearchFocused(true)}
-                onBlur={() => setSearchFocused(false)}
-              />
+  const handlePostClick = (post) => {
+    navigate(`/community-bunri/${post.id}`);
+  };
 
-              {watch("searchTerm") && watch("searchTerm").length > 0 && (
-                <HiXCircle
-                  className="clear-search-button"
-                  onClick={() => reset({ searchTerm: "" })}
-                  style={{ color: "gray" }}
-                />
-              )}
-              <button
-                type="submit"
-                className="search-button"
-                aria-label="검색"
-                onClick={handleSearchButtonClick}
-              >
-                <FaSearch className="search-icon" />
-              </button>
-            </div>
-          </div>
-        </form>
+  return (
+    <div className="main-form-margin">
+      <div className="main-rule-container">
+        <p className="main-rule-title-text">
+          모두가 함께 만드는 분리배출, 분리위키
+        </p>
+        <p className="main-rule-subtitle-text">
+          잘 모르는 분리 배출 방법을 아래에 알려드려요!
+        </p>
+        <div className="card-container">
+          <CardContainer />
+        </div>
       </div>
-      <div onClick={navigateTowrite} className="direct-write-button">
-        등록되지 않은 쓰레기 배출 방법을 직접 작성하기
-      </div>
-      <div className="upload-container">
-        <h2>찾고자 하는 쓰레기를 업로드해보세요!</h2>
-        <div>
-          <input
-            type="file"
-            ref={inputRef}
-            style={{ display: "none" }}
-            onChange={handleFileChange}
-          />
-          <input
-            type="file"
-            id="camera"
-            name="camera"
-            capture="camera"
-            accept="image/*"
-            ref={cameraInputRef}
-            style={{ display: "none" }}
-            onChange={handleFileChange}
-          />
-          {image ? (
-            <div className="upload-container">
-              <div className="upload-buttons">
-                <button
-                  className="white-button"
-                  onClick={() => inputRef.current.click()}
-                >
-                  사진 촬영
-                </button>
-                <button className="white-button" onClick={handleUploadComplete}>
-                  업로드 완료
-                </button>
-              </div>
-              <img src={image} className="uploaded-image" alt="Uploaded" />
-              <br />
-              <button className="white-button" onClick={handleImageRemove}>
-                사진 지우기
-              </button>
-            </div>
-          ) : (
+      <button onClick={ScrollToTop} className="MoveTopBtn" />
+      <div>
+        <div className="main-button-frame">
+          <h2 className="main-button-text">더 많은 분리배출 방법 보러 가기</h2>
+          <div className="main-button-container">
             <button
-              className={`upload-button ${isActive ? "active" : ""}`}
-              onClick={handleImageClick}
-              onDragOver={(e) => e.preventDefault()}
-              onDrop={handleFileChange}
+              className="main-button"
+              onClick={() => navigate("/solution/total/list")}
             >
-              촬영이나 사진 업로드하기 <br />
-              jpg 또는 png 파일만 업로드 가능
+              전체 솔루션 목록
             </button>
-          )}
-          <button onClick={ScrollToTop} className="MoveTopBtn" />
+            <button
+              className="main-button"
+              onClick={() => navigate("/wiki/total/list")}
+            >
+              전체 위키 목록
+            </button>
+            <button
+              className="main-button"
+              onClick={() => navigate("/categories")}
+              style={{ width: "200px" }}
+            >
+              카테고리별로 보기
+            </button>
+          </div>
         </div>
-        <div>
-          <h2>등록된 쓰레기의 배출방법을 확인해보세요!</h2>
-          <button
-            className="white-button"
-            onClick={() => navigate("/solution/total/list")}
-          >
-            전체 솔루션 목록
-          </button>
-          <button
-            className="white-button"
-            onClick={() => navigate("/wiki/total/list")}
-          >
-            전체 위키 목록
-          </button>
-          <button
-            className="white-button"
-            onClick={() => navigate("/categories")}
-            style={{ width: "200px" }}
-          >
-            카테고리별로 보기
-          </button>
+        <div className="two-box-container">
+          <div className="main-list">
+            <p className="main-list-title">최근 등록된 분리배출 방법</p>
+            {recentBoardList
+              .filter((boardItem) => boardItem.state === "ACCEPTED")
+              .map((boardItem, index) => (
+                <div
+                  className="main-list-content"
+                  key={index}
+                  onClick={() => handleRequestClick(boardItem.wasteId)}
+                >
+                  <div className="main-list-left-wrapper">
+                    <p className="main-list-left-text">{boardItem.wasteName}</p>
+                  </div>
+                  <div className="main-list-right-wrapper">
+                    <p className="main-list-right-text">
+                      {boardItem.createdDate}
+                    </p>
+                  </div>
+                </div>
+              ))}
+          </div>
+          <div className="main-list-second-content">
+            <p>SNS</p>
+          </div>
         </div>
-        <div>
-          {isAdmin && (
-            <div>
-              <br />
-              <button
-                className="white-button"
-                onClick={() => navigate("/admin/update/request/list")}
-                style={{ backgroundColor: "black", border: "none" }}
+        <div className="two-box-container">
+          <div className="main-list">
+            <p className="main-list-title">
+              답변을 애타게 기다리는 분리수거 질문
+            </p>
+            {boardList
+              .filter((boardItem) => !boardItem.adopted)
+              .map((boardItem, index) => (
+                <div
+                  className="main-list-content"
+                  key={index}
+                  onClick={() => handlePostClick(boardItem)}
+                >
+                  <div className="main-list-left-wrapper">
+                    <p className="main-list-left-text">{boardItem.title}</p>
+                  </div>
+                  <div className="main-list-right-wrapper">
+                    <p className="main-list-right-text">{boardItem.writer}</p>
+                  </div>
+                </div>
+              ))}
+          </div>
+
+          <div className="main-list">
+            <p className="main-list-title">추천 수가 많은 커뮤니티 글</p>
+            {recommendBoardList.map((boardItem, index) => (
+              <div
+                className="main-list-content"
+                key={index}
+                onClick={() => handlePostClick(boardItem)}
               >
-                수정 요청 관리
-              </button>
-            </div>
-          )}
+                <div className="main-list-left-wrapper">
+                  <p className="main-list-left-text">{boardItem.title}</p>
+                </div>
+                <div className="main-list-right-wrapper">
+                  <p className="main-list-right-text">{boardItem.recommend}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
+      </div>
+      <div>
+        {isAdmin && (
+          <div className="main-button-container">
+            <br />
+            <button
+              className="white-button"
+              onClick={() => navigate("/admin/update/request/list")}
+              style={{ backgroundColor: "black", border: "none" }}
+            >
+              수정 요청 관리
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

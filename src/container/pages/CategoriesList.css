@@ -16,18 +16,27 @@
 }
 
 .category-button {
-  background-color: #3b855d;
-  color : white;
-  border: none;
-  border-radius: 20px;
-  padding: 10px 20px;
-  font-size: 14px;
+  display: flex;
+  height: 50px;
+  padding: 0px 20px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
   cursor: pointer;
-  font-family: 'Pretendard-Bold';
+  border : none;
+  border-radius: 14px;
+  background: var(--Btn-Color, #8AAB5F);
+  color: #FFF;
+  text-align: center;
+  font-family: Pretendard;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
 }
 
 .category-button:hover, .category-button.active {
-  background-color: #255f40;
+  background-color: #6C8D40;
 }
 
 .categories-data-list {
@@ -37,6 +46,15 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Added shadow */
   border-radius: 8px; /* Added border-radius for a smoother look */
   margin-bottom: 10px;
+}
+
+.categories-text{
+  color: var(--Text, #313926);
+  font-family: Pretendard;
+  font-size: 48px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
 }
 
 .data-item {

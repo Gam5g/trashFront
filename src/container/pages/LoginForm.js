@@ -1,23 +1,14 @@
 import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
-import { RiLockPasswordLine } from "react-icons/ri";
-import { LuUserSquare2 } from "react-icons/lu";
 import { useForm } from "react-hook-form";
 import { useSetRecoilState } from "recoil";
-import { useCookies, Cookies } from "react-cookie";
-import "../../App.css";
-import "../../Button.css";
+import { useCookies } from "react-cookie";
+import "./LoginForm.css";
 import AuthToken from "./AuthToken";
 import { isLoggedInState } from "../../state/authState";
 
 const LoginForm = () => {
-  const {
-    register,
-    formState: { errors },
-    watch,
-    handleSubmit,
-  } = useForm({
+  const { watch, handleSubmit, register } = useForm({
     mode: "onChange",
   });
 
@@ -28,15 +19,18 @@ const LoginForm = () => {
   const setIsLoggedIn = useSetRecoilState(isLoggedInState);
   const navigate = useNavigate();
 
-  const togglePasswordVisibility = () => {
-    setPasswordVisible(!passwordVisible);
-  };
+  const onSubmit = async (data) => {
+    const formData = data;
+    console.log("Form Data:", formData);
+    if (!formData.id) {
+      alert("아이디를 입력하세요.");
+      return;
+    }
 
-  const onSubmit = async () => {
-    const formData = {
-      id: watch("id"),
-      password: watch("password"),
-    };
+    if (!formData.password) {
+      alert("비밀번호를 입력하세요.");
+      return;
+    }
     setIsLoading(true);
     try {
       const response = await AuthToken.post(
@@ -49,7 +43,6 @@ const LoginForm = () => {
           headers: {
             "Content-Type": "application/json",
             withCredentials: true,
-            //credentials: "include",
           },
           credentials: "include",
         }
@@ -64,7 +57,6 @@ const LoginForm = () => {
 
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("accountName", formData.id);
-      //setCookie("accessToken", accessToken, { path: "/" });
 
       alert("로그인되었습니다. 환영합니다!");
       console.log("Access Token:", accessToken);
@@ -90,64 +82,38 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="NotDrag">
-      <div className="titleWrap"> 로그인 </div>
+    <div className="login-content-box">
+      <div className="login-title-wrap"> 로그인 </div>
       <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
-        <div className="contentWrap">
-          <div className="inputWrap">
-            <LuUserSquare2 style={{ height: "30px" }} />
-            <input
-              type="text"
-              name="id"
-              className="inputContent"
-              placeholder="아이디"
-              {...register("id", {
-                required: "아이디를 입력하세요.",
-              })}
-            />
-          </div>
-          <p style={{ color: "red" }}>{errors.id?.message}</p>
-          <div className="inputWrap">
-            <RiLockPasswordLine style={{ height: "30px" }} />
+        <div>
+          <input
+            type="text"
+            name="id"
+            className="login-input-content"
+            placeholder="ID"
+            {...register("id")}
+          />
+          <div className="input-wrap">
             <input
               type={passwordVisible ? "text" : "password"}
               name="password"
-              className="inputContent"
-              placeholder="비밀번호"
-              {...register("password", {
-                required: "비밀번호를 입력하세요.",
-              })}
+              className="login-input-content"
+              placeholder="Password"
+              {...register("password")}
             />
-            <div onClick={togglePasswordVisibility}>
-              {passwordVisible ? (
-                <AiFillEye style={{ height: "30px", cursor: "pointer" }} />
-              ) : (
-                <AiFillEyeInvisible
-                  style={{ height: "30px", cursor: "pointer" }}
-                />
-              )}
-            </div>
           </div>
-          <p style={{ color: "red" }}>{errors.password?.message}</p>
-          <div className="login-container">
+          <div className="sign-in-container">
             <button
-              className="write-green-button"
+              className="sign-in-button"
               type="submit"
-              style={{ width: "360px" }}
               disabled={isLoading}
             >
               로그인
             </button>
           </div>
           <div></div>
-          <Link
-            to="../sign-up"
-            style={{
-              color: "gray",
-              margin: "20px 10px 0",
-            }}
-          >
-            회원가입
+          <Link to="../sign-up" className="register-link-button">
+            아직 회원이 아니신가요? 회원가입
           </Link>
         </div>
       </form>

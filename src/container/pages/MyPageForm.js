@@ -67,61 +67,63 @@ function MyPageForm() {
   }*/
 
   return (
-    <div className="myPage">
-      <h2>회원정보</h2>
-      {account ? (
-        <div className="accountInfo">
-          <div className="section">
-            <h3>계정</h3>
-            <ul>
-              <li>아이디: {account.accountName}</li>
-              <li>닉네임: {account.nickname}</li>
-              <li>이메일: {account.email}</li>
-              <li className="clickable" onClick={onUpdate}>
-                이메일 또는 닉네임 변경
-              </li>
-            </ul>
-          </div>
-          <div className="section">
-            <h3>커뮤니티</h3>
-            <ul>
-              <li className="clickable" onClick={navigateToList}>
-                내 게시물 보기
-              </li>
-            </ul>
-          </div>
-          {!isAdmin && (
+    <div className="padding-layout">
+      <div className="myPage">
+        <h2>회원정보</h2>
+        {account ? (
+          <div className="accountInfo">
             <div className="section">
-              <h3>나의 위키 편집 요청</h3>
+              <hr />
+              <h3>계정</h3>
               <ul>
-                <li className="clickable" onClick={navigateToModifiedList}>
-                  내가 수정 요청한 정보 보기
-                </li>
-                <li className="clickable" onClick={navigateToCreateList}>
-                  내가 생성 요청한 정보 보기
+                <li>아이디: {account.accountName}</li>
+                <li>닉네임: {account.nickname}</li>
+                <li>이메일: {account.email}</li>
+                <li className="clickable" onClick={onUpdate}>
+                  이메일 또는 닉네임 변경
                 </li>
               </ul>
             </div>
-          )}
-          <div className="section">
-            <h3>위치정보</h3>
-            <ul>
-              <li>경도: {account.latitude}</li>
-              <li>위도: {account.longitude}</li>
-            </ul>
+            <div className="section">
+              <hr />
+              <h3>커뮤니티</h3>
+              <ul>
+                <li className="clickable" onClick={navigateToList}>
+                  내 게시물 보기
+                </li>
+              </ul>
+            </div>
+            {!isAdmin && (
+              <div className="section">
+                <hr />
+                <h3>나의 위키 편집 요청</h3>
+                <ul>
+                  <li className="clickable" onClick={navigateToModifiedList}>
+                    내가 수정 요청한 정보 보기
+                  </li>
+                  <li className="clickable" onClick={navigateToCreateList}>
+                    내가 생성 요청한 정보 보기
+                  </li>
+                </ul>
+              </div>
+            )}
+            <div className="section">
+              <hr />
+              <h3>위치정보</h3>
+              <ul>
+                <li>경도: {account.latitude}</li>
+                <li>위도: {account.longitude}</li>
+              </ul>
+            </div>
+            <div className="section">
+              <hr />
+              <h3>기타</h3>
+            </div>
           </div>
-          <div className="section">
-            <h3>기타</h3>
-            <ul>
-              <li className="clickable" onClick={navigateToOut}>
-                탈퇴하기
-              </li>
-            </ul>
-          </div>
-        </div>
-      ) : (
-        <div>계정 정보를 찾을 수 없습니다.</div>
-      )}
+        ) : (
+          <div>계정 정보를 찾을 수 없습니다.</div>
+        )}
+      </div>
     </div>
   );
 }

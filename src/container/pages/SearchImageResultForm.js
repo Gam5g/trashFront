@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import "./SearchImageResultForm.css";
 
 const translations = {
   paper: "종이",
@@ -29,11 +30,13 @@ const SearchImageResultForm = () => {
     <div className="NotDrag">
       {result.length > 0 && (
         <>
-          <h1>사진으로 나온 결과는 다음과 같습니다.</h1>
+          <h1 className="image-result-title">
+            사진으로 나온 결과는 다음과 같습니다.
+          </h1>
           {res.map((item, index) => (
-            <div key={index}>
+            <div key={index} className="image-result-list">
               <h2>{translations[item.name] || item.name}</h2>
-              <p>확률 : {(item.confidence * 100).toFixed(2)} %</p>
+              <h4>확률 {(item.confidence * 100).toFixed(2)} %</h4>
             </div>
           ))}
           <div>
@@ -41,18 +44,13 @@ const SearchImageResultForm = () => {
             <img
               src={result[0].imageUrl}
               alt={result[0].name}
-              style={{ width: "500px", height: "auto" }}
+              className="image-result-rule"
             />
           </div>
         </>
       )}
       <br />
       <div>
-        <img
-          src={"../../../images/sad.jpg"}
-          style={{ width: "500px" }}
-          alt="없음"
-        />
         <div />
         <div
           style={{
@@ -64,7 +62,14 @@ const SearchImageResultForm = () => {
           {result.length > 0 ? (
             <h1>결과가 마음에 안 든다면?</h1>
           ) : (
-            <h1>죄송합니다. 해당 항목에 나온 결과가 없습니다.</h1>
+            <>
+              <img
+                src={"../../../images/sad.jpg"}
+                style={{ width: "500px" }}
+                alt="없음"
+              />
+              <h1>죄송합니다. 해당 항목에 나온 결과가 없습니다.</h1>
+            </>
           )}
         </div>
         <button

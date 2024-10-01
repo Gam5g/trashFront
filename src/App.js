@@ -45,6 +45,7 @@ import RequestCreateList from "./container/pages/UserCreateRequestList";
 import RequestDetail from "./container/pages/RequestDetail";
 import WikiTotalList from "./container/pages/WikiTotalList";
 import WikiDetailForm from "./container/pages/WikiDetailForm";
+import CameraForm from "./container/pages/CameraForm";
 import { RecoilRoot } from "recoil";
 import { isLoggedInState } from "./state/authState";
 import ScrollTop from "./ScrollTop";
@@ -83,6 +84,7 @@ function App() {
             <Route path="/sign-in" element={<LoginForm />} />
             <Route path="/withdrawal" element={<WithdrawalForm />} />
             <Route path="/station" element={<Station />} />
+            <Route path="/camera" element={<CameraForm />} />
             <Route path="/search/result" element={<SearchImageResultForm />} />
             <Route path="/search" element={<SearchDetailForm />} />
             <Route path="/search/edit" element={<SearchEditForm />} />

@@ -6,6 +6,7 @@ import { isLoggedInState } from "../state/authState";
 import Paging from "../container/pages/Community/Paging";
 import AuthToken from "../container/pages/AuthToken";
 import "../Button.css";
+import "./CommunityList.css";
 import "../container/pages/Community/Community.css";
 
 const CommunityList = ({ posttype }) => {
@@ -102,7 +103,64 @@ const CommunityList = ({ posttype }) => {
 
   return (
     <>
-      <div className="NotDrag">
+      <div>
+        <div
+          className={isMobile ? "" : "search-controls"}
+          style={{ paddingTop: "20px" }}
+        >
+          <select
+            className="sort-container"
+            onChange={(e) => setOption1(e.target.value)}
+            value={option1}
+          >
+            <option value="1">페이지 번호순 정렬</option>
+            {posttype === "bunri" && <option value="2">추천순 정렬</option>}
+            <option value="3">조회순 정렬</option>
+          </select>
+          {isMobile ? <div style={{ marginBottom: "15px" }} /> : <></>}
+          <div className="search-container">
+            <select
+              className="searchBy-container"
+              value={option2}
+              onChange={(e) => setOption2(e.target.value)}
+            >
+              <option value="1">제목</option>
+              <option value="2">글쓴이</option>
+            </select>
+            <input
+              type="text"
+              placeholder="입력"
+              className="community-search-input"
+              value={query}
+              onChange={(e) => {
+                console.log("Query Changed : ", e.target.value);
+                setQuery(e.target.value);
+              }}
+              onFocus={() => setIsFocused(true)}
+              onBlur={() => setIsFocused(false)}
+            />
+            <button
+              className="communitylist-search-button"
+              onClick={handleSearch}
+            >
+              검색
+            </button>
+            {!isMobile &&
+              (isLoggedIn ? (
+                <button
+                  className="communitylist-write-button"
+                  onClick={NavigateToWrite}
+                >
+                  글쓰기
+                </button>
+              ) : (
+                <button className="disable-communitylist-write-button">
+                  글쓰기
+                </button>
+              ))}
+          </div>
+        </div>
+        <br />
         {isMobile ? (
           <table className="mobile-table-container">
             <tbody>
@@ -187,59 +245,6 @@ const CommunityList = ({ posttype }) => {
             </tbody>
           </table>
         )}
-
-        <div
-          className={isMobile ? "" : "search-controls"}
-          style={{ paddingTop: "20px" }}
-        >
-          <select
-            className="sort-container"
-            onChange={(e) => setOption1(e.target.value)}
-            value={option1}
-          >
-            <option value="1">페이지 번호순 정렬</option>
-            {posttype === "bunri" && <option value="2">추천순 정렬</option>}
-            <option value="3">조회순 정렬</option>
-          </select>
-          {isMobile ? <div style={{ marginBottom: "15px" }} /> : <></>}
-          <div className="search-container">
-            <select
-              className="searchBy-container"
-              value={option2}
-              onChange={(e) => setOption2(e.target.value)}
-            >
-              <option value="1">제목</option>
-              <option value="2">글쓴이</option>
-            </select>
-            <input
-              type="text"
-              placeholder="입력"
-              className="community-search-input"
-              value={query}
-              onChange={(e) => {
-                console.log("Query Changed : ", e.target.value);
-                setQuery(e.target.value);
-              }}
-              onFocus={() => setIsFocused(true)}
-              onBlur={() => setIsFocused(false)}
-            />
-            <button className="searchbutton" onClick={handleSearch}>
-              검색
-            </button>
-            {!isMobile &&
-              (isLoggedIn ? (
-                <button
-                  className="write-green-button"
-                  onClick={NavigateToWrite}
-                >
-                  글쓰기
-                </button>
-              ) : (
-                <button className="disabled-write-button">글쓰기</button>
-              ))}
-          </div>
-        </div>
-
         <div>
           <Paging
             totalItemsCount={

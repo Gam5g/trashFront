@@ -53,22 +53,6 @@
   align-items: center;
 }
 
-.titleWrap {
-  margin-top: 88px;
-  margin-bottom: 10px;
-  font-size: 35px;
-  font-weight: 600;
-  display: "flex";
-  flex-direction: "column";
-  align-items: "flex-start";
-  color: #262626;
-}
-
-.contentWrap {
-  margin-top: 26px;
-  flex: 1;
-}
-
 .inputWrap {
   width: 340px;
   height: 30px;
@@ -80,9 +64,6 @@
   border: 1px solid #e2e0e0;
 }
 
-.inputWrap:focus-within {
-  border: 1px solid #00A54C;
-}
 
 .inputWrap input {
   pointer-events: auto;

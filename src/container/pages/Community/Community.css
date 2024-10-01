@@ -94,17 +94,6 @@
     margin-bottom: 20px;
 }
 
-
-.community-search-input {
-    width: 200px;
-    height: 13px;
-    padding: 10px 12px;
-    border: 1px solid #bbb;
-    border-radius: 4px;
-    font-size: 14px;
-    z-index:1;
-}
-
 .title{
     font-size : 20px;
     margin-top : 10px;
@@ -115,10 +104,6 @@
     color : gray;
     line-height:50px;
     border-bottom : 2px solid gray;
-}
-
-.NotDrag {
-    user-select: none;
 }
 
 .mobile-table-container {
@@ -185,20 +170,6 @@
     margin: auto;
 }
 
-.search-container {
-    display: flex;
-    align-items: center;
-}
-
-.search-container select {
-    margin-right: 5px;
-}
-
-.searchBy-container,
-.community-search-input {
-  flex: 1;
-}
-
 .writebutton,
 .searchbutton {
     width : 60px;
@@ -223,17 +194,6 @@
     pointer-events: none;
 }
 
-.searchBy-container {
-    padding: 8px 12px;
-    height: 35px;
-    border: 1px solid #ccc; 
-    border-radius: 4px;
-    background-color: #d9d9d9;
-    color: #333;
-    font-size: 14px; 
-    cursor: pointer;
-}
-
 .button-container {
     display: flex;
     justify-content: center;
@@ -256,30 +216,6 @@
     }
 }
 
-.adopted-content {
-    display: flex;
-    align-items: center;
-  }
-
-.adopted {
-    background-color: #00A54C;
-}
-
-.not-adopted {
-    background-color: #006d33;
-}
-
-.adopted, .not-adopted {
-    border-radius: 8px;
-    margin-right: 10px;
-    color : white;
-    font-size : 22px;
-    width : 95px;
-    height : 45px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
 
 .comment-container {
     margin-top: 20px;
@@ -438,40 +374,15 @@
     background-color: #0073e6;
 }
 
-
-.community-search-input:focus,
-.community-search-input:hover,
-.sort-container:hover {
-    border-color: #00A54C
-}
-
-.searchBy-container:hover {
-    background-color: #c6c6c6;
-}
-
 .searchbutton:hover {
     background-color: #EEEEEE;
 }
-.search-container select:focus,
-.community-search-input:focus,
-.searchbutton:focus,
-.searchBy-container:focus,
-.sort-container:focus {
-    outline: none;
-}
-
-.sort-container,
-.searchBy-container,
- option:checked {
-    font-weight: bold;
-}
-
 
 @font-face {
     font-family: 'Pretendard-Bold';
     src: url("../../../fonts/Pretendard-Bold.woff2") format('truetype');
   }
   
-.writebutton, .searchBy-container, .comment-textarea, .comment-update-textarea, .community-search-input, .sort-container, .greenbutton, .searchbutton {
+.writebutton, .comment-textarea, .comment-update-textarea, .sort-container, .greenbutton, .searchbutton {
     font-family: 'Pretendard-Bold';
 }

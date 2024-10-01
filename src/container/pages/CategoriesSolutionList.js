@@ -1,7 +1,7 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
 import SolutionList from "../../components/SolutionList";
-import "./Categories.css";
+import "./CategoriesList.css";
 
 const CategoriesSolutionList = () => {
   const location = useLocation();

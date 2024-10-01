@@ -76,7 +76,7 @@
     cursor : pointer;
   }
 
-  .deleteButton, .editButton, .listButton {
+  .deleteButton, .editButton {
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
@@ -85,17 +85,6 @@
     transition: background-color 0.3s ease;
   }
   
-  .likesButton {
-    font-size : bold 15px;
-    background-color: white;
-    width : 50px;
-    height: 50px;
-    color : #3B855D;
-    border : 1px solid #3B855D;
-    border-radius: 50px 50px 50px 50px;
-    cursor: pointer;
-  }
-
   .dislikesButton {
     font-size : bold 15px;
     background-color: #3B855D;
@@ -118,11 +107,6 @@
     margin-left: 10px;
   }
   
-  .listButton {
-    background-color: #007bff;
-    color: #fff;
-    margin-left: 10px;
-  }
   
   .deleteButton:hover {
     background-color: #ff3333;
@@ -131,11 +115,7 @@
   .editButton:hover {
     background-color: #016e69;
   }
-  
-  .listButton:hover {
-    background-color: #0056b3;
-  }
-  
+
   .likesButton:hover {
     color : white;
     background-color: #038b85;
@@ -151,6 +131,6 @@
     src: url("../../../fonts/Pretendard-Bold.woff2") format('truetype');
   }
   
-.deleteButton, .listButton, .editButton, .commentinput, .submitButton{
+.deleteButton, .editButton, .commentinput, .submitButton{
     font-family: 'Pretendard-Bold';
 }

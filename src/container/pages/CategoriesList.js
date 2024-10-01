@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AuthToken from "./AuthToken";
 import Paging from "./Community/Paging";
-import "./Categories.css";
+import "./CategoriesList.css";
 import { useNavigate } from "react-router-dom";
 
 const CategoriesList = () => {
@@ -99,7 +99,7 @@ const CategoriesList = () => {
       className="categories-container"
       style={{ marginTop: marginTopValue, userSelect: "none" }}
     >
-      <h1>카테고리별 배출방법 ＞</h1>
+      <h1 className="categories-text">카테고리별 배출방법 ＞</h1>
       <div className="categories-buttons">
         {categories.map((category) => (
           <button
