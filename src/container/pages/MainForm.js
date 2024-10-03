@@ -53,7 +53,7 @@ function MainForm() {
         }));
         setRecentBoardList(inputData_recent);
         const response = await AuthToken.get(
-          `/questionBoard/read/1/paging?page=1`,
+          `/questionBoard/read/4/paging?page=1`,
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
@@ -108,6 +108,7 @@ function MainForm() {
     navigate(`/community-bunri/${post.id}`);
   };
 
+  ///soultion/create에 솔루션 직접 만드는 페이지 버튼 추가 필요
   return (
     <div className="main-form-margin">
       <div className="main-rule-container">
@@ -141,9 +142,14 @@ function MainForm() {
             <button
               className="main-button"
               onClick={() => navigate("/categories")}
-              style={{ width: "200px" }}
             >
               카테고리별로 보기
+            </button>
+            <button
+              className="main-button"
+              onClick={() => navigate("/solution/create")}
+            >
+              새 솔루션 올리기
             </button>
           </div>
         </div>
@@ -170,7 +176,16 @@ function MainForm() {
               ))}
           </div>
           <div className="main-list-second-content">
-            <p>SNS</p>
+            <iframe
+              width="500"
+              height="400"
+              src="https://www.youtube.com/embed/yYQCHZbrgB4?si=6UIogs_Ibj8mQF52"
+              title="YouTube video player"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen
+            ></iframe>
           </div>
         </div>
         <div className="two-box-container">
