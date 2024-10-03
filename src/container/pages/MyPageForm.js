@@ -39,11 +39,12 @@ function MyPageForm() {
     }
   }, [isLoggedIn, navigate]);
 
-  const navigateToOut = () => {
-    navigate("/withdrawal");
+  const onNicknameUpdate = async () => {
+    navigate("/my-page/update/nickname");
   };
-  const onUpdate = async () => {
-    navigate("/my-page/update");
+
+  const onEmailUpdate = async () => {
+    navigate("/my-page/update/email");
   };
 
   const navigateToList = () => {
@@ -77,11 +78,13 @@ function MyPageForm() {
               <h3>계정</h3>
               <ul>
                 <li>아이디: {account.accountName}</li>
-                <li>닉네임: {account.nickname}</li>
-                <li>이메일: {account.email}</li>
-                <li className="clickable" onClick={onUpdate}>
-                  이메일 또는 닉네임 변경
+                <li className="clickable" onClick={onNicknameUpdate}>
+                  닉네임 변경: {account.nickname}
                 </li>
+                <li className="clickable" onClick={onEmailUpdate}>
+                  이메일 변경: {account.email}
+                </li>
+                <li>비밀번호 변경</li>
               </ul>
             </div>
             <div className="section">

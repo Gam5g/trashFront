@@ -1,0 +1,115 @@
+.my-page-update-text{
+    color: #424242;
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 48px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+
+}
+
+.my-page-type{
+    color: #424242;
+    font-family: Pretendard;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom : 15px;
+}
+.my-page-text{
+    color: #424242;
+    font-family: Pretendard;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin-bottom : 15px;
+}
+
+.my-page-update-input{
+    border-radius: 14px;
+    border: 1px solid #A5A5A5;
+    background: #FFF;
+    display: flex;
+    width: 400px;
+    height: 60px;
+    padding: 10px 20px;
+    align-items: center;
+    gap: 10px;
+    color: #A5A5A5;
+    font-family: Pretendard;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.my-page-duplicate-button{
+    cursor: pointer;
+    border: none;
+    color: #FFF;
+    font-family: Pretendard;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    display: flex;
+    width: 442px;
+    height: 50px;
+    padding: 10px 20px;
+    margin-bottom : 20px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 16px;
+    background: var(--Btn-Color, #8AAB5F);
+}
+.my-page-button-container{
+    display: flex;
+    gap : 17px;
+}
+.my-page-update-button{
+    cursor: pointer;
+    display: flex;
+    border: none;
+    width: 48%;
+    height: 20%;
+    padding: 12px 30px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    color: #FFF;
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    border-radius: 16px;
+    background: var(--Btn-Color, #8AAB5F);
+}
+
+.my-page-cancel-button{
+    cursor: pointer;
+    border: none;
+    border-radius: 16px;
+    background: #C6C6C6;
+    display: flex;
+    width: 48%;
+    height: 20%;
+    padding: 12px 30px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    color: #FFF;
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
