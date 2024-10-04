@@ -108,7 +108,6 @@ function MainForm() {
     navigate(`/community-bunri/${post.id}`);
   };
 
-  ///soultion/create에 솔루션 직접 만드는 페이지 버튼 추가 필요
   return (
     <div className="main-form-margin">
       <div className="main-rule-container">

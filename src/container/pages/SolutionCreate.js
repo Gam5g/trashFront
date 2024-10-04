@@ -4,6 +4,7 @@ import { useMediaQuery } from "react-responsive";
 import { useRecoilValue } from "recoil";
 import { isLoggedInState } from "../../state/authState";
 import AuthToken from "./AuthToken";
+import "./SolutionCreate.css";
 import "./Solution.css";
 
 const SolutionCreate = () => {
@@ -182,10 +183,8 @@ const SolutionCreate = () => {
   };
 
   return (
-    <div className="NotDrag" style={{ marginTop: "200px" }}>
-      <div className="info-title" style={{ marginTop: "125px" }}>
-        새로운 정보 작성
-      </div>{" "}
+    <div className="solution-create-form">
+      <div className="solution-title">새로운 정보 생성</div>
       <form onSubmit={handleSubmit} className="info-container">
         <div className="button-container">
           <h3 className="solution-font">이름</h3>
@@ -238,7 +237,7 @@ const SolutionCreate = () => {
         </div>
 
         <div className="button-container">
-          <h3 className="solution-font">태그</h3>
+          <h3 className="solution-font">키워드</h3>
           <div className="inputWrap">
             <input
               className="inputContent"
@@ -284,7 +283,7 @@ const SolutionCreate = () => {
             ) : (
               <button
                 type="button"
-                className={`solution-upload-button ${isActive ? "active" : ""}`}
+                className={`solution-image-upload-button ${isActive ? "active" : ""}`}
                 onClick={handleImageClick}
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={handleFileChange}
@@ -295,9 +294,7 @@ const SolutionCreate = () => {
           </div>
         </div>
         <div className="button-container">
-          <h3 style={{ color: "green", fontSize: "25px", marginRight: "15px" }}>
-            배출요령
-          </h3>
+          <h3 className="solution-font">배출요령</h3>
           <div>
             <textarea
               type="text"

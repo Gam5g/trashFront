@@ -2,12 +2,13 @@ import React, { useRef, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { isLoggedInState } from "../state/authState";
-import "../container/pages/Community/Community.css";
-import "../Button.css";
 import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import ImageResize from "quill-image-resize";
 import AuthToken from "../container/pages/AuthToken";
+import "../container/pages/Community/Community.css";
+import "../Button.css";
+import "./CommunityWrite.css";
 import { useMediaQuery } from "react-responsive";
 import AWS from "aws-sdk";
 
@@ -205,11 +206,11 @@ const CommunityWrite = ({ posttype }) => {
 
   return (
     <div className="NotDrag">
-      <div className="titleWrap" style={{ userSelect: "none" }}>
+      <div className="community-title-wrap" style={{ userSelect: "none" }}>
         {posttype === "bunri" ? "분리수거" : "나눔"} 커뮤니티 &gt;
       </div>
 
-      <p style={{ fontSize: "16px", marginTop: "-5px" }}>글 작성</p>
+      <p className="community-subtitle-wrap">글 작성</p>
       <form onSubmit={onSubmit}>
         <div className="write" style={{ userSelect: "none" }}>
           <p style={{ color: "gray", fontSize: "14px" }}>제목</p>

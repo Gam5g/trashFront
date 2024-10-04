@@ -1,3 +1,7 @@
+.NotDrag{
+  user-select: none;
+}
+
 .adopted-content {
     display: flex;
     align-items: center;
@@ -27,6 +31,35 @@
     line-height: normal;
 }
 
+.community-detail-title-wrap{
+  user-select: none;
+  color: #424242;
+  font-family: Pretendard;
+  font-size: 48px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.community-detail-subtitle-wrap{
+  user-select: none;
+  color: #424242;
+  text-align: left;
+  font-family: Pretendard;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.writer-info{
+  color: #424242;
+  font-family: Pretendard;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
 
 .likes-container {
     display: flex;
@@ -93,6 +126,42 @@
     background: #C6C6C6;
     color: #FFF;
     text-align: center;
+    font-family: Pretendard;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
+
+  .comment-content{
+    color: #424242;
+    font-family: Pretendard;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
+
+  .comment-date{
+    color: #A5A5A5;
+    font-family: Pretendard;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
+  .recommend-number{
+    align-self: stretch;
+    color: var(--Btn-Color, #8AAB5F);
+    font-family: Pretendard;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+
+  .adopted-button{
+    color: #A5A5A5;
     font-family: Pretendard;
     font-size: 20px;
     font-style: normal;

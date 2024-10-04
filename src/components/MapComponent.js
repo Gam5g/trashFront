@@ -7,7 +7,6 @@ import "../style.css";
 import "../Button.css";
 import "./MapComponent.css";
 const { kakao } = window;
-
 const MapComponent = ({
   endpoint,
   page,
@@ -25,6 +24,7 @@ const MapComponent = ({
   const [radius, setRadius] = useState(0);
   const latitude = localStorage.getItem("latitude");
   const longitude = localStorage.getItem("longitude");
+
   const isValidCoordinate = (coord) => {
     const num = parseFloat(coord);
     return !isNaN(num) && isFinite(num);
@@ -33,6 +33,24 @@ const MapComponent = ({
   const isLocationAvailable =
     isValidCoordinate(latitude) && isValidCoordinate(longitude);
 
+  // 지도 로드 시점에 대한 처리
+  useEffect(() => {
+    if (!window.kakao || !window.kakao.maps) {
+      console.error("Kakao Maps API is not available.");
+      return;
+    }
+
+    const container = document.getElementById("map");
+    const options = {
+      center: new kakao.maps.LatLng(35.8606528, 128.5607254), // 지도 중심 좌표
+      level: 6, // 지도의 확대 레벨
+    };
+
+    const mapObj = new kakao.maps.Map(container, options);
+    setMap(mapObj);
+  }, []);
+
+  // 위치 데이터 가져오기
   useEffect(() => {
     const fetchLocationData = async (region) => {
       try {
@@ -72,17 +90,7 @@ const MapComponent = ({
     }
   }, [isLoggedIn, activeRegion, page, isChecked, radius, clickedPosition]);
 
-  useEffect(() => {
-    const container = document.getElementById("map");
-
-    const options = {
-      center: new kakao.maps.LatLng(35.8606528, 128.5607254),
-      level: 6,
-    };
-    const mapObj = new kakao.maps.Map(container, options);
-    setMap(mapObj);
-  }, []);
-
+  // 지도 위에 마커 표시
   useEffect(() => {
     if (map && locationData.length > 0) {
       locationData.forEach((position) => {
@@ -146,16 +154,25 @@ const MapComponent = ({
         }
       ></div>
       <div className="checkbox-container">
-        <label>
-          <input
-            type="checkbox"
-            checked={isChecked}
-            onChange={handleCheckboxChange}
-            disabled={!isLocationAvailable}
-          />
-          반경으로 검색(회원가입에서 위치동의하지 않았을 경우 사용 불가)
-        </label>
+        <div
+          className={`checkbox-container ${isChecked ? "checked" : "unchecked"}`}
+        >
+          <label className="custom-checkbox">
+            <input
+              type="checkbox"
+              className="map-checkbox"
+              checked={isChecked}
+              onChange={handleCheckboxChange}
+              disabled={!isLocationAvailable}
+            />
+            <span className="checkbox-mark"></span>
+            <span className="map-checkbox-text">
+              반경으로 검색(회원가입에서 위치동의하지 않았을 경우 사용 불가)
+            </span>
+          </label>
+        </div>
       </div>
+      <br />
       {!isChecked &&
         regionButtons.map((region) => (
           <button
