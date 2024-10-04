@@ -53,6 +53,10 @@ header {
     color: #424D34;
     font-weight: bold;
 }
+
+.nav-menu a:hover {
+  color : #6C8D40;
+}
 .community-container {
   position: relative;
   display: inline-block;
@@ -129,19 +133,27 @@ header {
     flex-grow : 1;
   }
 
-  .search-bar {
+  .search-bar, .long-search-bar{
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 25%;
     padding: 0px 24px;
     border: 1px solid var(--Line, #DCDCDC);
-    border-radius: 25px;
     background: var(--White, #FFF);
     user-select: none;
   }
+  .search-bar {
+    border-radius: 25px;
+  }
+   
+  .long-search-bar {
+    position: relative;
+    border-radius: 25px 25px 0px 0px;
+  }
   
-  .search-bar input {
+  .search-bar input,
+  .long-search-bar input {
     flex-grow: 1;
     color: var(--gray, #7E7E7E);
     font-family: Pretendard;
@@ -149,10 +161,31 @@ header {
     font-weight: 500;
     line-height: 28px;
     border: none;
-    outline: none; 
-    padding-right:10px
+    outline: none;
+    padding-right: 10px;
   }
   
+  .search-bar input{
+    width:28%;
+  }
+  .long-search-bar input {
+    width:44%;
+  }
+  @media (max-width: 768px) {
+    .search-bar input,
+    .long-search-bar input {
+      width: 15%; 
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .search-bar input,
+    .long-search-bar input {
+      width: 100%;
+      font-size: 14px;
+      padding-right: 8px;
+    }
+  }
   .clear-search-button {
     width : 20px;
     height : 20px;
@@ -179,23 +212,25 @@ header {
 
   .related-searches {
     position: absolute;
-    top: 70%;
+    top: 100%;
     left: 0;
-    margin-left:53%;
-    width: 25%; 
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    padding: 10px;
-    margin-top: 5px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-    border: 1px solid #e0e0e0;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: white;
+    border: 1px solid #dcdcdc;
+    border-radius: 0 0 25px 25px;
     z-index: 100;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
   
   .related-search-item {
-    padding: 10px 5px;
+    color: var(--gray, #7E7E7E);
+    font-family: Pretendard;
     font-size: 16px;
-    color: #333;
+    font-weight: 500;
+    line-height: 28px;
+    padding: 10px;
     cursor: pointer;
     border-bottom: 1px solid #e0e0e0;
   }
@@ -207,9 +242,7 @@ header {
   .related-search-item:hover {
     background-color: #f0f0f0;
   }
-  
 
-  
 .auth-links {
   display: flex;
   gap: 10px;
@@ -222,7 +255,10 @@ header {
   color: #424D34;
   font-weight: bold;
 }
-  
+
+.auth-links a:hover {
+  color : #6C8D40;
+}
   @media (max-width: 768px) {
     header, .search-bar {
       padding: 10px 5%;

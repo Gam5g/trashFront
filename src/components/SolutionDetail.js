@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import AuthToken from "../container/pages/AuthToken";
-
+import "./SolutionDetail.css";
 const SolutionDetail = ({ type }) => {
   const navigate = useNavigate();
   const { wasteId } = useParams();
@@ -237,11 +237,7 @@ const SolutionDetail = ({ type }) => {
             </div>
           </div>
           <div className="button-container">
-            <h3
-              style={{ color: "green", fontSize: "25px", marginRight: "15px" }}
-            >
-              배출요령
-            </h3>
+            <h3 className="solution-font">배출요령</h3>
             <div>
               <textarea
                 type="text"

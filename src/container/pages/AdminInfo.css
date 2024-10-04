@@ -1,0 +1,27 @@
+.admin-info-text{
+    display: inline-flex;
+    padding: 5px 10px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    color: #000;
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    border-radius: 16px;
+    border: 1px solid #000;
+    background: #D6D6D6;
+}
+
+.admin-text{
+    color: #424242;
+    font-family: Pretendard;
+    font-size: 42px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+
+}

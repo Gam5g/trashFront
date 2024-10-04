@@ -17,26 +17,6 @@ textarea.solution-input {
     margin-top: 5px;
   }
 
-  .info-title {
-    margin : 0 auto;
-    text-align: center;
-    background-color: #3B855D;
-    border-radius: 22px;
-    margin-bottom :20px;
-    color : white;
-    font-size : 45px;
-    width : 355px;
-    height : 65px;
-
-}
-
-.info-container{
-  border: 6px solid #3B855D;
-  border-radius: 22px;
-  width : 550px;
-  height : 800px;
-}
-
 .info-upload-container {
   user-select: none;
   display: flex;
@@ -46,19 +26,13 @@ textarea.solution-input {
   width: 100%;
 }
 
-.solution-font {
-  color : green;
-  font-size : 25px;
-  margin-right: 15px;
-}
-
-.solution-upload-button {
+.solution-image-upload-button {
   margin : 0 auto;
   margin-top: 20px;
   margin-bottom: 20px;
   background-color: white;
-  color: #4CAF50;
-  border: 2px dashed #4CAF50;
+  color: #7E7E7E;
+  border: 2px dashed var(--gray, #7E7E7E);
   border-radius: 10px;
   width : 420px;
   height: 240px;
@@ -72,10 +46,10 @@ textarea.solution-input {
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
-.solution-upload-button:hover, .solution-upload-button.active {
+.solution-image-upload-button:hover, .solution-image-upload-button.active {
   background-color: #e8f5e9;
-  color:#388E3c;
-  border-color:  #388e3c;
+  color:#7E7E7E;
+  border-color:  #7E7E7E;
 }
 
 .solution-uploaded-image {

@@ -5,6 +5,7 @@ import { useRecoilValue } from "recoil";
 import { isLoggedInState } from "../state/authState";
 import Paging from "../container/pages/Community/Paging";
 import "../Button.css";
+import "./MapForm.css";
 
 const MapForm = ({
   MapComponent,
@@ -40,7 +41,7 @@ const MapForm = ({
   };
 
   return (
-    <div className="NotDrag">
+    <div className="map-form-container">
       <h1>대구광역시 수거함 위치 ＞</h1>
       <div
         className="location-button-container"
@@ -48,15 +49,21 @@ const MapForm = ({
       >
         {primaryPath === "/battery" ? (
           <>
-            <button className="gray-button" onClick={navigateToSecondary}>
+            <button
+              className="map-disabled-button"
+              onClick={navigateToSecondary}
+            >
               {secondaryTitle}
             </button>
-            <button className="location-green-button">{primaryTitle}</button>
+            <button className="map-current-button">{primaryTitle}</button>
           </>
         ) : (
           <>
-            <button className="location-green-button">{primaryTitle}</button>
-            <button className="gray-button" onClick={navigateToSecondary}>
+            <button className="map-current-button">{primaryTitle}</button>
+            <button
+              className="map-disabled-button"
+              onClick={navigateToSecondary}
+            >
               {secondaryTitle}
             </button>
           </>

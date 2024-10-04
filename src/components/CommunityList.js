@@ -35,6 +35,7 @@ const CommunityList = ({ posttype }) => {
 
   useEffect(() => {
     const fetchBoardData = async () => {
+      const nickname = localStorage.getItem("nickname");
       try {
         let url = "";
 
@@ -43,7 +44,7 @@ const CommunityList = ({ posttype }) => {
         } else if (posttype === "nanum") {
           url = `/recycleBoard/read/${option1}/paging?page=${page}`;
         } else if (posttype === "mylist") {
-          url = ``;
+          url = `/questionBoard/search/${option1}/${option2}/paging?page=${page}&size=1&sort=string&keyword=${nickname}`;
         }
 
         const response = await AuthToken.get(url, {
@@ -73,6 +74,7 @@ const CommunityList = ({ posttype }) => {
 
   const handleSearch = async () => {
     const keyword = encodeURIComponent(query);
+
     try {
       let url = ``;
       if (posttype === "bunri") {
