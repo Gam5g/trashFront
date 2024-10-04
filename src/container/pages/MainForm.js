@@ -84,7 +84,7 @@ function MainForm() {
             adopted: data.adopted,
           })
         );
-        setRecommendBoardList(inputData_recommend.slice(0, 6));
+        setRecommendBoardList(inputData_recommend.slice(0, 5));
       } catch (error) {
         console.error(error);
       }

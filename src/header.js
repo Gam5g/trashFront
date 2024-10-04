@@ -222,7 +222,6 @@ const Header = () => {
               onFocus={() => setSearchFocused(true)}
               onBlur={(e) => {
                 if (!e.currentTarget.contains(e.relatedTarget)) {
-                  // related-search-item를 클릭하는 경우에는 blur 이벤트를 막아줌
                   setSearchFocused(false);
                 }
               }}

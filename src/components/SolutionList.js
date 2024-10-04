@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import AuthToken from "../container/pages/AuthToken";
 import Paging from "../container/pages/Community/Paging";
 import "../container/pages/Solution.css";
+import "../container/pages/AdminInfo.css";
 
 const SolutionList = ({ type, mode }) => {
   const location = useLocation();
@@ -110,7 +111,7 @@ const SolutionList = ({ type, mode }) => {
 
   return (
     <div className="NotDrag" style={{ marginTop: marginTopValue }}>
-      {type === "admin" && <h3>관리자 로그인</h3>}
+      {type === "admin" && <h3 className="admin-info-text">관리자 로그인</h3>}
       {type === "user" && <h1>나의 요청 리스트</h1>}
       {type === "admin" && <h1>요청 리스트</h1>}
       {type === "totalSolution" && <h1>현재 솔루션 반영 상태</h1>}

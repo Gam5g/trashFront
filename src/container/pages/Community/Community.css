@@ -106,52 +106,6 @@
     border-bottom : 2px solid gray;
 }
 
-.mobile-table-container {
-    margin-top: 500px;
-    width: 360px;
-}
-
-.mobile-table-container tr {
-    cursor: pointer;
-}
-.table-container {
-    border: none;
-    border-collapse: collapse;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.07), 
-                0 2px 4px rgba(0,0,0,0.07), 
-                0 4px 8px rgba(0,0,0,0.07), 
-                0 8px 16px rgba(0,0,0,0.07),
-                0 16px 32px rgba(0,0,0,0.07), 
-                0 32px 64px rgba(0,0,0,0.07);
-    width: 1000px;
-    margin: auto;
-}
-
-.table-container tbody td:nth-child(2){
-    cursor: pointer;
-}
-
-.table-container th, .table-container td {
-    border-top: 1px solid gray;
-    border-bottom: 1px solid gray;
-    border-right: none;
-    padding: 8px;
-    text-align: center;
-}
-
-.table-container th:nth-child(2),
-.table-container td:nth-child(2) {
-    width: 40%;
-}
-
-.table-container th {
-    background-color: #f4f4f4;
-}
-
-.table-container th:hover {
-    background-color: #f5f5f5;
-}
-
 .mobile-search-controls {
     display: flex;
     flex-wrap: nowrap;
@@ -170,7 +124,6 @@
     margin: auto;
 }
 
-.writebutton,
 .searchbutton {
     width : 60px;
 }
@@ -222,11 +175,8 @@
   }
   
   .comment {
-    border: 1px solid #ddd;
-    border-radius: 8px;
     padding: 10px;
-    margin-bottom: 20px;
-    background-color: #f9f9f9;
+    margin-bottom: 5px;
     position: relative;
   }
   
@@ -247,7 +197,7 @@
   }
   
   .comment .comment-content {
-    margin-bottom: 10px;
+    margin-bottom: 3px;
     color: #555;
   }
   
@@ -271,7 +221,6 @@
     
   .comment .comment-buttons .recommend-button {
     background-color: transparent;
-    color: red;
     font-weight: bold;
   }
   
@@ -369,11 +318,6 @@
     background-color: #2D6446;
 }
 
-
-.writebutton:hover {
-    background-color: #0073e6;
-}
-
 .searchbutton:hover {
     background-color: #EEEEEE;
 }
@@ -383,6 +327,6 @@
     src: url("../../../fonts/Pretendard-Bold.woff2") format('truetype');
   }
   
-.writebutton, .comment-textarea, .comment-update-textarea, .sort-container, .greenbutton, .searchbutton {
+.comment-textarea, .comment-update-textarea, .sort-container, .greenbutton, .searchbutton {
     font-family: 'Pretendard-Bold';
 }

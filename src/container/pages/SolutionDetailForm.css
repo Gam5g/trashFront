@@ -1,0 +1,56 @@
+.solution-detail-form-container{
+    user-select: none;
+    margin-top:400px;
+}
+
+.result-title{
+    color: #424242;
+    font-family: Pretendard;
+    font-size: 48px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+.result-text{
+    color: #424242;
+    font-family: Pretendard;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+
+}
+
+.result-type-text{
+    color: var(--primary-hover, #6C8D40);
+    font-family: Pretendard;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    text-align: center;
+}
+
+.back-button{
+    cursor: pointer;
+    border: none;
+    display: flex;
+    height: 34px;
+    padding: 0px 20px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 16px;
+    background: #C6C6C6;
+    color: #FFF;
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}

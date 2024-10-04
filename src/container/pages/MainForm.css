@@ -138,6 +138,10 @@
     border-bottom: 1px solid var(--Line, #DCDCDC);
 }
 
+.main-list-content:last-child {
+    border-bottom: none;
+  }
+
 .main-list-left-wrapper {
     display: flex;
     justify-content: center;

@@ -185,75 +185,82 @@ const SolutionCreate = () => {
   return (
     <div className="solution-create-form">
       <div className="solution-title">새로운 정보 생성</div>
-      <form onSubmit={handleSubmit} className="info-container">
-        <div className="button-container">
-          <h3 className="solution-font">이름</h3>
-          <div className="inputWrap">
-            <input
-              className="inputContent"
-              type="text"
-              name="name"
-              value={solutionList.name}
-              onChange={handleChange}
-            />
-          </div>
+      <form onSubmit={handleSubmit} className="solution-info-container">
+        <div>
+          <h3 className="result-type-text">이름</h3>
         </div>
-        <div className="button-container" style={{ marginRight: "330px" }}>
-          <h3 className="solution-font">재질</h3>
-          <button
-            style={{ marginLeft: "5px" }}
-            className="nothing-button"
-            type="button"
-          ></button>
+        <div>
+          <input
+            className="inputContent"
+            type="text"
+            name="name"
+            value={solutionList.name}
+            onChange={handleChange}
+          />
         </div>
 
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <div style={{ marginRight: "20px" }}>
-            {[
-              "일반쓰레기",
-              "종이류",
-              "유리",
-              "플라스틱",
-              "캔류",
-              "비닐류",
-              "스티로폼",
-              "폐유",
-              "폐가전",
-              "폐건전지",
-              "재활용 어려움",
-            ].map((category) => (
-              <label key={category} className="checkbox-label">
-                <input
-                  type="checkbox"
-                  name="category"
-                  value={category}
-                  checked={solutionList.categories.includes(category)}
-                  onChange={handleCategoryChange}
-                />{" "}
-                {category}
-              </label>
-            ))}
-          </div>
+        <div>
+          <h3 className="result-type-text">재질</h3>
+        </div>
+        <div className="checkbox-container">
+          {[
+            "일반쓰레기",
+            "종이류",
+            "유리",
+            "플라스틱",
+            "캔류",
+            "비닐류",
+            "스티로폼",
+            "폐유",
+            "폐가전",
+            "폐건전지",
+            "재활용 어려움",
+          ].map((category) => (
+            <label key={category} className="custom-checkbox">
+              <input
+                type="checkbox"
+                className="category-checkbox"
+                name="category"
+                value={category}
+                checked={solutionList.categories.includes(category)}
+                onChange={handleCategoryChange}
+              />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="12"
+                viewBox="0 0 16 12"
+                fill="none"
+                className="checkbox-mark"
+              >
+                <path
+                  d="M2 4.85716L5.85 10L14 1"
+                  stroke="white"
+                  stroke-width="3"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              {category}
+            </label>
+          ))}
         </div>
 
-        <div className="button-container">
-          <h3 className="solution-font">키워드</h3>
-          <div className="inputWrap">
-            <input
-              className="inputContent"
-              type="text"
-              name="tags"
-              placeholder="태그를 입력하세요 (쉼표로 구분)"
-              onChange={handleTagsChange}
-            />
-          </div>
+        <div>
+          <h3 className="result-type-text"> 키워드</h3>
         </div>
-        <div className="button-container">
-          {!image && (
-            <h3 className="solution-font" style={{ marginLeft: "35px" }}>
-              사진
-            </h3>
-          )}
+        <div>
+          <input
+            className="inputContent"
+            type="text"
+            name="tags"
+            value={solutionList.tags}
+            onChange={handleTagsChange}
+          />
+        </div>
+        <div>
+          <h3 className="result-type-text"> 사진</h3>
+        </div>
+        <div>
           <div>
             <input
               type="file"
@@ -293,29 +300,36 @@ const SolutionCreate = () => {
             )}
           </div>
         </div>
-        <div className="button-container">
-          <h3 className="solution-font">배출요령</h3>
-          <div>
-            <textarea
-              type="text"
-              className="solution-input"
-              name="solution"
-              placeholder="솔루션을 입력하세요"
-              value={solutionList.solution}
-              onChange={handleTextareaChange}
-              maxLength={maxChars}
-            />
-            <div className="char-count">
-              {charCount}/{maxChars} 글자
-            </div>
+        <div>
+          <h3 className="result-type-text">배출요령</h3>
+        </div>
+        <div>
+          <textarea
+            className="inputContent textarea"
+            name="solution"
+            placeholder="솔루션을 입력하세요"
+            value={solutionList.solution}
+            onChange={handleTextareaChange}
+            maxLength={maxChars}
+            style={{ height: "150px" }}
+          />
+          <div className="char-count">
+            {charCount}/{maxChars} 글자
           </div>
         </div>
       </form>
       <div className="button-container">
-        <button type="submit" onClick={handleSubmit} className="submitbutton">
+        <button
+          type="submit"
+          onClick={handleSubmit}
+          className="solution-create-request-button"
+        >
           생성 요청하기
         </button>
-        <button className="cancelbutton" onClick={navigateToHome}>
+        <button
+          className="solution-cancel-request-button"
+          onClick={navigateToHome}
+        >
           취소
         </button>
       </div>
