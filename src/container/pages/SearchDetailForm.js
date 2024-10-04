@@ -4,6 +4,7 @@ import AuthToken from "./AuthToken";
 import "../../style.css";
 import Paging from "./Community/Paging";
 import "./Solution.css";
+import "./SearchDetailForm.css";
 
 const SearchDetailForm = () => {
   const isAdmin = localStorage.getItem("accountName") === "admin";
@@ -196,10 +197,10 @@ const SearchDetailForm = () => {
   }
 
   return (
-    <div className="NotDrag" style={{ marginTop: "250px" }}>
+    <div className="search-detail-form-container">
       <div>
         <div>
-          <h1 style={{ textAlign: "center" }}>{searchResult.name}</h1>
+          <h1 className="result-title">{searchResult.name}</h1>
           <div
             style={{
               display: "flex",
@@ -219,50 +220,18 @@ const SearchDetailForm = () => {
             )}
           </div>
           <div style={{ textAlign: "center" }}>
-            <p
-              style={{
-                textAlign: "center",
-                color: "green",
-                fontSize: "25px",
-              }}
-            >
-              재질
-            </p>
-            {searchResult.categories.join(", ")}
-            <p
-              style={{
-                textAlign: "center",
-                color: "green",
-                fontSize: "25px",
-              }}
-            >
-              키워드
-            </p>
-            {searchResult.tags.join(", ")}
-            <p
-              style={{
-                textAlign: "center",
-                color: "green",
-                fontSize: "25px",
-              }}
-            >
-              배출 요령
-            </p>
-            <p>{formatRules(searchResult.solution)}</p>
+            <p className="result-type-text">재질</p>
+            <p className="result-text">{searchResult.categories.join(", ")}</p>
+            <p className="result-type-text">키워드</p>
+            <p className="result-text">{searchResult.tags.join(", ")}</p>
+            <p className="result-type-text">배출 요령</p>
+            <p className="result-text">{formatRules(searchResult.solution)}</p>
           </div>
           <div className="button-container">
-            <button
-              className="white-button"
-              style={{ marginLeft: "30px" }}
-              onClick={handleEdit}
-            >
+            <button className="update-button" onClick={handleEdit}>
               수정하기
             </button>
-            <button
-              className="white-button"
-              onClick={navigateToHome}
-              style={{ marginLeft: "5px" }}
-            >
+            <button className="back-button" onClick={navigateToHome}>
               돌아가기
             </button>
           </div>

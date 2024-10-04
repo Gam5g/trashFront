@@ -1,0 +1,66 @@
+.wiki-detail-container{
+    user-select: none;
+    margin-top:450px;
+}
+
+.result-title{
+    color: #424242;
+    font-family: Pretendard;
+    font-size: 48px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+.result-text{
+    color: #424242;
+    font-family: Pretendard;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+
+}
+
+.result-type-text{
+    color: var(--primary-hover, #6C8D40);
+    font-family: Pretendard;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+
+}
+
+.wiki-accept-button,
+.wiki-reject-button {
+    cursor: pointer;
+    border: none;
+    display: flex;
+    width: 45%;
+    height: 56px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 16px;
+    color: #FFF;
+    text-align: center;
+    font-family: Pretendard, sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.wiki-accept-button {
+    gap: 12px;
+    background: var(--Btn-Color, #8AAB5F);
+}
+
+.wiki-reject-button {
+    padding: 12px 69px;
+    gap: 10px;
+    background: #C6C6C6;
+    flex-shrink: 0;
+}

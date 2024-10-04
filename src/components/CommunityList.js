@@ -215,15 +215,7 @@ const CommunityList = ({ posttype }) => {
                     <td>
                       {post.adopted === true ? (
                         <>
-                          <img
-                            src="images/adopted.png"
-                            alt="adopted"
-                            className="adopted-icon"
-                            style={{
-                              width: "15%",
-                              height: "10%",
-                            }}
-                          />
+                          <span className="adopted-icon">채택완료</span>
                           {post.title.length > 30 ? (
                             <>{post.title.slice(0, 30) + "..."}</>
                           ) : (

@@ -23,7 +23,7 @@
     align-items: center;
     gap: 10px;
     border-radius: 16px;
-    color: #FFF;
+    color:  white;
     font-family: Pretendard;
     font-size: 24px;
     font-style: normal;
@@ -52,10 +52,16 @@
   line-height: normal;
 }
 
+.writer-and-buttons-container{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .writer-info{
   color: #424242;
   font-family: Pretendard;
-  font-size: 24px;
+  font-size: 20px;
   font-style: normal;
   font-weight: 700;
   line-height: normal;
@@ -141,30 +147,76 @@
     font-weight: 500;
     line-height: normal;
   }
+  .comment-info-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .comment-interactions {
+    display: flex;
+    align-items: center;
+  }
 
+  .comment-info {
+    display : flex;
+    
+  }
   .comment-date{
     color: #A5A5A5;
     font-family: Pretendard;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
+    font-size: 14px;
+    margin-right: 10px;
+  }
+  .recommend-button, .recommend-display {
+    cursor: pointer;
+    border : none;
+    background-color: white;
+    display: flex;
+    align-items: center;
   }
   .recommend-number{
+    cursor: pointer;
     align-self: stretch;
     color: var(--Btn-Color, #8AAB5F);
     font-family: Pretendard;
-    font-size: 20px;
+    font-size: 14px;
     font-style: normal;
     font-weight: 700;
     line-height: normal;
   }
 
-  .adopted-button{
-    color: #A5A5A5;
+  .comment-actions {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .comment-button, .adopted-button {
+    padding: 4px 8px;
+    background-color: #d3d3d3;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .comment-button:hover, .adopted-button:hover {
+    background-color: #b0b0b0;
+  }
+
+  .adopted-display {
+    display: inline-flex;
+    padding: 2px 10px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 16px;
+    border: 1px solid #3B855D;
+    background: #E6F9EF;
+    color: #3B855D;
+    text-align: center;
     font-family: Pretendard;
-    font-size: 20px;
+    font-size: 8px;
     font-style: normal;
-    font-weight: 500;
+
     line-height: normal;
   }

@@ -95,10 +95,7 @@ const CategoriesList = () => {
     "0px";
 
   return (
-    <div
-      className="categories-container"
-      style={{ marginTop: marginTopValue, userSelect: "none" }}
-    >
+    <div className="categories-container" style={{ marginTop: marginTopValue }}>
       <h1 className="categories-text">카테고리별 배출방법 ＞</h1>
       <div className="categories-buttons">
         {categories.map((category) => (

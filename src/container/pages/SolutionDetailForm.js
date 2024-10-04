@@ -5,6 +5,7 @@ import AuthToken from "./AuthToken";
 import Modal from "./Modal";
 import "../../style.css";
 import "./Solution.css";
+import "./SolutionDetailForm.css";
 
 function SolutionDetailForm() {
   const navigate = useNavigate();
@@ -65,10 +66,10 @@ function SolutionDetailForm() {
   };
 
   return (
-    <div className="NotDrag" style={{ marginTop: "120px" }}>
+    <div className="solution-detail-form-container">
       <div>
         <div>
-          <h1 style={{ textAlign: "center" }}>{solutionResult.name}</h1>
+          <h1 className="result-title">{solutionResult.name}</h1>
           <div
             style={{
               display: "flex",
@@ -88,35 +89,35 @@ function SolutionDetailForm() {
             )}
           </div>
           <div style={{ textAlign: "center" }}>
-            <p className="solution-detail-font">재질</p>
-            {solutionResult.categories.join(", ")}
-            <p className="solution-detail-font">키워드</p>
-            {solutionResult.tags.join(", ")}
-            <p className="solution-detail-font">배출 요령</p>
-            <p>{formatRules(solutionResult.solution)}</p>
-            <p className="solution-detail-font">솔루션 작성자</p>
-            <p style={{ cursor: "pointer" }} onClick={() => setModalOpen(true)}>
+            <p className="result-type-text">재질</p>
+            <p className="result-text">
+              {solutionResult.categories.join(", ")}
+            </p>
+            <p className="result-type-text">키워드</p>
+            <p className="result-text">{solutionResult.tags.join(", ")}</p>
+            <p className="result-type-text">배출 요령</p>
+            <p className="result-text">
+              {formatRules(solutionResult.solution)}
+            </p>
+            <p className="result-type-text">솔루션 작성자</p>
+            <p
+              className="result-text"
+              style={{ cursor: "pointer" }}
+              onClick={() => setModalOpen(true)}
+            >
               {" "}
               {solutionResult.accountNickName}{" "}
             </p>
+            <p className="result-type-text">솔루션 현재 상태</p>
+            <p className="result-text">
+              {solutionResult.state === "ACCEPTED" && "수락됨"}
+              {solutionResult.state === "REJECTED" && "거부됨"}
+              {solutionResult.state === "PENDING" && "대기중"}
+            </p>
           </div>
-          <p className="solution-detail-font">솔루션 현재 상태</p>
-          <p
-            style={{
-              textAlign: "center",
-            }}
-          >
-            {solutionResult.state === "ACCEPTED" && "수락됨"}
-            {solutionResult.state === "REJECTED" && "거부됨"}
-            {solutionResult.state === "PENDING" && "대기중"}
-          </p>
         </div>
         <div className="button-container">
-          <button
-            className="white-button"
-            onClick={navigateToBack}
-            style={{ marginLeft: "5px" }}
-          >
+          <button className="back-button" onClick={navigateToBack}>
             돌아가기
           </button>
         </div>

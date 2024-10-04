@@ -378,21 +378,20 @@ const CommunityDetail = ({ posttype }) => {
               <div className="writer-and-buttons-container">
                 글쓴이: {nanumPost.writer} | 나눔 위치 : {nanumPost.location} |
                 나눔 항목 : {nanumPost.shareTarget}
-                {(posttype === "bunri" && bunriPost.writer === getNickname) ||
-                  (posttype === "nanum" && nanumPost.writer === getNickname && (
-                    <div className="post-buttons">
-                      <button
-                        type="button"
-                        className="list-button"
-                        onClick={navigateToEditPost}
-                      >
-                        수정
-                      </button>
-                      <button className="list-button" onClick={deletePost}>
-                        삭제
-                      </button>
-                    </div>
-                  ))}
+                {posttype === "nanum" && nanumPost.writer === getNickname && (
+                  <div className="post-buttons">
+                    <button
+                      type="button"
+                      className="list-button"
+                      onClick={navigateToEditPost}
+                    >
+                      수정
+                    </button>
+                    <button className="list-button" onClick={deletePost}>
+                      삭제
+                    </button>
+                  </div>
+                )}
               </div>
               <hr />
               <p>
@@ -408,10 +407,10 @@ const CommunityDetail = ({ posttype }) => {
               {nanumPost.content}
             </div>
           ) : (
-            <div className="writer-and-buttons-container">
-              <div className="writer-info">글쓴이: {bunriPost.writer}</div>
-              {(posttype === "bunri" && bunriPost.writer === getNickname) ||
-                (posttype === "nanum" && nanumPost.writer === getNickname && (
+            <div>
+              <div className="writer-and-buttons-container">
+                <div className="writer-info">글쓴이: {bunriPost.writer}</div>
+                {posttype === "bunri" && bunriPost.writer === getNickname && (
                   <div className="post-buttons">
                     <button
                       type="button"
@@ -424,7 +423,8 @@ const CommunityDetail = ({ posttype }) => {
                       삭제
                     </button>
                   </div>
-                ))}
+                )}
+              </div>
               <hr />
               <p>
                 조회수: {bunriPost.view} | 추천수: {bunriPost.recommend}
@@ -470,26 +470,6 @@ const CommunityDetail = ({ posttype }) => {
           {(posttype === "bunri" && bunriPost) ||
           (posttype === "nanum" && nanumPost) ? (
             <div>
-              {posttype === "bunri" &&
-                bunriPost.adopted === true &&
-                bunriPost.adoptedComment && (
-                  <div className="adopted-comment-container">
-                    <h2 style={{ color: "green" }}>채택된 답변</h2>
-                    <div className="adopted-comment">
-                      <span className="nickname">
-                        {bunriPost.adoptedComment.nickname}
-                      </span>
-                      <div className="comment-content">
-                        <p>
-                          {JSON.parse(bunriPost.adoptedComment.content).comment}
-                        </p>
-                      </div>
-                    </div>
-                    <span className="date">
-                      {formatDate(bunriPost.adoptedComment.createdDate)}
-                    </span>
-                  </div>
-                )}
               <div className="comment-container">
                 {(posttype === "bunri"
                   ? bunriPost.comments
@@ -501,7 +481,11 @@ const CommunityDetail = ({ posttype }) => {
                     <div className="comment" key={index}>
                       <div className="comment-header">
                         <span className="nickname">{comment.nickname}</span>
-                        {}
+                        {posttype === "bunri" &&
+                          bunriPost.adopted &&
+                          bunriPost.adoptedComment.id === comment.id && (
+                            <p className="adopted-display">채택</p>
+                          )}
                       </div>
                       {editingCommentId === comment.id ? (
                         <div>
@@ -513,20 +497,19 @@ const CommunityDetail = ({ posttype }) => {
                           />
                         </div>
                       ) : (
-                        <div className="comment-content">
-                          <p>
+                        <div>
+                          <p className="comment-content">
                             {comment.content &&
                               JSON.parse(comment.content).comment}
                           </p>
                         </div>
                       )}
                       <div className="comment-info-container">
-                        <span className="comment-date">
-                          {formatDate(comment.createdDate)}
-                        </span>
-                        <div className="comment-buttons">
-                          {posttype === "bunri" &&
-                          getNickname !== comment.nickname ? (
+                        <div className="comment-info">
+                          <p className="comment-date">
+                            {formatDate(comment.createdDate)}
+                          </p>
+                          {posttype === "bunri" ? (
                             <button
                               type="button"
                               className="recommend-button"
@@ -549,7 +532,7 @@ const CommunityDetail = ({ posttype }) => {
                               </p>
                             </button>
                           ) : (
-                            <div>
+                            <div className="recommend-display">
                               {" "}
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -568,6 +551,8 @@ const CommunityDetail = ({ posttype }) => {
                               </p>
                             </div>
                           )}
+                        </div>
+                        <div className="comment-interactions">
                           {getNickname === comment.nickname &&
                           editingCommentId !== comment.id ? (
                             <>
@@ -622,13 +607,12 @@ const CommunityDetail = ({ posttype }) => {
                             )}
                         </div>
                       </div>
+                      <hr style={{ border: "0.5px solid #d9d9d9" }}></hr>
                     </div>
                   ))}
               </div>
             </div>
           ) : null}
-
-          <hr style={{ border: "0.5px solid #d9d9d9" }}></hr>
 
           <div className="commentbox">
             <h5>{getNickname}</h5>

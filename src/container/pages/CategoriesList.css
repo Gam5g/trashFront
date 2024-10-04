@@ -1,5 +1,6 @@
 .categories-container {
   margin: 20px;
+  user-select: none;
 }
 
 .categories-container h1 {
@@ -51,7 +52,7 @@
 .categories-text{
   color: var(--Text, #313926);
   font-family: Pretendard;
-  font-size: 48px;
+  font-size: 56px;
   font-style: normal;
   font-weight: 700;
   line-height: normal;

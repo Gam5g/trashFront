@@ -6,6 +6,8 @@ import AuthToken from "./AuthToken";
 import Modal from "./Modal";
 import "./Detailform.css";
 import "./Search.css";
+import "./AdminInfo.css";
+import "./WikiDetailForm.css";
 
 const WikiDetailForm = ({ type, state }) => {
   const isAdmin = localStorage.getItem("accountName") === "admin";
@@ -232,10 +234,10 @@ const WikiDetailForm = ({ type, state }) => {
   };
 
   return (
-    <div style={{ userSelect: "none", marginTop: "250px" }}>
+    <div className="wiki-detail-container">
       {type === "admin" && (
-        <div style={{ marginTop: "50px" }}>
-          <p>관리자 로그인</p>
+        <div className="admin-text">
+          <p className="admin-info-text">관리자 로그인</p>
           <h1>수정 요청 받은 정보</h1>
         </div>
       )}
@@ -279,40 +281,33 @@ const WikiDetailForm = ({ type, state }) => {
             }
           >
             <div className="origin-title">원본</div>
-            <div className="origin-container" style={{ height: "600px" }}>
+            <div className="origin-container" style={{ height: "800px" }}>
               <>
-                <p style={{ fontSize: "45px", textAlign: "center" }}>
-                  {originList.wasteName}
-                </p>
-                <h3 className="search-font">재질</h3>
-                <p>{originList.categories}</p>
-                <h3 className="search-font">태그</h3>
-                <p>{originList.tags}</p>
-                <h3 className="search-font">배출요령</h3>
-                <p>{originList.solution}</p>
+                <p className="result-title">{originList.wasteName}</p>
+                <h3 className="result-type-text">재질</h3>
+                <p className="result-text">{originList.categories}</p>
+                <h3 className="result-type-text">태그</h3>
+                <p className="result-text">{originList.tags}</p>
+                <h3 className="result-type-text">배출요령</h3>
+                <p className="result-text">{originList.solution}</p>
               </>
             </div>
           </div>
         )}
-        <div
-          style={
-            modifiedList.wikiState === "PENDING" ? { marginTop: "100px" } : {}
-          }
-        >
+        <div>
           <div className="modified-title">{originList ? "기본" : "수정"}</div>
           <form
             onSubmit={handleSubmit}
             className={"modified-container"}
-            style={{ height: "600px" }}
+            style={{ height: "800px" }}
           >
             <>
-              <p style={{ fontSize: "45px", textAlign: "center" }}>
-                {modifiedList.wasteName}
-              </p>
+              <p className="result-title">{modifiedList.wasteName}</p>
               {modifiedList.accountNickname !== "midas" && (
                 <>
-                  <h3 className="search-font">작성자</h3>
+                  <h3 className="result-type-text">작성자</h3>
                   <p
+                    className="result-text"
                     style={{ cursor: "pointer" }}
                     onClick={() => setModalOpen(true)}
                   >
@@ -320,12 +315,12 @@ const WikiDetailForm = ({ type, state }) => {
                   </p>{" "}
                 </>
               )}
-              <h3 className="search-font">재질</h3>
-              <p>{modifiedList.categories}</p>
-              <h3 className="search-font">태그</h3>
-              <p>{modifiedList.tags}</p>
-              <h3 className="search-font">배출요령</h3>
-              <p>{modifiedList.solution}</p>
+              <h3 className="result-type-text">재질</h3>
+              <p className="result-text">{modifiedList.categories}</p>
+              <h3 className="result-type-text">태그</h3>
+              <p className="result-text">{modifiedList.tags}</p>
+              <h3 className="result-type-text">배출요령</h3>
+              <p className="result-text">{modifiedList.solution}</p>
             </>
           </form>
           {type === "edit" && (
@@ -343,24 +338,22 @@ const WikiDetailForm = ({ type, state }) => {
               </button>
             </div>
           )}
-          {type === "admin" &&
-            modifiedList.wikiState === "PENDING" &&
-            isAdmin && (
-              <div className="button-container">
-                <button
-                  type="submit"
-                  onClick={handleAdminAccept}
-                  className="submitbutton"
-                >
-                  수정 승인
-                </button>
-                <button className="cancelbutton" onClick={handleAdminRejected}>
-                  수정 거절
-                </button>
-              </div>
-            )}
         </div>
       </div>
+      {type === "admin" && modifiedList.wikiState === "PENDING" && isAdmin && (
+        <div className="button-container">
+          <button
+            type="submit"
+            onClick={handleAdminAccept}
+            className="wiki-accept-button"
+          >
+            수정사항 승인
+          </button>
+          <button className="wiki-reject-button" onClick={handleAdminRejected}>
+            수정사항 거절
+          </button>
+        </div>
+      )}
       <div
         className="button-container"
         style={{

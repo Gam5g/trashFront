@@ -6,7 +6,7 @@ import AuthToken from "../container/pages/AuthToken";
 import "../style.css";
 import "../Button.css";
 import "./MapComponent.css";
-const { kakao } = window;
+
 const MapComponent = ({
   endpoint,
   page,
@@ -35,10 +35,7 @@ const MapComponent = ({
 
   // 지도 로드 시점에 대한 처리
   useEffect(() => {
-    if (!window.kakao || !window.kakao.maps) {
-      console.error("Kakao Maps API is not available.");
-      return;
-    }
+    const kakao = window.kakao;
 
     const container = document.getElementById("map");
     const options = {
@@ -92,6 +89,7 @@ const MapComponent = ({
 
   // 지도 위에 마커 표시
   useEffect(() => {
+    const kakao = window.kakao;
     if (map && locationData.length > 0) {
       locationData.forEach((position) => {
         if (position.address === "지정된 위치에 수거함이 없습니다") {
@@ -128,6 +126,7 @@ const MapComponent = ({
   };
 
   const handlePositionClick = (position) => {
+    const kakao = window.kakao;
     map.setLevel(6);
     const center = new kakao.maps.LatLng(position.latitude, position.longitude);
     map.panTo(center);
@@ -165,7 +164,21 @@ const MapComponent = ({
               onChange={handleCheckboxChange}
               disabled={!isLocationAvailable}
             />
-            <span className="checkbox-mark"></span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="12"
+              viewBox="0 0 16 12"
+              fill="none"
+              className="checkbox-mark"
+            >
+              <path
+                d="M2 4.85716L5.85 10L14 1"
+                stroke="white"
+                stroke-width="3"
+                stroke-linejoin="round"
+              />
+            </svg>
             <span className="map-checkbox-text">
               반경으로 검색(회원가입에서 위치동의하지 않았을 경우 사용 불가)
             </span>

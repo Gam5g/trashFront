@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { isLoggedInState } from "../state/authState";
 import AuthToken from "../container/pages/AuthToken";
+import "./CompareForm.css";
 import "../container/pages/Search.css";
 
 const CompareForm = ({
@@ -145,36 +146,28 @@ const CompareForm = ({
       <div>
         <div className="origin-title">원본</div>
         <div className="origin-container">
-          <p style={{ fontSize: "45px", textAlign: "center" }}>
-            {originList.name}
-          </p>
+          <p className="compare-title">{originList.name}</p>
           <img
             src={imageUrl}
             style={{ width: "30%", height: "30%" }}
             alt="solution"
           />
-          <h3 className="search-font">재질</h3>
-          <p>{originList.categories.join(", ")}</p>
-          <h3 className="search-font">태그</h3>
-          <p>{originList.tags.join(", ")}</p>
-          <h3 className="search-font">배출요령</h3>
-          <p>{originList.solution}</p>
+          <h3 className="compare-font">재질</h3>
+          <p className="compare-default-text">
+            {originList.categories.join(", ")}
+          </p>
+          <h3 className="compare-font">태그</h3>
+          <p className="compare-default-text">{originList.tags.join(", ")}</p>
+          <h3 className="compare-font">배출요령</h3>
+          <p className="compare-default-text">{originList.solution}</p>
         </div>
       </div>
       <div>
         <div className="modified-title">수정</div>
         <form onSubmit={handleSubmit} className={"modified-container"}>
-          <p
-            style={{
-              fontSize: "45px",
-              textAlign: "center",
-              marginBottom: "-20px",
-            }}
-          >
-            {originList.name}
-          </p>
+          <p className="compare-title">{originList.name}</p>
           <div className="button-container" style={{ marginRight: "330px" }}>
-            <h3 className="search-font" style={{ marginBottom: "5px" }}>
+            <h3 className="compare-font" style={{ marginBottom: "5px" }}>
               재질
             </h3>
           </div>
@@ -213,16 +206,16 @@ const CompareForm = ({
             </div>
           </div>
           <div>
-            <h3 className="search-font">태그</h3>
+            <h3 className="compare-font">태그</h3>
             {originList && (
-              <div>
+              <div className="compare-default-text">
                 <p>{originList.tags.join(", ")}</p>
                 <hr />
               </div>
             )}
             <div className="inputWrap">
               <input
-                className="inputContent"
+                className="solution-input"
                 type="text"
                 name="tags"
                 placeholder="태그를 입력하세요 (쉼표로 구분)"
@@ -232,10 +225,10 @@ const CompareForm = ({
             </div>
           </div>
           <div>
-            <h3 className="search-font">배출요령</h3>
+            <h3 className="compare-font">배출요령</h3>
             <div>
               {originList && (
-                <div>
+                <div className="compare-default-text">
                   <p>{originList.solution}</p>
                   <hr />
                 </div>
@@ -260,10 +253,14 @@ const CompareForm = ({
         </form>
 
         <div className="button-container">
-          <button type="submit" onClick={handleSubmit} className="submitbutton">
+          <button
+            type="submit"
+            onClick={handleSubmit}
+            className="update-request-button"
+          >
             수정 요청하기
           </button>
-          <button className="cancelbutton" onClick={navigateToHome}>
+          <button className="update-cancel-button" onClick={navigateToHome}>
             취소
           </button>
         </div>
