@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import AuthToken from "./AuthToken";
-import "./Modal.css"; // 모달 스타일을 적용하기 위한 CSS 파일
+import "./Modal.css";
 
 const Modal = ({ isOpen, onClose, accountId }) => {
   const [targetInfo, setTargetInfo] = useState({

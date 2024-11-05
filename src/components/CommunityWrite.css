@@ -17,3 +17,59 @@
     font-weight: 700;
     line-height: normal;
 }
+
+.button-container {
+    display: flex;
+    align-items: center;
+    gap: 15px; 
+    margin-bottom: 10px;
+}
+
+.button-container p {
+    color: gray;
+    font-size: 14px;
+    min-width: 70px; 
+    margin: 0;
+    text-align: right; 
+}
+
+.community-input-content {
+    width: 100%;
+    border: 1px solid gray;
+    border-radius: 8px;
+    padding: 10px;
+    box-sizing: border-box;
+    font-size: 16px;
+    outline: none;
+    resize: vertical;
+}
+
+  
+  .green-button {
+    background-color: #3B855D;
+    width : 30%;
+    height : 35%;
+    padding: 10px 20px;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-family : Pretendard-Bold;
+}
+
+.cancel-button {
+    display: block;
+    width: 30%;
+    height : 35%;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #8AAB5F;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-family : Pretendard-Bold;
+}

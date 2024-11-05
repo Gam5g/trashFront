@@ -214,7 +214,7 @@ const Header = () => {
               onSubmit={handleSubmit(onSubmit)}
               className={
                 isSearchFocused &&
-                watch("searchTerm").length > 0 &&
+                watch("searchTerm")?.length > 0 &&
                 searchDetails.length > 0
                   ? "long-search-bar"
                   : "search-bar"

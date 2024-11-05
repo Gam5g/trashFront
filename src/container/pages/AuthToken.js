@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const AuthToken = axios.create({
-  baseURL: "http://54.180.237.99:8080/api",
+  baseURL: "https://www.bunriwiki.shop/api",
   headers: { "Content-Type": "application/json" },
 });
 

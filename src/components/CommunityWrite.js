@@ -9,8 +9,6 @@ import AuthToken from "../container/pages/AuthToken";
 import "../container/pages/Community/Community.css";
 import "../Button.css";
 import "./CommunityWrite.css";
-import { useMediaQuery } from "react-responsive";
-import AWS from "aws-sdk";
 
 Quill.register("modules/imageResize", ImageResize);
 
@@ -227,26 +225,15 @@ const CommunityWrite = ({ posttype }) => {
           <>
             <div>
               <div className="button-container">
-                <p
-                  style={{
-                    color: "gray",
-                    fontSize: "14px",
-                    marginLeft: "-70px",
-                    marginRight: "10px",
-                  }}
-                >
-                  공유 대상
-                </p>
-                <label htmlFor="shareTarget" className="inputWrap">
-                  <input
-                    className="inputContent"
-                    type="text"
-                    id="shareTarget"
-                    name="shareTarget"
-                    value={nanumInfo.shareTarget}
-                    onChange={onChange}
-                  />
-                </label>
+                <p>공유 대상</p>
+                <input
+                  className="community-input-content"
+                  type="text"
+                  id="shareTarget"
+                  name="shareTarget"
+                  value={nanumInfo.shareTarget}
+                  onChange={onChange}
+                />
               </div>
               {errors.shareTarget && (
                 <p className="error-message">{errors.shareTarget}</p>
@@ -254,27 +241,15 @@ const CommunityWrite = ({ posttype }) => {
             </div>
             <div>
               <div className="button-container">
-                <p
-                  style={{
-                    marginLeft: "-75px",
-                    color: "gray",
-                    fontSize: "14px",
-                    marginRight: "30px",
-                  }}
-                >
-                  {" "}
-                  위치
-                </p>
-                <label htmlFor="location" className="inputWrap">
-                  <input
-                    className="inputContent"
-                    type="text"
-                    id="location"
-                    name="location"
-                    value={nanumInfo.location}
-                    onChange={onChange}
-                  />
-                </label>
+                <p>위치</p>
+                <input
+                  className="community-input-content"
+                  type="text"
+                  id="location"
+                  name="location"
+                  value={nanumInfo.location}
+                  onChange={onChange}
+                />
               </div>
               {errors.location && (
                 <p className="error-message">{errors.location}</p>
@@ -304,11 +279,11 @@ const CommunityWrite = ({ posttype }) => {
         </div>
 
         <div className="button-container">
-          <button className="greenbutton" type="submit">
+          <button className="green-button" type="submit">
             등록
           </button>
           <button
-            className="cancelbutton"
+            className="cancel-button"
             type="button"
             onClick={() => navigate(`/community-${posttype}`)}
           >

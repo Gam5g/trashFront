@@ -2,12 +2,20 @@ import React, { useEffect, useRef, useState } from "react";
 import Card from "./Card";
 import "./CardContainer.css";
 import AuthToken from "../container/pages/AuthToken";
+import AWS from "aws-sdk";
 
 const CardContainer = () => {
   const containerRef = useRef(null);
   const scrollSpeed = 2; // 스크롤 속도 설정 (숫자가 커질수록 빠름)
   const [isPaused, setIsPaused] = useState(false); // 애니메이션 일시정지 상태
   const [cards, setCards] = useState([]);
+
+  // Initialize AWS S3 client
+  const s3 = new AWS.S3({
+    accessKeyId: process.env.REACT_APP_ACCESS_KEY,
+    secretAccessKey: process.env.REACT_APP_SECRET_ACCESS_KEY,
+    region: process.env.REACT_APP_REGION,
+  });
 
   useEffect(() => {
     const fetchCardsData = async () => {
@@ -20,17 +28,42 @@ const CardContainer = () => {
             },
           });
           const { name, imageUrl, wasteId } = response.data;
-          fetchedCards.push({ title: name, imageUrl, id: wasteId });
+
+          // Clean and decode the image URL
+          const cleanedUrl = cleanAndDecodeUrl(imageUrl);
+
+          // Push the cleaned data into fetchedCards
+          fetchedCards.push({ title: name, imageUrl: cleanedUrl, id: wasteId });
         }
         setCards(fetchedCards);
       } catch (error) {
         console.error(error);
       }
     };
-
     fetchCardsData();
   }, []);
 
+  // Function to clean and decode the image URL
+  const cleanAndDecodeUrl = (url) => {
+    const redundantPart =
+      "https://trash-front-s3.s3.ap-northeast-2.amazonaws.com/";
+
+    // Remove the redundant prefix if it exists
+    if (url.startsWith(redundantPart)) {
+      url = url.replace(redundantPart, "");
+    }
+
+    // Decode the URL to handle encoded characters like '%3A'
+    const decodedUrl = decodeURIComponent(url);
+
+    // Truncate the URL before the unnecessary query params (e.g., "Amz-SignedHeaders=host")
+    const truncateIndex = decodedUrl.indexOf("?Amz-SignedHeaders=host");
+    if (truncateIndex !== -1) {
+      return decodedUrl.substring(0, truncateIndex);
+    }
+
+    return decodedUrl;
+  };
   const repeatedCards = [...cards, ...cards]; // 카드 배열을 두 번 반복하여 무한 느낌
 
   useEffect(() => {
