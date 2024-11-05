@@ -239,10 +239,6 @@ const RegisterForm = () => {
   const password = useRef({});
   password.current = watch("password", "");
 
-  const validatePassword = (value) => {
-    return value === password.current || "비밀번호가 일치하지 않습니다.";
-  };
-
   const regions = [
     {
       name: "대구",

@@ -5,6 +5,7 @@ import { isLoggedInState } from "../state/authState";
 import "./CommunityDetail.css";
 import "../container/pages/Community/Detail.css";
 import AuthToken from "../container/pages/AuthToken";
+import ReportModal from "../container/pages/ReportModal";
 
 const CommunityDetail = ({ posttype }) => {
   const location = useLocation();
@@ -41,10 +42,12 @@ const CommunityDetail = ({ posttype }) => {
   const [loading, setLoading] = useState(true);
   const [errors, setErrors] = useState({ comment: "" });
   const getNickname = localStorage.getItem("nickname");
-  const getAccountName = localStorage.getItem("accountName");
   const [questionBoardId, setQuestionBoardId] = useState();
   const [recycleBoardId, setRecycleBoardId] = useState();
   const accessToken = localStorage.getItem("accessToken");
+  const [isModal, setIsModal] = useState(false);
+  const [targetNickname, setTargetNickname] = useState("");
+  const [targetId, setTargetId] = useState();
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -378,7 +381,7 @@ const CommunityDetail = ({ posttype }) => {
               <div className="writer-and-buttons-container">
                 글쓴이: {nanumPost.writer} | 나눔 위치 : {nanumPost.location} |
                 나눔 항목 : {nanumPost.shareTarget}
-                {posttype === "nanum" && nanumPost.writer === getNickname && (
+                {nanumPost.writer === getNickname && (
                   <div className="post-buttons">
                     <button
                       type="button"
@@ -605,6 +608,19 @@ const CommunityDetail = ({ posttype }) => {
                                 채택하기
                               </button>
                             )}
+                          {getNickname !== comment.nickname && (
+                            <button
+                              type="button"
+                              className="adopted-button"
+                              onClick={() => {
+                                setIsModal(true);
+                                setTargetId(comment.id);
+                                setTargetNickname(comment.nickname);
+                              }}
+                            >
+                              신고
+                            </button>
+                          )}
                         </div>
                       </div>
                       <hr style={{ border: "0.5px solid #d9d9d9" }}></hr>
@@ -642,6 +658,12 @@ const CommunityDetail = ({ posttype }) => {
           >
             목록
           </button>
+          <ReportModal
+            isOpen={isModal}
+            onClose={() => setIsModal(false)}
+            targetId={targetId}
+            targetNickname={targetNickname}
+          />
         </div>
       </div>
     </div>

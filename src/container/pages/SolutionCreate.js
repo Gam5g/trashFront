@@ -184,7 +184,9 @@ const SolutionCreate = () => {
 
   return (
     <div className="solution-create-form">
-      <div className="solution-title">새로운 정보 생성</div>
+      <div className="solution-title" style={{ marginTop: "300px" }}>
+        새로운 정보 생성
+      </div>
       <form onSubmit={handleSubmit} className="solution-info-container">
         <div>
           <h3 className="result-type-text">이름</h3>
