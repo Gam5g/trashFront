@@ -46,9 +46,9 @@ const CardContainer = () => {
   // Function to clean and decode the image URL
   const cleanAndDecodeUrl = (url) => {
     const redundantPart =
-      "https://trash-front-s3.s3.ap-northeast-2.amazonaws.com/";
+      "https://bunriwiki.s3.ap-northeast-2.amazonaws.com/image/";
+    //"https://trash-front-s3.s3.ap-northeast-2.amazonaws.com/";
 
-    // Remove the redundant prefix if it exists
     if (url.startsWith(redundantPart)) {
       url = url.replace(redundantPart, "");
     }
