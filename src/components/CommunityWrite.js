@@ -278,7 +278,7 @@ const CommunityWrite = ({ posttype }) => {
           {errors.content && <p className="error-message">{errors.content}</p>}
         </div>
 
-        <div className="button-container">
+        <div className="community-write-button-container">
           <button className="green-button" type="submit">
             등록
           </button>
