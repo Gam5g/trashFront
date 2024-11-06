@@ -24,7 +24,6 @@ import MedicineForm from "./container/pages/MedicineForm";
 import SearchImageResultForm from "./container/pages/SearchImageResultForm";
 import SearchDetailForm from "./container/pages/SearchDetailForm";
 import SearchEditForm from "./container/pages/SearchEditForm";
-import SwaggerDocs from "./SwaggerDocs";
 import NotFound from "./container/pages/NotFound";
 import Header from "./header";
 import Loading from "./container/pages/LoadingForm";
@@ -177,7 +176,6 @@ function App() {
             <Route path="/search/not-found" element={<NotFound />} />
           </Routes>
         </Router>
-        <SwaggerDocs />
       </RecoilRoot>
     </div>
   );
