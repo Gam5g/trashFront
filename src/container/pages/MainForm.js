@@ -176,8 +176,8 @@ function MainForm() {
           </div>
           <div className="main-list-second-content">
             <iframe
-              width="500"
-              height="400"
+              width="573.33"
+              height="473.33"
               src="https://www.youtube.com/embed/yYQCHZbrgB4?si=6UIogs_Ibj8mQF52"
               title="YouTube video player"
               frameborder="0"
