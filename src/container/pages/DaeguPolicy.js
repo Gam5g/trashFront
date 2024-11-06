@@ -52,7 +52,7 @@ const DaeguPolicy = () => {
     <div className="NotDrag">
       <h1> 대구의 분리수거 정책 ＞ </h1>
       <br />
-      <h2>대구광역시 쓰레기 봉투 가격(2023.1.1.기준)</h2>
+      <h2>대구광역시 쓰레기 봉투 가격 (2023.1.1.기준)</h2>
       <table className="price-table">
         <thead>
           <tr>
