@@ -73,3 +73,10 @@
     transition: background-color 0.3s;
     font-family : Pretendard-Bold;
 }
+
+.community-write-button-container{
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top:20px;
+}

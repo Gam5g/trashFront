@@ -183,8 +183,11 @@
     transform: rotate(45deg);
   }
 
-  .button-container{
+  .solution-create-button-container{
     margin-top:10px;
+    display: flex;
+    gap : 15px;
+    justify-content: center;
   }
 
   .solution-create-request-button{

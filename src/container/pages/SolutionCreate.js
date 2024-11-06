@@ -318,7 +318,7 @@ const SolutionCreate = () => {
           </div>
         </div>
       </form>
-      <div className="button-container">
+      <div className="solution-create-button-container">
         <button
           type="submit"
           onClick={handleSubmit}
