@@ -1,5 +1,6 @@
 .NotDrag{
   user-select: none;
+  padding-top: 70px;
 }
 
 .adopted-content {

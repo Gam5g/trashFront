@@ -8,7 +8,7 @@ const MyCommunityList = () => {
     <div className="NotDrag">
       <h1
         style={
-          isMobile ? { textAlign: "center", marginTop: "100px" } : undefined
+          isMobile ? { textAlign: "center", marginTop: "70px" } : undefined
         }
       >
         내 게시물 보기 ＞

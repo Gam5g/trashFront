@@ -116,7 +116,7 @@ function CameraForm() {
   };
 
   return (
-    <div className="upload-container">
+    <div>
       <div className="upload-container">
         <h2>찾고자 하는 쓰레기를 업로드해보세요!</h2>
         <div>

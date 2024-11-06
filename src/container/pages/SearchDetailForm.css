@@ -1,5 +1,10 @@
 .search-detail-form-container{
     user-select: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 70px);
 }
 
 .result-title{

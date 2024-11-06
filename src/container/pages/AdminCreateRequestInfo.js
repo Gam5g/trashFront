@@ -14,7 +14,7 @@ const AdminCreateRequestInfo = () => {
     }
   }, [isAdmin, navigate]);
   return (
-    <div style={{ marginTop: "400px" }}>
+    <div style={{ marginTop: "70px", userSelect: "none" }}>
       <p className="admin-info-text">관리자 로그인</p>
       <h1 className="admin-text">생성 요청 받은 정보 ＞</h1>
       <SolutionDetail type="admin" />

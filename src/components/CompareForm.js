@@ -146,30 +146,28 @@ const CompareForm = ({
       <div>
         <div className="origin-title">원본</div>
         <div className="origin-container">
-          <p className="compare-title">{originList.name}</p>
+          <h6 className="compare-title">{originList.name}</h6>
           <img
             src={imageUrl}
             style={{ width: "30%", height: "30%" }}
             alt="solution"
           />
           <h3 className="compare-font">재질</h3>
-          <p className="compare-default-text">
+          <h3 className="compare-default-text">
             {originList.categories.join(", ")}
-          </p>
+          </h3>
           <h3 className="compare-font">태그</h3>
-          <p className="compare-default-text">{originList.tags.join(", ")}</p>
+          <h3 className="compare-default-text">{originList.tags.join(", ")}</h3>
           <h3 className="compare-font">배출요령</h3>
-          <p className="compare-default-text">{originList.solution}</p>
+          <h3 className="compare-default-text">{originList.solution}</h3>
         </div>
       </div>
       <div>
         <div className="modified-title">수정</div>
         <form onSubmit={handleSubmit} className={"modified-container"}>
-          <p className="compare-title">{originList.name}</p>
-          <div className="button-container" style={{ marginRight: "330px" }}>
-            <h3 className="compare-font" style={{ marginBottom: "5px" }}>
-              재질
-            </h3>
+          <h6 className="compare-title">{originList.name}</h6>
+          <div className="button-container">
+            <h3 className="compare-font">재질</h3>
           </div>
           <div style={{ display: "flex", justifyContent: "center" }}>
             <div
@@ -209,13 +207,13 @@ const CompareForm = ({
             <h3 className="compare-font">태그</h3>
             {originList && (
               <div className="compare-default-text">
-                <p>{originList.tags.join(", ")}</p>
+                <h5>{originList.tags.join(", ")}</h5>
                 <hr />
               </div>
             )}
-            <div className="inputWrap">
+            <div className="compare-input-wrap">
               <input
-                className="solution-input"
+                className="compare-input"
                 type="text"
                 name="tags"
                 placeholder="태그를 입력하세요 (쉼표로 구분)"
@@ -229,7 +227,7 @@ const CompareForm = ({
             <div>
               {originList && (
                 <div className="compare-default-text">
-                  <p>{originList.solution}</p>
+                  <h5>{originList.solution}</h5>
                   <hr />
                 </div>
               )}
@@ -237,7 +235,7 @@ const CompareForm = ({
             <div>
               <textarea
                 type="text"
-                className="solution-input"
+                className="compare-input"
                 name="solution"
                 placeholder="솔루션을 입력하세요"
                 value={modifiedList.solution}

@@ -1,3 +1,11 @@
+.upload-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+
 .upload-button {
     display: flex;
     padding: 55px 0px;

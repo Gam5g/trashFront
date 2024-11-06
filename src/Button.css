@@ -96,12 +96,6 @@
     cursor: pointer;
 }
 
-body {
-    height: 100vh;
-    display:flex;
-    justify-content: center;
-    align-items:center;
-}
 
 .submitbutton {
     margin-top: 60px;

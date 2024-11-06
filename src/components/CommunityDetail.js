@@ -317,30 +317,8 @@ const CommunityDetail = ({ posttype }) => {
     });
   };
 
-  const commentLength =
-    posttype === "bunri"
-      ? bunriPost.comments.length
-      : nanumPost.comments.length;
-
-  const marginTopValues = [
-    { condition: 10, value: "1540px" },
-    { condition: 9, value: "1390px" },
-    { condition: 8, value: "1240px" },
-    { condition: 7, value: "1090px" },
-    { condition: 6, value: "940px" },
-    { condition: 5, value: "790px" },
-    { condition: 4, value: "640px" },
-    { condition: 3, value: "490px" },
-    { condition: 2, value: "340px" },
-    { condition: 1, value: "150px" },
-  ];
-
-  const marginTopValue =
-    marginTopValues.find((mtv) => commentLength >= mtv.condition)?.value ||
-    "0px";
-
   return (
-    <div className="NotDrag" style={{ marginTop: marginTopValue }}>
+    <div className="NotDrag">
       <div
         className="community-detail-title-wrap"
         style={{ userSelect: "none" }}

@@ -13,7 +13,7 @@ const AdminUpdateRequestInfo = () => {
     }
   }, [isAdmin, navigate]);
   return (
-    <div style={{ marginTop: "300px" }}>
+    <div>
       <WikiDetailForm type="admin" state="update" />
     </div>
   );
