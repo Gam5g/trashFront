@@ -92,25 +92,8 @@ const SolutionList = ({ type, mode }) => {
     fetchPageData(activePage);
   }, [activePage]);
 
-  const marginTopValues = [
-    { condition: 10, value: "300px" },
-    { condition: 9, value: "280px" },
-    { condition: 8, value: "260px" },
-    { condition: 7, value: "240px" },
-    { condition: 6, value: "220px" },
-    { condition: 5, value: "200px" },
-    { condition: 4, value: "180px" },
-    { condition: 3, value: "160px" },
-    { condition: 2, value: "140px" },
-    { condition: 1, value: "120px" },
-  ];
-
-  const marginTopValue =
-    marginTopValues.find((mtv) => requests.length >= mtv.condition)?.value ||
-    "0px";
-
   return (
-    <div className="NotDrag" style={{ marginTop: marginTopValue }}>
+    <div className="NotDrag">
       {type === "admin" && <h3 className="admin-info-text">관리자 로그인</h3>}
       {type === "user" && <h1>나의 요청 리스트</h1>}
       {type === "admin" && <h1>요청 리스트</h1>}

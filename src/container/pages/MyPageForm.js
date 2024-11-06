@@ -12,7 +12,6 @@ function MyPageForm() {
   const navigate = useNavigate();
   const [account, setAccount] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [cookies, setCookie] = useCookies(["accessToken"]);
 
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");

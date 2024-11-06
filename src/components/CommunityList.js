@@ -106,10 +106,7 @@ const CommunityList = ({ posttype }) => {
   return (
     <>
       <div>
-        <div
-          className={isMobile ? "" : "search-controls"}
-          style={{ paddingTop: "20px" }}
-        >
+        <div className={isMobile ? "" : "search-controls"}>
           <select
             className="sort-container"
             onChange={(e) => setOption1(e.target.value)}

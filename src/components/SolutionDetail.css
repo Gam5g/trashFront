@@ -8,7 +8,7 @@
   .solution-info-container {
     display: grid;
     border-radius: 50px;
-    border: 5px solid var(--Line, #3B7D3E);
+    border: 5px solid var(--Line, #8AAB5F);
     padding: 20px 20px;
     grid-template-columns: 150px 1fr;
     gap: 20px;
@@ -191,16 +191,22 @@
   .info-title-container {
     display: flex;
     justify-content: center;
+    align-items: center;
+    margin-bottom: 50px;
+    border-radius: 50px;
+    padding: 20px 40px; 
     margin: 20px 0;
   }
   
   .info-title {
     font-size: 48px;
+    width : 100%;
     font-weight: bold;
     padding: 10px 20px;
-    background-color: #3B7D3E;
+    background: var(--Btn-Color, #8AAB5F);
     color: white;
     border-radius: 24px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     text-align: center;
   }
   

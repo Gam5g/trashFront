@@ -1,11 +1,17 @@
-.login-content-box{
+.login-content-box {
     user-select: none;
+    display: flex;
+    align-items: center; 
+    flex-direction: column;
+    justify-content: center;
+    min-height: calc(100vh - 70px);
     width: 100%;
     max-width: 400px;
-    height: 50%;
+    margin: 0 auto; 
+    padding: 20px; 
     background: #FFF;
-    align-items: center;
 }
+
 
 .login-title-wrap {
     color: #424242;

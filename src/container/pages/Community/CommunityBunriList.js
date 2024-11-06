@@ -1,7 +1,7 @@
 import React from "react";
 import { useMediaQuery } from "react-responsive";
 import CommunityList from "../../../components/CommunityList";
-import "../../../Button.css";
+import "../../../components/CommunityList.css";
 
 const CommunityBunriList = () => {
   const isMobile = useMediaQuery({ query: "(max-width: 1000px)" });

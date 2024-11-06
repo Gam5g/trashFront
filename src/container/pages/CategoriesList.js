@@ -76,26 +76,8 @@ const CategoriesList = () => {
     fetchCategoryData(selectedCategory, pageNumber);
   };
 
-  const marginTopValues = [
-    { condition: 10, value: "700px" },
-    { condition: 9, value: "560px" },
-    { condition: 8, value: "480px" },
-    { condition: 7, value: "450px" },
-    { condition: 6, value: "300px" },
-    { condition: 5, value: "140px" },
-    { condition: 4, value: "0px" },
-    { condition: 3, value: "-110px" },
-    { condition: 2, value: "-240px" },
-    { condition: 1, value: "-350px" },
-    { condition: 0, value: "-500px" },
-  ];
-
-  const marginTopValue =
-    marginTopValues.find((mtv) => numberOfElements >= mtv.condition)?.value ||
-    "0px";
-
   return (
-    <div className="categories-container" style={{ marginTop: marginTopValue }}>
+    <div className="categories-container">
       <h1 className="categories-text">카테고리별 배출방법 ＞</h1>
       <div className="categories-buttons">
         {categories.map((category) => (

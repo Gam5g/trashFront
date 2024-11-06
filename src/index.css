@@ -8,7 +8,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
   font-family : "Pretendard-Bold";
   overflow-y:auto;
-  height:200vh;
 }
 
 code {
