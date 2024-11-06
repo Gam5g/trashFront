@@ -1,8 +1,10 @@
 .login-content-box{
     user-select: none;
-    width: 40%;
+    width: 100%;
+    max-width: 400px;
     height: 50%;
     background: #FFF;
+    align-items: center;
 }
 
 .login-title-wrap {
