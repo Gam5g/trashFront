@@ -153,13 +153,11 @@ const CompareForm = ({
             alt="solution"
           />
           <h3 className="compare-font">재질</h3>
-          <h3 className="compare-default-text">
-            {originList.categories.join(", ")}
-          </h3>
+          <h3>{originList.categories.join(", ")}</h3>
           <h3 className="compare-font">태그</h3>
-          <h3 className="compare-default-text">{originList.tags.join(", ")}</h3>
+          <h3>{originList.tags.join(", ")}</h3>
           <h3 className="compare-font">배출요령</h3>
-          <h3 className="compare-default-text">{originList.solution}</h3>
+          <h3>{originList.solution}</h3>
         </div>
       </div>
       <div>
@@ -187,17 +185,34 @@ const CompareForm = ({
                 "비닐류",
                 "스티로폼",
                 "폐유",
+                "폐가전",
                 "폐건전지",
                 "재활용 어려움",
               ].map((category) => (
-                <label key={category} className="checkbox-label">
+                <label key={category} className="custom-checkbox">
                   <input
                     type="checkbox"
+                    className="category-checkbox"
                     name="category"
                     value={category}
                     checked={modifiedList.categories.includes(category)}
                     onChange={handleCategoryChange}
-                  />{" "}
+                  />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="12"
+                    viewBox="0 0 16 12"
+                    fill="none"
+                    className="checkbox-mark"
+                  >
+                    <path
+                      d="M2 4.85716L5.85 10L14 1"
+                      stroke="white"
+                      stroke-width="3"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
                   {category}
                 </label>
               ))}
