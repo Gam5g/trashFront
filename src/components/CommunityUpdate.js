@@ -75,13 +75,7 @@ const CommunityUpdate = ({ posttype }) => {
   const modules = useMemo(() => {
     return {
       toolbar: {
-        container: [
-          [{ header: [1, 2, 3, false] }],
-          ["bold", "italic", "underline", "strike"],
-          [{ list: "ordered" }, { list: "bullet" }],
-          [{ color: [] }, { background: [] }],
-          [{ align: [] }, "link", "image"],
-        ],
+        container: [[{ color: [] }, { background: [] }], ["image"]],
         handlers: {
           image: imageHandler,
         },
@@ -94,24 +88,13 @@ const CommunityUpdate = ({ posttype }) => {
     };
   }, []);
 
-  const formats = [
-    "header",
-    "font",
-    "size",
-    "bold",
-    "italic",
-    "underline",
-    "strike",
-    "list",
-    "bullet",
-    "indent",
-    "background",
-    "color",
-    "link",
-    "image",
-  ];
+  const formats = ["background", "color", "image"];
 
   const quillRef = useRef(null);
+
+  const cleanContent = (html) => {
+    return html.replace(/<\/?[^>]+>/g, " ");
+  };
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -124,8 +107,8 @@ const CommunityUpdate = ({ posttype }) => {
     const title = posttype === "bunri" ? bunriInfo.title : nanumInfo.title;
     const content =
       posttype === "bunri"
-        ? bunriInfo.content?.replace(/^<p>|<\/p>$/g, "")
-        : nanumInfo.content?.replace(/^<p>|<\/p>$/g, "");
+        ? cleanContent(bunriInfo.content)
+        : cleanContent(nanumInfo.content);
 
     if (!title.trim()) {
       setErrors((prev) => ({ ...prev, title: "제목은 필수 항목입니다." }));
@@ -193,6 +176,7 @@ const CommunityUpdate = ({ posttype }) => {
         <div className="write" style={{ userSelect: "none" }}>
           <p style={{ color: "gray", fontSize: "14px" }}>제목</p>
           <input
+            style={{ width: "100%" }}
             type="text"
             id="title_txt"
             name="title"

@@ -76,13 +76,7 @@ const CommunityWrite = ({ posttype }) => {
   const modules = useMemo(() => {
     return {
       toolbar: {
-        container: [
-          [{ header: [1, 2, 3, false] }],
-          ["bold", "italic", "underline", "strike"],
-          [{ list: "ordered" }, { list: "bullet" }],
-          [{ color: [] }, { background: [] }],
-          [{ align: [] }, "link", "image"],
-        ],
+        container: [[{ color: [] }, { background: [] }], ["image"]],
         handlers: {
           image: imageHandler,
         },
@@ -95,29 +89,22 @@ const CommunityWrite = ({ posttype }) => {
     };
   }, []);
 
-  const formats = [
-    "header",
-    "font",
-    "size",
-    "bold",
-    "italic",
-    "underline",
-    "strike",
-    "list",
-    "bullet",
-    "indent",
-    "background",
-    "color",
-    "link",
-    "image",
-  ];
+  const formats = ["background", "color", "image"];
 
   const quillRef = useRef(null);
+
+  const cleanContent = (html) => {
+    return html.replace(/<\/?[^>]+>/g, " ");
+  };
 
   const onSubmit = async (e) => {
     e.preventDefault();
     let url = "";
-    let title, content, imageUrl, shareTarget, location;
+    let title, imageUrl, shareTarget, location;
+    let content =
+      posttype === "bunri"
+        ? cleanContent(bunriInfo.content)
+        : cleanContent(nanumInfo.content);
     if (!isLoggedIn) {
       alert("로그인 한 후에 글을 작성할 수 있습니다.");
       return;
@@ -171,7 +158,7 @@ const CommunityWrite = ({ posttype }) => {
         }
         handleUploadSuccess(imageURL);
       } catch (error) {
-        if (error.response.data.cause === "MaxUploadSizeExceededException") {
+        if (error.response?.data?.cause === "MaxUploadSizeExceededException") {
           alert("업로드할 사진 용량을 초과했습니다.");
           return;
         }
