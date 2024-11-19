@@ -19,6 +19,7 @@ function SolutionDetailForm() {
     tags: [],
     solution: " ",
     state: "",
+    wasteId: "",
   });
 
   useEffect(() => {
@@ -53,6 +54,12 @@ function SolutionDetailForm() {
 
   const navigateToBack = () => {
     navigate(-1);
+  };
+
+  const handleEdit = () => {
+    navigate(`/search/edit?query=${encodeURIComponent(solutionResult.name)}`, {
+      state: { searchData: solutionResult },
+    });
   };
 
   const formatRules = (rules) => {
@@ -117,6 +124,9 @@ function SolutionDetailForm() {
           </div>
         </div>
         <div className="button-container">
+          <button className="update-button" onClick={handleEdit}>
+            수정하기
+          </button>
           <button className="back-button" onClick={navigateToBack}>
             돌아가기
           </button>
