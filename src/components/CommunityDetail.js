@@ -639,8 +639,7 @@ const CommunityDetail = ({ posttype }) => {
           <ReportModal
             isOpen={isModal}
             onClose={() => setIsModal(false)}
-            targetId={targetId}
-            targetNickname={targetNickname}
+            questionBoardId={questionBoardId}
           />
         </div>
       </div>

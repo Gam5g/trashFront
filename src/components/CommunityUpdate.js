@@ -184,11 +184,11 @@ const CommunityUpdate = ({ posttype }) => {
 
   return (
     <div className="NotDrag">
-      <div className="titleWrap" style={{ userSelect: "none" }}>
+      <div className="community-title-wrap" style={{ userSelect: "none" }}>
         {posttype === "bunri" ? "분리수거" : "나눔"} 커뮤니티 &gt;
       </div>
 
-      <p style={{ fontSize: "16px", marginTop: "-5px" }}>글 수정</p>
+      <p className="community-subtitle-wrap">글 수정</p>
       <form onSubmit={onSubmit}>
         <div className="write" style={{ userSelect: "none" }}>
           <p style={{ color: "gray", fontSize: "14px" }}>제목</p>
@@ -205,26 +205,15 @@ const CommunityUpdate = ({ posttype }) => {
           <>
             <div>
               <div className="button-container">
-                <p
-                  style={{
-                    color: "gray",
-                    fontSize: "14px",
-                    marginLeft: "-70px",
-                    marginRight: "10px",
-                  }}
-                >
-                  공유 대상
-                </p>
-                <label htmlFor="shareTarget" className="inputWrap">
-                  <input
-                    className="inputContent"
-                    type="text"
-                    id="shareTarget"
-                    name="shareTarget"
-                    value={nanumInfo.shareTarget}
-                    onChange={onChange}
-                  />
-                </label>
+                <p>공유 대상</p>
+                <input
+                  className="community-input-content"
+                  type="text"
+                  id="shareTarget"
+                  name="shareTarget"
+                  value={nanumInfo.shareTarget}
+                  onChange={onChange}
+                />
               </div>
               {errors.shareTarget && (
                 <p className="error-message">{errors.shareTarget}</p>
@@ -232,27 +221,15 @@ const CommunityUpdate = ({ posttype }) => {
             </div>
             <div>
               <div className="button-container">
-                <p
-                  style={{
-                    marginLeft: "-75px",
-                    color: "gray",
-                    fontSize: "14px",
-                    marginRight: "30px",
-                  }}
-                >
-                  {" "}
-                  위치
-                </p>
-                <label htmlFor="location" className="inputWrap">
-                  <input
-                    className="inputContent"
-                    type="text"
-                    id="location"
-                    name="location"
-                    value={nanumInfo.location}
-                    onChange={onChange}
-                  />
-                </label>
+                <p>위치</p>
+                <input
+                  className="community-input-content"
+                  type="text"
+                  id="location"
+                  name="location"
+                  value={nanumInfo.location}
+                  onChange={onChange}
+                />
               </div>
               {errors.location && (
                 <p className="error-message">{errors.location}</p>
@@ -299,12 +276,12 @@ const CommunityUpdate = ({ posttype }) => {
             <p>나눔 완료에 처음 체크했을 경우, 다시 수정할 수 없습니다.</p>
           </div>
         )}
-        <div className="button-container">
-          <button className="greenbutton" type="submit">
+        <div className="community-write-button-container">
+          <button className="green-button" type="submit">
             수정
           </button>
           <button
-            className="cancelbutton"
+            className="cancel-button"
             type="button"
             onClick={() => navigate(`/community-${posttype}`)}
           >

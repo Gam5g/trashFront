@@ -1,33 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import AuthToken from "./AuthToken";
 import "./ReportModal.css";
 
-const ReportModal = ({ isOpen, onClose, targetId, targetNickname }) => {
-  const [itemList, setItemList] = useState([]);
-  const [textAreaValue, setTextAreaValue] = useState("");
-  const [targetInfo, setTargetInfo] = useState({
-    accountName: "",
-    targetId: "",
-    targetNickname: "",
-  });
+const ReportModal = ({ isOpen, onClose, questionBoardId }) => {
+  const type = {
+    0: "스팸 또는 광고성 게시물",
+    1: "허위 정보 또는 오보",
+    2: "사기 또는 사기 시도",
+    3: "개인정보 침해",
+    4: "불법 콘텐츠 링크 공유",
+    5: "폭력적 위협 또는 협박",
+    6: "성적 콘텐츠 또는 성희롱",
+    7: "커뮤니티 규칙 위반",
+    8: "인종차별 또는 차별 발언",
+    9: "사생활 침해",
+    10: "기타",
+  };
 
-  useEffect(() => {
-    if (isOpen && targetNickname && targetId) {
-      setTargetInfo((prev) => ({
-        ...prev,
-        targetId: targetId,
-        targetNickname: targetNickname,
-      }));
-    }
-  }, [isOpen, targetId, targetNickname]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [textAreaValue, setTextAreaValue] = useState("");
 
   if (!isOpen) return null;
 
   const handleCategoryChange = (e) => {
-    const { checked, value } = e.target;
-    setItemList((prev) =>
-      checked ? [...prev, value] : prev.filter((category) => category !== value)
-    );
+    setSelectedCategory(parseInt(e.target.value));
   };
 
   const handleTextAreaChange = (e) => {
@@ -36,21 +32,23 @@ const ReportModal = ({ isOpen, onClose, targetId, targetNickname }) => {
 
   const handleSubmit = async () => {
     const dataToSend = {
-      targetId: targetInfo.targetId,
-      targetNickname: targetInfo.targetNickname,
-      reportCategories: itemList,
-      additionalInfo: textAreaValue,
+      type: selectedCategory,
+      description: textAreaValue,
     };
 
     try {
       const accessToken = localStorage.getItem("accessToken");
 
-      const response = await AuthToken.post("/report", dataToSend, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await AuthToken.post(
+        `/questionBoard/declare/${questionBoardId}`,
+        dataToSend,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (response.status === 200) {
         alert("신고가 성공적으로 접수되었습니다.");
@@ -68,60 +66,28 @@ const ReportModal = ({ isOpen, onClose, targetId, targetNickname }) => {
     <div className="modal-overlay">
       <div className="modal-content">
         <div className="modal-header">
-          <h2>{targetInfo.targetNickname} 유저 신고하기</h2>
+          <h2>유저 신고하기</h2>
           <button className="close-button" onClick={onClose}>
             ×
           </button>
         </div>
         <div className="modal-body">
-          <table>
-            <tbody>
-              <tr>
-                <div className="checkbox-container">
-                  {[
-                    "스팸 또는 광고성 게시물",
-                    "허위 정보 또는 오보",
-                    "사기 또는 사기 시도",
-                    "개인정보 침해",
-                    "불법 콘텐츠 링크 공유",
-                    "폭력적 위협 또는 협박",
-                    "성적 콘텐츠 또는 성희롱",
-                    "커뮤니티 규칙 위반",
-                    "인종차별 또는 차별 발언",
-                    "사생활 침해",
-                    "기타",
-                  ].map((category) => (
-                    <label key={category} className="custom-checkbox">
-                      <input
-                        type="checkbox"
-                        className="category-checkbox"
-                        name="category"
-                        value={category}
-                        checked={itemList.includes(category)}
-                        onChange={handleCategoryChange}
-                      />
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="12"
-                        viewBox="0 0 16 12"
-                        fill="none"
-                        className="checkbox-mark"
-                      >
-                        <path
-                          d="M2 4.85716L5.85 10L14 1"
-                          stroke="white"
-                          stroke-width="3"
-                          stroke-linejoin="round"
-                        />
-                      </svg>
-                      {category}
-                    </label>
-                  ))}
-                </div>
-              </tr>
-            </tbody>
-          </table>
+          <div className="checkbox-container">
+            {Object.keys(type).map((key) => (
+              <label key={key} className="custom-checkbox">
+                <input
+                  type="radio"
+                  className="category-radio"
+                  name="category"
+                  value={key}
+                  checked={selectedCategory === parseInt(key)}
+                  onChange={handleCategoryChange}
+                />
+
+                {type[key]}
+              </label>
+            ))}
+          </div>
           <textarea
             placeholder="추가 작성할 내용이 있다면 적어주세요."
             value={textAreaValue}
