@@ -6,8 +6,8 @@ import AWS from "aws-sdk";
 
 const CardContainer = () => {
   const containerRef = useRef(null);
-  const scrollSpeed = 2; // 스크롤 속도 설정 (숫자가 커질수록 빠름)
-  const [isPaused, setIsPaused] = useState(false); // 애니메이션 일시정지 상태
+  const scrollSpeed = 2;
+  const [isPaused, setIsPaused] = useState(false);
   const [cards, setCards] = useState([]);
 
   // Initialize AWS S3 client
