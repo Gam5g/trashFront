@@ -11,6 +11,7 @@ textarea.solution-input {
     font-size: 18px;
   }
 
+
 .compare-title{
     color: #424242;
     margin : 0px;
@@ -21,22 +22,30 @@ textarea.solution-input {
     line-height: normal;
 }
 
+.compare-content {
+  font-family: Pretendard, sans-serif;
+  font-weight : 300;
+  color: #424242;
+  margin : 20px;
+}
+
 .compare-font {
-  text-align: center;
+  position : relative;
+  text-align: left !important;
   color : #6C8D40;
   font-size : 25px;
 }
 
 .compare-default-text {
+  width : 95%;
+  font-family: Pretendard, sans-serif;
+  font-weight : 300;
   color: #424242; 
   font-size: 18px;
-  font-weight: 400; 
   line-height: 1.6;
   margin: 8px 0; 
   padding: 0 10px; 
-  background-color: #f8f8f8; 
-  border-radius: 5px; 
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background-color: #e0e0e0; 
 }
 .solution-input{
     border: none;

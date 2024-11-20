@@ -153,18 +153,20 @@ const CompareForm = ({
             alt="solution"
           />
           <h3 className="compare-font">재질</h3>
-          <h3>{originList.categories.join(", ")}</h3>
+          <h3 className="compare-content">
+            {originList.categories.join(", ")}
+          </h3>
           <h3 className="compare-font">태그</h3>
-          <h3>{originList.tags.join(", ")}</h3>
+          <h3 className="compare-content">{originList.tags.join(", ")}</h3>
           <h3 className="compare-font">배출요령</h3>
-          <h3>{originList.solution}</h3>
+          <h3 className="compare-content">{originList.solution}</h3>
         </div>
       </div>
       <div>
         <div className="modified-title">수정</div>
         <form onSubmit={handleSubmit} className={"modified-container"}>
           <h6 className="compare-title">{originList.name}</h6>
-          <div className="button-container">
+          <div style={{ width: "95%" }}>
             <h3 className="compare-font">재질</h3>
           </div>
           <div style={{ display: "flex", justifyContent: "center" }}>
@@ -217,14 +219,15 @@ const CompareForm = ({
                 </label>
               ))}
             </div>
+            <hr style={{ border: "1px solid #ccc", margin: "20px 0" }} />
           </div>
-          <div>
+          <div style={{ width: "95%" }}>
+            <hr style={{ border: "1px solid #ccc", margin: "20px 0" }} />
             <h3 className="compare-font">태그</h3>
             {originList && (
-              <div className="compare-default-text">
-                <h5>{originList.tags.join(", ")}</h5>
-                <hr />
-              </div>
+              <h5 className="compare-default-text">
+                {originList.tags.join(", ")}
+              </h5>
             )}
             <div className="compare-input-wrap">
               <input
@@ -236,15 +239,14 @@ const CompareForm = ({
                 value={modifiedList.tags.join(", ")}
               />
             </div>
+            <hr style={{ border: "1px solid #ccc", margin: "20px 0" }} />
           </div>
-          <div>
+          <div style={{ width: "95%" }}>
+            <hr style={{ border: "0.2px solid #ccc", margin: "20px 0" }} />
             <h3 className="compare-font">배출요령</h3>
             <div>
               {originList && (
-                <div className="compare-default-text">
-                  <h5>{originList.solution}</h5>
-                  <hr />
-                </div>
+                <h5 className="compare-default-text">{originList.solution}</h5>
               )}
             </div>
             <div>
@@ -256,12 +258,12 @@ const CompareForm = ({
                 value={modifiedList.solution}
                 onChange={handleTextareaChange}
                 maxLength={maxChars}
-                style={{ width: "480px", marginLeft: "8px" }}
               />
               <div className="char-count">
                 {charCount}/{maxChars} 글자
               </div>
             </div>
+            <hr style={{ border: "1px solid #ccc", margin: "20px 0" }} />
           </div>
         </form>
 
