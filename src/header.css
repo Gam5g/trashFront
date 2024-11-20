@@ -41,6 +41,32 @@ header {
   letter-spacing: 2px;
 }
 
+.close-menu-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: transparent;
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
+  color: #424242;
+  cursor: pointer;
+  z-index: 100;
+}
+
+.close-menu-button:hover {
+  color: #6c8d40;
+  transition: color 0.3s ease;
+}
+
+.mobile-menu {
+  display: none;
+}
+
+.mobile-menu.open {
+  display: block;
+}
+
 .nav-menu {
     display: flex;
     gap: 20px;

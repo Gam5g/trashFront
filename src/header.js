@@ -165,6 +165,13 @@ const Header = () => {
                     <span className="bunri-logo">BUNRI</span>
                     <span className="wiki-logo">WiKi</span>
                   </div>
+                  <button
+                    className="close-menu-button"
+                    onClick={closeMenu}
+                    aria-label="메뉴 닫기"
+                  >
+                    X
+                  </button>
                   <li>
                     {isLoggedIn ? (
                       <>
@@ -188,6 +195,9 @@ const Header = () => {
                   </li>
                   <li>
                     <a href="/daegu-bunri-policy">대구 재활용 안내</a>
+                  </li>
+                  <li>
+                    <a href="/camera">카메라 검색</a>
                   </li>
                 </ul>
               </div>
