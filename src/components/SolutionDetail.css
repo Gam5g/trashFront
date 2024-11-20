@@ -160,7 +160,6 @@
     background-color: #e0e0e0;
   }
   
-  /* Buttons Styling */
   .button-container {
     display: flex;
     justify-content: center;
@@ -182,7 +181,6 @@
     background-color: #6C8D40;
   }
   
-  /* Text Areas and Character Count */
   .char-count {
     text-align: right;
     width: 100%;
@@ -217,8 +215,7 @@
     font-weight: 300;
     line-height: normal;
   }
-  
-  /* Navigation Button */
+
   .navigate-back-button {
     display: block;
     cursor: pointer;
@@ -236,8 +233,7 @@
   .navigate-back-button:hover {
     background-color: #b0b0b0;
   }
-  
-  /* Solution Container Styling */
+
   .solution-container {
     display: flex;
     justify-content: space-between;
