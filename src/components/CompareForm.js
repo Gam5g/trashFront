@@ -149,7 +149,7 @@ const CompareForm = ({
           <h6 className="compare-title">{originList.name}</h6>
           <img
             src={imageUrl}
-            style={{ width: "30%", height: "30%" }}
+            style={{ width: "200px", height: "200px", marginTop: "20px" }}
             alt="solution"
           />
           <h3 className="compare-font">재질</h3>
