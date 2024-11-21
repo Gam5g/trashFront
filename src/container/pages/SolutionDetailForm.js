@@ -88,8 +88,8 @@ function SolutionDetailForm() {
               <img
                 src={solutionResult.imageUrl}
                 style={{
-                  width: "30%",
-                  height: "30%",
+                  width: "200px",
+                  height: "200px",
                 }}
                 alt={solutionResult.name}
               />

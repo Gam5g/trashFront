@@ -228,7 +228,14 @@ const SolutionDetail = ({ type }) => {
             <h3 className="result-type-text">사진</h3>
           </div>
           <div>
-            <img src={solutionList.imageUrl} alt="uploaded" />
+            <img
+              src={solutionList.imageUrl}
+              alt="uploaded"
+              style={{
+                width: "200px",
+                height: "200px",
+              }}
+            />
           </div>
           <div>
             <h3 className="result-type-text"> 키워드</h3>
