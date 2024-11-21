@@ -3,7 +3,7 @@
     margin-top:70px;
 }
 
-.result-title{
+.wiki-result-title{
     color: #424242;
     font-family: Pretendard;
     font-size: 48px;
@@ -15,14 +15,15 @@
     align-items: center;
     justify-content: center;
 }
-.result-text{
+.detail-result-text{
+    padding : 20px;
     color: #424242;
     font-family: Pretendard;
     font-size: 20px;
     font-style: normal;
     font-weight: 300;
     line-height: normal;
-
+    text-align: center;
 }
 
 .result-type-text{
@@ -32,7 +33,7 @@
     font-style: normal;
     font-weight: 700;
     line-height: normal;
-
+    padding-left : 20px;
 }
 
 .wiki-accept-button,
@@ -40,7 +41,7 @@
     cursor: pointer;
     border: none;
     display: flex;
-    width: 45%;
+    width: 25%;
     height: 56px;
     justify-content: center;
     align-items: center;
@@ -53,6 +54,21 @@
     line-height: normal;
 }
 
+.wiki-delete-button{
+    display : flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ff5555;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-family: 'Pretendard-Bold';
+    width: 100px;
+}
 
 .wiki-accept-button {
     gap: 12px;

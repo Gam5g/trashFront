@@ -269,22 +269,33 @@ const SolutionDetail = ({ type }) => {
             돌아가기
           </button>
         ) : solutionList.state === "PENDING" ? (
-          <div className="button-container">
-            <button
-              type="submit"
-              onClick={handleSubmit}
-              className="submitbutton"
-            >
-              생성 요청 승인
-            </button>
-            <button
-              type="button"
-              onClick={handleRejectClick}
-              className="cancelbutton"
-            >
-              생성 거절
-            </button>
-          </div>
+          <>
+            <div className="button-container">
+              <button
+                type="submit"
+                onClick={handleSubmit}
+                className="submitbutton"
+              >
+                생성 요청 승인
+              </button>
+              <button
+                type="button"
+                onClick={handleRejectClick}
+                className="cancelbutton"
+              >
+                생성 거절
+              </button>
+            </div>
+            <div>
+              <button
+                type="button"
+                onClick={navigateToAdminBack}
+                className="navigate-back-button"
+              >
+                목록으로 돌아가기
+              </button>
+            </div>
+          </>
         ) : (
           <button
             type="button"

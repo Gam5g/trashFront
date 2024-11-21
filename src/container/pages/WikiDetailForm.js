@@ -266,30 +266,30 @@ const WikiDetailForm = ({ type, state }) => {
           </div>
         </div>
       </div>
-      <div
-        className="button-container"
-        style={
-          modifiedList.wikiState !== "PENDING" ? { marginTop: "100px" } : {}
-        }
-      >
+      <div className="button-container">
         {originList && originList.wasteName && (
-          <div
-            style={
-              modifiedList.wikiState === "PENDING" && state !== "update"
-                ? { marginTop: "100px" }
-                : {}
-            }
-          >
+          <div>
             <div className="origin-title">원본</div>
             <div className="origin-container" style={{ height: "800px" }}>
               <>
-                <p className="result-title">{originList.wasteName}</p>
-                <h3 className="result-type-text">재질</h3>
-                <p className="result-text">{originList.categories}</p>
+                <span className="wiki-result-title">
+                  {originList.wasteName}
+                </span>
+                <span
+                  className="result-type-text"
+                  style={{ marginTop: "30px" }}
+                >
+                  재질
+                </span>
+                <span className="detail-result-text">
+                  {originList.categories}
+                </span>
                 <h3 className="result-type-text">태그</h3>
-                <p className="result-text">{originList.tags}</p>
+                <span className="detail-result-text">{originList.tags}</span>
                 <h3 className="result-type-text">배출요령</h3>
-                <p className="result-text">{originList.solution}</p>
+                <span className="detail-result-text">
+                  {originList.solution}
+                </span>
               </>
             </div>
           </div>
@@ -302,25 +302,31 @@ const WikiDetailForm = ({ type, state }) => {
             style={{ height: "800px" }}
           >
             <>
-              <p className="result-title">{modifiedList.wasteName}</p>
+              <span className="wiki-result-title">
+                {modifiedList.wasteName}
+              </span>
               {modifiedList.accountNickname !== "midas" && (
                 <>
                   <h3 className="result-type-text">작성자</h3>
-                  <p
-                    className="result-text"
-                    style={{ cursor: "pointer" }}
+                  <span
+                    className="detail-result-text"
+                    style={{ cursor: "pointer", fontWeight: "bold" }}
                     onClick={() => setModalOpen(true)}
                   >
                     {modifiedList.accountNickname}
-                  </p>{" "}
+                  </span>{" "}
                 </>
               )}
               <h3 className="result-type-text">재질</h3>
-              <p className="result-text">{modifiedList.categories}</p>
+              <span className="detail-result-text">
+                {modifiedList.categories}
+              </span>
               <h3 className="result-type-text">태그</h3>
-              <p className="result-text">{modifiedList.tags}</p>
+              <span className="detail-result-text">{modifiedList.tags}</span>
               <h3 className="result-type-text">배출요령</h3>
-              <p className="result-text">{modifiedList.solution}</p>
+              <span className="detail-result-text">
+                {modifiedList.solution}
+              </span>
             </>
           </form>
           {type === "edit" && (
@@ -341,7 +347,7 @@ const WikiDetailForm = ({ type, state }) => {
         </div>
       </div>
       {type === "admin" && modifiedList.wikiState === "PENDING" && isAdmin && (
-        <div className="button-container">
+        <div className="button-container" style={{ paddingTop: "20px" }}>
           <button
             type="submit"
             onClick={handleAdminAccept}
@@ -355,11 +361,10 @@ const WikiDetailForm = ({ type, state }) => {
         </div>
       )}
       <div
-        className="button-container"
         style={{
           display: "flex",
-          justifyContent: "center",
-          marginBottom: "50px",
+          flexDirection: "column",
+          alignItems: "center",
         }}
       >
         <button
@@ -372,18 +377,10 @@ const WikiDetailForm = ({ type, state }) => {
         >
           이전 페이지로 돌아가기
         </button>
+        <div />
         {modifiedList.accountNickname === localStorage.getItem("accountName") &&
           modifiedList.wikiState === "PENDING" && (
-            <button
-              className="deleteButton"
-              style={{
-                width: "100px",
-                height: "45px",
-                marginLeft: "20px",
-                marginBottom: "-60px",
-              }}
-              onClick={handleDelete}
-            >
+            <button className="wiki-delete-button" onClick={handleDelete}>
               삭제하기
             </button>
           )}

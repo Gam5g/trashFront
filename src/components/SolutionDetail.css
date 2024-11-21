@@ -166,19 +166,28 @@
     gap: 15px;
   }
   
-  .submitbutton, .cancelbutton {
+  .submitbutton, .cancelbutton, .deletebutton {
     display: block;
     margin: 10px auto;
     padding: 10px 20px;
-    background-color: #8AAB5F;
     color: white;
     border: none;
     border-radius: 8px;
     cursor: pointer;
   }
   
-  .submitbutton:hover, .cancelbutton:hover {
+  .submitbutton {
+    background-color: #8AAB5F;
+  }
+
+  .cancelbutton {
+      background-color: #a8a8a8;
+    }
+  .submitbutton:hover {
     background-color: #6C8D40;
+  }
+  .cancelbutton:hover{
+    background-color: #a0a0a0;
   }
   
   .char-count {
