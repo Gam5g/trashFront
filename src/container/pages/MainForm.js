@@ -168,7 +168,13 @@ function MainForm() {
                   </div>
                   <div className="main-list-right-wrapper">
                     <p className="main-list-right-text">
-                      {boardItem.createdDate}
+                      {new Date(boardItem.createdDate).toLocaleString("ko-KR", {
+                        year: "numeric",
+                        month: "long",
+                        day: "2-digit",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
                     </p>
                   </div>
                 </div>
