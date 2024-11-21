@@ -38,7 +38,7 @@ function MainForm() {
     const fetchBoardData = async () => {
       try {
         const recent_response = await AuthToken.get(
-          `/solution?page=1&size=10`,
+          `/solution?page=0&size=25`,
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
@@ -157,6 +157,7 @@ function MainForm() {
             <p className="main-list-title">최근 등록된 분리배출 방법</p>
             {recentBoardList
               .filter((boardItem) => boardItem.state === "ACCEPTED")
+              .slice(0, 5)
               .map((boardItem, index) => (
                 <div
                   className="main-list-content"
@@ -228,7 +229,9 @@ function MainForm() {
                   <p className="main-list-left-text">{boardItem.title}</p>
                 </div>
                 <div className="main-list-right-wrapper">
-                  <p className="main-list-right-text">{boardItem.recommend}</p>
+                  <p className="main-list-right-text">
+                    {boardItem.recommend}개
+                  </p>
                 </div>
               </div>
             ))}
