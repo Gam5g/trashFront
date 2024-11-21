@@ -105,16 +105,7 @@ const SolutionCreate = () => {
           throw new Error("Image URL not found in response");
         }
 
-        const separationResponse = await AuthToken.get(
-          `/solution/image?imageUrl=${imageURL}`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        return { imageURL, result: separationResponse.data.result };
+        return { imageURL };
       } catch (error) {
         if (error.response?.data?.cause === "MaxUploadSizeExceededException") {
           alert("업로드할 사진 용량을 초과했습니다.");
@@ -157,7 +148,7 @@ const SolutionCreate = () => {
       formData.append("categories", solutionList.categories);
       formData.append("solution", solutionList.solution);
       formData.append("tags", solutionList.tags.join(","));
-
+      console.log(formData);
       await AuthToken.post(`/solution`, formData, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
