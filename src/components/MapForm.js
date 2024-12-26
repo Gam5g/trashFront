@@ -20,12 +20,12 @@ const MapForm = ({
   const [activePage, setActivePage] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
 
-  useEffect(() => {
+  /*useEffect(() => {
     if (!isLoggedIn) {
       alert("로그인한 후에 접속하세요.");
       navigate(-1);
     }
-  }, [isLoggedIn]);
+  }, [isLoggedIn]);*/
 
   const handlePageChange = async (pageNumber) => {
     console.log(pageNumber);
